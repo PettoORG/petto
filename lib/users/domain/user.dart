@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:petto/core/domain/role.dart';
 
 part 'user.freezed.dart';
 
@@ -16,17 +17,8 @@ sealed class User with _$User {
     /// Firebase Authentication UID.
     required String uid,
 
-    /// Date and time when the user record was created.
-    required DateTime? createdAt,
-
-    /// Date and time of the last update to the user record.
-    required DateTime? modifiedAt,
-
-    /// UID of the user who created this record.
-    required String createdBy,
-
-    /// UID of the user who last modified this record.
-    required String modifiedBy,
+    /// User role in the system (e.g., admin, user).
+    required UserRole role,
 
     /// Full name of the user.
     required String displayName,
@@ -40,14 +32,8 @@ sealed class User with _$User {
     /// Optional user profile image URL.
     required String? photoUrl,
 
-    /// User phone number for contact or alerts.
-    required String phoneNumber,
-
     /// Whether the user account is currently disabled.
     required bool disabled,
-
-    /// Date and time of the user's last login.
-    required DateTime? lastLogin,
 
     /// Whether the user has an active premium subscription.
     required bool isPremium,
@@ -57,12 +43,25 @@ sealed class User with _$User {
 
     /// End date of the current premium subscription (if any).
     required DateTime? premiumEndDate,
+
+    /// Date and time when the user record was created.
+    required DateTime? createdAt,
+
+    /// Date and time of the last update to the user record.
+    required DateTime? modifiedAt,
+
+    /// UID of the user who created this record.
+    required String createdBy,
+
+    /// UID of the user who last modified this record.
+    required String modifiedBy,
   }) = _User;
 
   /// Returns an empty/default User instance.
   factory User.empty() => User(
         id: '0',
         uid: '',
+        role: UserRole.petOwner,
         createdAt: DateTime.now(),
         modifiedAt: DateTime.now(),
         createdBy: '',
@@ -71,9 +70,7 @@ sealed class User with _$User {
         email: '',
         emailVerified: false,
         photoUrl: null,
-        phoneNumber: '',
         disabled: false,
-        lastLogin: null,
         isPremium: false,
         premiumStartDate: null,
         premiumEndDate: null,

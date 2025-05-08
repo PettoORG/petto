@@ -21,17 +21,8 @@ mixin _$User {
   /// Firebase Authentication UID.
   String get uid;
 
-  /// Date and time when the user record was created.
-  DateTime? get createdAt;
-
-  /// Date and time of the last update to the user record.
-  DateTime? get modifiedAt;
-
-  /// UID of the user who created this record.
-  String get createdBy;
-
-  /// UID of the user who last modified this record.
-  String get modifiedBy;
+  /// User role in the system (e.g., admin, user).
+  UserRole get role;
 
   /// Full name of the user.
   String get displayName;
@@ -45,14 +36,8 @@ mixin _$User {
   /// Optional user profile image URL.
   String? get photoUrl;
 
-  /// User phone number for contact or alerts.
-  String get phoneNumber;
-
   /// Whether the user account is currently disabled.
   bool get disabled;
-
-  /// Date and time of the user's last login.
-  DateTime? get lastLogin;
 
   /// Whether the user has an active premium subscription.
   bool get isPremium;
@@ -62,6 +47,18 @@ mixin _$User {
 
   /// End date of the current premium subscription (if any).
   DateTime? get premiumEndDate;
+
+  /// Date and time when the user record was created.
+  DateTime? get createdAt;
+
+  /// Date and time of the last update to the user record.
+  DateTime? get modifiedAt;
+
+  /// UID of the user who created this record.
+  String get createdBy;
+
+  /// UID of the user who last modified this record.
+  String get modifiedBy;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -77,14 +74,7 @@ mixin _$User {
             other is User &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.uid, uid) || other.uid == uid) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.modifiedAt, modifiedAt) ||
-                other.modifiedAt == modifiedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy) &&
-            (identical(other.modifiedBy, modifiedBy) ||
-                other.modifiedBy == modifiedBy) &&
+            (identical(other.role, role) || other.role == role) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.email, email) || other.email == email) &&
@@ -92,18 +82,22 @@ mixin _$User {
                 other.emailVerified == emailVerified) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber) &&
             (identical(other.disabled, disabled) ||
                 other.disabled == disabled) &&
-            (identical(other.lastLogin, lastLogin) ||
-                other.lastLogin == lastLogin) &&
             (identical(other.isPremium, isPremium) ||
                 other.isPremium == isPremium) &&
             (identical(other.premiumStartDate, premiumStartDate) ||
                 other.premiumStartDate == premiumStartDate) &&
             (identical(other.premiumEndDate, premiumEndDate) ||
-                other.premiumEndDate == premiumEndDate));
+                other.premiumEndDate == premiumEndDate) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.modifiedAt, modifiedAt) ||
+                other.modifiedAt == modifiedAt) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.modifiedBy, modifiedBy) ||
+                other.modifiedBy == modifiedBy));
   }
 
   @override
@@ -111,24 +105,23 @@ mixin _$User {
       runtimeType,
       id,
       uid,
-      createdAt,
-      modifiedAt,
-      createdBy,
-      modifiedBy,
+      role,
       displayName,
       email,
       emailVerified,
       photoUrl,
-      phoneNumber,
       disabled,
-      lastLogin,
       isPremium,
       premiumStartDate,
-      premiumEndDate);
+      premiumEndDate,
+      createdAt,
+      modifiedAt,
+      createdBy,
+      modifiedBy);
 
   @override
   String toString() {
-    return 'User(id: $id, uid: $uid, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy, displayName: $displayName, email: $email, emailVerified: $emailVerified, photoUrl: $photoUrl, phoneNumber: $phoneNumber, disabled: $disabled, lastLogin: $lastLogin, isPremium: $isPremium, premiumStartDate: $premiumStartDate, premiumEndDate: $premiumEndDate)';
+    return 'User(id: $id, uid: $uid, role: $role, displayName: $displayName, email: $email, emailVerified: $emailVerified, photoUrl: $photoUrl, disabled: $disabled, isPremium: $isPremium, premiumStartDate: $premiumStartDate, premiumEndDate: $premiumEndDate, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -140,20 +133,19 @@ abstract mixin class $UserCopyWith<$Res> {
   $Res call(
       {String id,
       String uid,
-      DateTime? createdAt,
-      DateTime? modifiedAt,
-      String createdBy,
-      String modifiedBy,
+      UserRole role,
       String displayName,
       String email,
       bool emailVerified,
       String? photoUrl,
-      String phoneNumber,
       bool disabled,
-      DateTime? lastLogin,
       bool isPremium,
       DateTime? premiumStartDate,
-      DateTime? premiumEndDate});
+      DateTime? premiumEndDate,
+      DateTime? createdAt,
+      DateTime? modifiedAt,
+      String createdBy,
+      String modifiedBy});
 }
 
 /// @nodoc
@@ -170,20 +162,19 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? uid = null,
-    Object? createdAt = freezed,
-    Object? modifiedAt = freezed,
-    Object? createdBy = null,
-    Object? modifiedBy = null,
+    Object? role = null,
     Object? displayName = null,
     Object? email = null,
     Object? emailVerified = null,
     Object? photoUrl = freezed,
-    Object? phoneNumber = null,
     Object? disabled = null,
-    Object? lastLogin = freezed,
     Object? isPremium = null,
     Object? premiumStartDate = freezed,
     Object? premiumEndDate = freezed,
+    Object? createdAt = freezed,
+    Object? modifiedAt = freezed,
+    Object? createdBy = null,
+    Object? modifiedBy = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -194,22 +185,10 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _self.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: freezed == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      modifiedAt: freezed == modifiedAt
-          ? _self.modifiedAt
-          : modifiedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      createdBy: null == createdBy
-          ? _self.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
-      modifiedBy: null == modifiedBy
-          ? _self.modifiedBy
-          : modifiedBy // ignore: cast_nullable_to_non_nullable
-              as String,
+      role: null == role
+          ? _self.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as UserRole,
       displayName: null == displayName
           ? _self.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -226,18 +205,10 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _self.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      phoneNumber: null == phoneNumber
-          ? _self.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
       disabled: null == disabled
           ? _self.disabled
           : disabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      lastLogin: freezed == lastLogin
-          ? _self.lastLogin
-          : lastLogin // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       isPremium: null == isPremium
           ? _self.isPremium
           : isPremium // ignore: cast_nullable_to_non_nullable
@@ -250,6 +221,22 @@ class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
           ? _self.premiumEndDate
           : premiumEndDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      createdAt: freezed == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      modifiedAt: freezed == modifiedAt
+          ? _self.modifiedAt
+          : modifiedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: null == createdBy
+          ? _self.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String,
+      modifiedBy: null == modifiedBy
+          ? _self.modifiedBy
+          : modifiedBy // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -260,20 +247,19 @@ class _User extends User {
   const _User(
       {required this.id,
       required this.uid,
-      required this.createdAt,
-      required this.modifiedAt,
-      required this.createdBy,
-      required this.modifiedBy,
+      required this.role,
       required this.displayName,
       required this.email,
       required this.emailVerified,
       required this.photoUrl,
-      required this.phoneNumber,
       required this.disabled,
-      required this.lastLogin,
       required this.isPremium,
       required this.premiumStartDate,
-      required this.premiumEndDate})
+      required this.premiumEndDate,
+      required this.createdAt,
+      required this.modifiedAt,
+      required this.createdBy,
+      required this.modifiedBy})
       : super._();
 
   /// Document ID in the database. Typically same as [uid].
@@ -284,21 +270,9 @@ class _User extends User {
   @override
   final String uid;
 
-  /// Date and time when the user record was created.
+  /// User role in the system (e.g., admin, user).
   @override
-  final DateTime? createdAt;
-
-  /// Date and time of the last update to the user record.
-  @override
-  final DateTime? modifiedAt;
-
-  /// UID of the user who created this record.
-  @override
-  final String createdBy;
-
-  /// UID of the user who last modified this record.
-  @override
-  final String modifiedBy;
+  final UserRole role;
 
   /// Full name of the user.
   @override
@@ -316,17 +290,9 @@ class _User extends User {
   @override
   final String? photoUrl;
 
-  /// User phone number for contact or alerts.
-  @override
-  final String phoneNumber;
-
   /// Whether the user account is currently disabled.
   @override
   final bool disabled;
-
-  /// Date and time of the user's last login.
-  @override
-  final DateTime? lastLogin;
 
   /// Whether the user has an active premium subscription.
   @override
@@ -339,6 +305,22 @@ class _User extends User {
   /// End date of the current premium subscription (if any).
   @override
   final DateTime? premiumEndDate;
+
+  /// Date and time when the user record was created.
+  @override
+  final DateTime? createdAt;
+
+  /// Date and time of the last update to the user record.
+  @override
+  final DateTime? modifiedAt;
+
+  /// UID of the user who created this record.
+  @override
+  final String createdBy;
+
+  /// UID of the user who last modified this record.
+  @override
+  final String modifiedBy;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -355,14 +337,7 @@ class _User extends User {
             other is _User &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.uid, uid) || other.uid == uid) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.modifiedAt, modifiedAt) ||
-                other.modifiedAt == modifiedAt) &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy) &&
-            (identical(other.modifiedBy, modifiedBy) ||
-                other.modifiedBy == modifiedBy) &&
+            (identical(other.role, role) || other.role == role) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
             (identical(other.email, email) || other.email == email) &&
@@ -370,18 +345,22 @@ class _User extends User {
                 other.emailVerified == emailVerified) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber) &&
             (identical(other.disabled, disabled) ||
                 other.disabled == disabled) &&
-            (identical(other.lastLogin, lastLogin) ||
-                other.lastLogin == lastLogin) &&
             (identical(other.isPremium, isPremium) ||
                 other.isPremium == isPremium) &&
             (identical(other.premiumStartDate, premiumStartDate) ||
                 other.premiumStartDate == premiumStartDate) &&
             (identical(other.premiumEndDate, premiumEndDate) ||
-                other.premiumEndDate == premiumEndDate));
+                other.premiumEndDate == premiumEndDate) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.modifiedAt, modifiedAt) ||
+                other.modifiedAt == modifiedAt) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.modifiedBy, modifiedBy) ||
+                other.modifiedBy == modifiedBy));
   }
 
   @override
@@ -389,24 +368,23 @@ class _User extends User {
       runtimeType,
       id,
       uid,
-      createdAt,
-      modifiedAt,
-      createdBy,
-      modifiedBy,
+      role,
       displayName,
       email,
       emailVerified,
       photoUrl,
-      phoneNumber,
       disabled,
-      lastLogin,
       isPremium,
       premiumStartDate,
-      premiumEndDate);
+      premiumEndDate,
+      createdAt,
+      modifiedAt,
+      createdBy,
+      modifiedBy);
 
   @override
   String toString() {
-    return 'User(id: $id, uid: $uid, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy, displayName: $displayName, email: $email, emailVerified: $emailVerified, photoUrl: $photoUrl, phoneNumber: $phoneNumber, disabled: $disabled, lastLogin: $lastLogin, isPremium: $isPremium, premiumStartDate: $premiumStartDate, premiumEndDate: $premiumEndDate)';
+    return 'User(id: $id, uid: $uid, role: $role, displayName: $displayName, email: $email, emailVerified: $emailVerified, photoUrl: $photoUrl, disabled: $disabled, isPremium: $isPremium, premiumStartDate: $premiumStartDate, premiumEndDate: $premiumEndDate, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -419,20 +397,19 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   $Res call(
       {String id,
       String uid,
-      DateTime? createdAt,
-      DateTime? modifiedAt,
-      String createdBy,
-      String modifiedBy,
+      UserRole role,
       String displayName,
       String email,
       bool emailVerified,
       String? photoUrl,
-      String phoneNumber,
       bool disabled,
-      DateTime? lastLogin,
       bool isPremium,
       DateTime? premiumStartDate,
-      DateTime? premiumEndDate});
+      DateTime? premiumEndDate,
+      DateTime? createdAt,
+      DateTime? modifiedAt,
+      String createdBy,
+      String modifiedBy});
 }
 
 /// @nodoc
@@ -449,20 +426,19 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
   $Res call({
     Object? id = null,
     Object? uid = null,
-    Object? createdAt = freezed,
-    Object? modifiedAt = freezed,
-    Object? createdBy = null,
-    Object? modifiedBy = null,
+    Object? role = null,
     Object? displayName = null,
     Object? email = null,
     Object? emailVerified = null,
     Object? photoUrl = freezed,
-    Object? phoneNumber = null,
     Object? disabled = null,
-    Object? lastLogin = freezed,
     Object? isPremium = null,
     Object? premiumStartDate = freezed,
     Object? premiumEndDate = freezed,
+    Object? createdAt = freezed,
+    Object? modifiedAt = freezed,
+    Object? createdBy = null,
+    Object? modifiedBy = null,
   }) {
     return _then(_User(
       id: null == id
@@ -473,22 +449,10 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
           ? _self.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: freezed == createdAt
-          ? _self.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      modifiedAt: freezed == modifiedAt
-          ? _self.modifiedAt
-          : modifiedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      createdBy: null == createdBy
-          ? _self.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String,
-      modifiedBy: null == modifiedBy
-          ? _self.modifiedBy
-          : modifiedBy // ignore: cast_nullable_to_non_nullable
-              as String,
+      role: null == role
+          ? _self.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as UserRole,
       displayName: null == displayName
           ? _self.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
@@ -505,18 +469,10 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
           ? _self.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      phoneNumber: null == phoneNumber
-          ? _self.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
       disabled: null == disabled
           ? _self.disabled
           : disabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      lastLogin: freezed == lastLogin
-          ? _self.lastLogin
-          : lastLogin // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       isPremium: null == isPremium
           ? _self.isPremium
           : isPremium // ignore: cast_nullable_to_non_nullable
@@ -529,6 +485,22 @@ class __$UserCopyWithImpl<$Res> implements _$UserCopyWith<$Res> {
           ? _self.premiumEndDate
           : premiumEndDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      createdAt: freezed == createdAt
+          ? _self.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      modifiedAt: freezed == modifiedAt
+          ? _self.modifiedAt
+          : modifiedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      createdBy: null == createdBy
+          ? _self.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String,
+      modifiedBy: null == modifiedBy
+          ? _self.modifiedBy
+          : modifiedBy // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
