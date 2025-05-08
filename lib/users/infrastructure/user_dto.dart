@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/core/domain/json_converter/timestamp_converter.dart';
-import 'package:petto/core/domain/role.dart';
+import 'package:petto/users/domain/role.dart';
 import 'package:petto/core/infrastructure/base_dto.dart';
 import 'package:petto/users/domain/user.dart';
 

@@ -1,0 +1,75 @@
+{
+  "petSpecieEnum": {
+    "dog": "Perro",
+    "cat": "Gato",
+    "rabbit": "Conejo",
+    "bird": "Ave",
+    "fish": "Pez",
+    "other": "Otro"
+  },
+  "petFoodTypeEnum": {
+    "dry": "Alimento seco",
+    "wet": "Alimento húmedo",
+    "raw": "Dieta cruda (BARF)",
+    "mixed": "Alimentación mixta",
+    "special": "Alimento especial (medicado o prescrito)"
+  },
+  "petBreeds": {
+    "labradorRetriever": "Labrador Retriever",
+    "germanShepherd": "Pastor Alemán",
+    "goldenRetriever": "Golden Retriever",
+    "bulldog": "Bulldog",
+    "poodle": "Poodle",
+    "beagle": "Beagle",
+    "rottweiler": "Rottweiler",
+    "dachshund": "Dachshund",
+    "yorkshireTerrier": "Yorkshire Terrier",
+    "boxer": "Bóxer",
+
+    "persian": "Persa",
+    "maineCoon": "Maine Coon",
+    "siamese": "Siamés",
+    "bengal": "Bengala",
+    "britishShorthair": "Británico de Pelo Corto",
+    "sphynx": "Sphynx",
+    "ragdoll": "Ragdoll",
+    "americanShorthair": "Americano de Pelo Corto",
+    "scottishFold": "Scottish Fold",
+    "russianBlue": "Azul Ruso",
+
+    "hollandLop": "Holland Lop",
+    "miniRex": "Mini Rex",
+    "lionhead": "Cabeza de León",
+    "netherlandDwarf": "Enano de los Países Bajos",
+    "miniLop": "Mini Lop",
+    "flemishGiant": "Gigante de Flandes",
+    "englishAngora": "Angora Inglés",
+    "rex": "Rex",
+    "polish": "Polaco",
+    "harlequin": "Arlequín",
+
+    "budgerigar": "Periquito",
+    "cockatiel": "Carolina",
+    "canary": "Canario",
+    "lovebird": "Inseparable",
+    "africanGrey": "Loro Gris Africano",
+    "parakeet": "Cotorra",
+    "conure": "Cotorra del Sol",
+    "finch": "Pinzón",
+    "amazonParrot": "Loro Amazónico",
+    "cockatoo": "Cacatúa",
+
+    "betta": "Betta",
+    "goldfish": "Pez Dorado",
+    "guppy": "Guppy",
+    "angelfish": "Pez Ángel",
+    "molly": "Molly",
+    "platy": "Platy",
+    "neonTetra": "Tetra Neón",
+    "swordtail": "Pez Espada",
+    "cichlid": "Cíclido",
+    "zebraDanio": "Danio Cebra",
+
+    "other": "Otro"
+  }
+}

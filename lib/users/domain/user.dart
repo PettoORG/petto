@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:petto/core/domain/role.dart';
+import 'package:petto/users/domain/role.dart';
 
 part 'user.freezed.dart';
 
