@@ -1,4 +1,10 @@
 {
+  "error": {
+    "retrievingLanguageCode": "Ocurrió un error al obtener el idioma",
+    "retrievingThemePreference": "Ocurrió un error al obtener la preferencia del tema",
+    "savingLanguageCode": "Ocurrió un error al guardar el idioma",
+    "savingThemePreference": "Ocurrió un error al guardar la preferencia del tema"
+  },
   "petBreeds": {
     "africanGrey": "Loro Gris Africano",
     "amazonParrot": "Loro Amazónico",

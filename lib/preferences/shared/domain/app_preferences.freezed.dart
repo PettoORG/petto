@@ -15,27 +15,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$AppPreferences {
-  /// Firebase Cloud Messaging (FCM) token for the instance of the application installed on the device.
-  String? get fcmTokenId;
-
-  /// The role of the user for whom the FCM token was generated.
-  String? get fcmTokenRole;
-
-  /// Unique identifier of the user for whom the FCM token was generated.
-  String? get fcmTokenUid;
-
-  /// Date and time when the FCM token was generated.
-  DateTime? get fcmTokenTimestamp;
-
-  /// Email that triggered an account linking error during sign-in.
-  /// This field is used to store the email in cases where the authentication error is either
-  /// 'email-already-in-use' or 'account-exists-with-different-credential'. Once the user
-  /// has successfully authenticated, this information is checked and the user is directed to the
-  /// account linking flow.
-  String? get pendingAccountLinkingEmail;
-
-  /// Recently searched marketplace queries.
-  List<String>? get recentMarketplaceSearches;
+  String? get isDarkTheme;
+  String? get languageCode;
 
   /// Create a copy of AppPreferences
   /// with the given fields replaced by the non-null parameter values.
@@ -50,35 +31,18 @@ mixin _$AppPreferences {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is AppPreferences &&
-            (identical(other.fcmTokenId, fcmTokenId) ||
-                other.fcmTokenId == fcmTokenId) &&
-            (identical(other.fcmTokenRole, fcmTokenRole) ||
-                other.fcmTokenRole == fcmTokenRole) &&
-            (identical(other.fcmTokenUid, fcmTokenUid) ||
-                other.fcmTokenUid == fcmTokenUid) &&
-            (identical(other.fcmTokenTimestamp, fcmTokenTimestamp) ||
-                other.fcmTokenTimestamp == fcmTokenTimestamp) &&
-            (identical(other.pendingAccountLinkingEmail,
-                    pendingAccountLinkingEmail) ||
-                other.pendingAccountLinkingEmail ==
-                    pendingAccountLinkingEmail) &&
-            const DeepCollectionEquality().equals(
-                other.recentMarketplaceSearches, recentMarketplaceSearches));
+            (identical(other.isDarkTheme, isDarkTheme) ||
+                other.isDarkTheme == isDarkTheme) &&
+            (identical(other.languageCode, languageCode) ||
+                other.languageCode == languageCode));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      fcmTokenId,
-      fcmTokenRole,
-      fcmTokenUid,
-      fcmTokenTimestamp,
-      pendingAccountLinkingEmail,
-      const DeepCollectionEquality().hash(recentMarketplaceSearches));
+  int get hashCode => Object.hash(runtimeType, isDarkTheme, languageCode);
 
   @override
   String toString() {
-    return 'AppPreferences(fcmTokenId: $fcmTokenId, fcmTokenRole: $fcmTokenRole, fcmTokenUid: $fcmTokenUid, fcmTokenTimestamp: $fcmTokenTimestamp, pendingAccountLinkingEmail: $pendingAccountLinkingEmail, recentMarketplaceSearches: $recentMarketplaceSearches)';
+    return 'AppPreferences(isDarkTheme: $isDarkTheme, languageCode: $languageCode)';
   }
 }
 
@@ -88,13 +52,7 @@ abstract mixin class $AppPreferencesCopyWith<$Res> {
           AppPreferences value, $Res Function(AppPreferences) _then) =
       _$AppPreferencesCopyWithImpl;
   @useResult
-  $Res call(
-      {String? fcmTokenId,
-      String? fcmTokenRole,
-      String? fcmTokenUid,
-      DateTime? fcmTokenTimestamp,
-      String? pendingAccountLinkingEmail,
-      List<String>? recentMarketplaceSearches});
+  $Res call({String? isDarkTheme, String? languageCode});
 }
 
 /// @nodoc
@@ -110,38 +68,18 @@ class _$AppPreferencesCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? fcmTokenId = freezed,
-    Object? fcmTokenRole = freezed,
-    Object? fcmTokenUid = freezed,
-    Object? fcmTokenTimestamp = freezed,
-    Object? pendingAccountLinkingEmail = freezed,
-    Object? recentMarketplaceSearches = freezed,
+    Object? isDarkTheme = freezed,
+    Object? languageCode = freezed,
   }) {
     return _then(_self.copyWith(
-      fcmTokenId: freezed == fcmTokenId
-          ? _self.fcmTokenId
-          : fcmTokenId // ignore: cast_nullable_to_non_nullable
+      isDarkTheme: freezed == isDarkTheme
+          ? _self.isDarkTheme
+          : isDarkTheme // ignore: cast_nullable_to_non_nullable
               as String?,
-      fcmTokenRole: freezed == fcmTokenRole
-          ? _self.fcmTokenRole
-          : fcmTokenRole // ignore: cast_nullable_to_non_nullable
+      languageCode: freezed == languageCode
+          ? _self.languageCode
+          : languageCode // ignore: cast_nullable_to_non_nullable
               as String?,
-      fcmTokenUid: freezed == fcmTokenUid
-          ? _self.fcmTokenUid
-          : fcmTokenUid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fcmTokenTimestamp: freezed == fcmTokenTimestamp
-          ? _self.fcmTokenTimestamp
-          : fcmTokenTimestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      pendingAccountLinkingEmail: freezed == pendingAccountLinkingEmail
-          ? _self.pendingAccountLinkingEmail
-          : pendingAccountLinkingEmail // ignore: cast_nullable_to_non_nullable
-              as String?,
-      recentMarketplaceSearches: freezed == recentMarketplaceSearches
-          ? _self.recentMarketplaceSearches
-          : recentMarketplaceSearches // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
     ));
   }
 }
@@ -149,53 +87,13 @@ class _$AppPreferencesCopyWithImpl<$Res>
 /// @nodoc
 
 class _AppPreferences extends AppPreferences {
-  const _AppPreferences(
-      {required this.fcmTokenId,
-      required this.fcmTokenRole,
-      required this.fcmTokenUid,
-      required this.fcmTokenTimestamp,
-      required this.pendingAccountLinkingEmail,
-      required final List<String>? recentMarketplaceSearches})
-      : _recentMarketplaceSearches = recentMarketplaceSearches,
-        super._();
+  const _AppPreferences({required this.isDarkTheme, required this.languageCode})
+      : super._();
 
-  /// Firebase Cloud Messaging (FCM) token for the instance of the application installed on the device.
   @override
-  final String? fcmTokenId;
-
-  /// The role of the user for whom the FCM token was generated.
+  final String? isDarkTheme;
   @override
-  final String? fcmTokenRole;
-
-  /// Unique identifier of the user for whom the FCM token was generated.
-  @override
-  final String? fcmTokenUid;
-
-  /// Date and time when the FCM token was generated.
-  @override
-  final DateTime? fcmTokenTimestamp;
-
-  /// Email that triggered an account linking error during sign-in.
-  /// This field is used to store the email in cases where the authentication error is either
-  /// 'email-already-in-use' or 'account-exists-with-different-credential'. Once the user
-  /// has successfully authenticated, this information is checked and the user is directed to the
-  /// account linking flow.
-  @override
-  final String? pendingAccountLinkingEmail;
-
-  /// Recently searched marketplace queries.
-  final List<String>? _recentMarketplaceSearches;
-
-  /// Recently searched marketplace queries.
-  @override
-  List<String>? get recentMarketplaceSearches {
-    final value = _recentMarketplaceSearches;
-    if (value == null) return null;
-    if (_recentMarketplaceSearches is EqualUnmodifiableListView)
-      return _recentMarketplaceSearches;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
+  final String? languageCode;
 
   /// Create a copy of AppPreferences
   /// with the given fields replaced by the non-null parameter values.
@@ -210,35 +108,18 @@ class _AppPreferences extends AppPreferences {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _AppPreferences &&
-            (identical(other.fcmTokenId, fcmTokenId) ||
-                other.fcmTokenId == fcmTokenId) &&
-            (identical(other.fcmTokenRole, fcmTokenRole) ||
-                other.fcmTokenRole == fcmTokenRole) &&
-            (identical(other.fcmTokenUid, fcmTokenUid) ||
-                other.fcmTokenUid == fcmTokenUid) &&
-            (identical(other.fcmTokenTimestamp, fcmTokenTimestamp) ||
-                other.fcmTokenTimestamp == fcmTokenTimestamp) &&
-            (identical(other.pendingAccountLinkingEmail,
-                    pendingAccountLinkingEmail) ||
-                other.pendingAccountLinkingEmail ==
-                    pendingAccountLinkingEmail) &&
-            const DeepCollectionEquality().equals(
-                other._recentMarketplaceSearches, _recentMarketplaceSearches));
+            (identical(other.isDarkTheme, isDarkTheme) ||
+                other.isDarkTheme == isDarkTheme) &&
+            (identical(other.languageCode, languageCode) ||
+                other.languageCode == languageCode));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      fcmTokenId,
-      fcmTokenRole,
-      fcmTokenUid,
-      fcmTokenTimestamp,
-      pendingAccountLinkingEmail,
-      const DeepCollectionEquality().hash(_recentMarketplaceSearches));
+  int get hashCode => Object.hash(runtimeType, isDarkTheme, languageCode);
 
   @override
   String toString() {
-    return 'AppPreferences(fcmTokenId: $fcmTokenId, fcmTokenRole: $fcmTokenRole, fcmTokenUid: $fcmTokenUid, fcmTokenTimestamp: $fcmTokenTimestamp, pendingAccountLinkingEmail: $pendingAccountLinkingEmail, recentMarketplaceSearches: $recentMarketplaceSearches)';
+    return 'AppPreferences(isDarkTheme: $isDarkTheme, languageCode: $languageCode)';
   }
 }
 
@@ -250,13 +131,7 @@ abstract mixin class _$AppPreferencesCopyWith<$Res>
       __$AppPreferencesCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {String? fcmTokenId,
-      String? fcmTokenRole,
-      String? fcmTokenUid,
-      DateTime? fcmTokenTimestamp,
-      String? pendingAccountLinkingEmail,
-      List<String>? recentMarketplaceSearches});
+  $Res call({String? isDarkTheme, String? languageCode});
 }
 
 /// @nodoc
@@ -272,38 +147,18 @@ class __$AppPreferencesCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? fcmTokenId = freezed,
-    Object? fcmTokenRole = freezed,
-    Object? fcmTokenUid = freezed,
-    Object? fcmTokenTimestamp = freezed,
-    Object? pendingAccountLinkingEmail = freezed,
-    Object? recentMarketplaceSearches = freezed,
+    Object? isDarkTheme = freezed,
+    Object? languageCode = freezed,
   }) {
     return _then(_AppPreferences(
-      fcmTokenId: freezed == fcmTokenId
-          ? _self.fcmTokenId
-          : fcmTokenId // ignore: cast_nullable_to_non_nullable
+      isDarkTheme: freezed == isDarkTheme
+          ? _self.isDarkTheme
+          : isDarkTheme // ignore: cast_nullable_to_non_nullable
               as String?,
-      fcmTokenRole: freezed == fcmTokenRole
-          ? _self.fcmTokenRole
-          : fcmTokenRole // ignore: cast_nullable_to_non_nullable
+      languageCode: freezed == languageCode
+          ? _self.languageCode
+          : languageCode // ignore: cast_nullable_to_non_nullable
               as String?,
-      fcmTokenUid: freezed == fcmTokenUid
-          ? _self.fcmTokenUid
-          : fcmTokenUid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      fcmTokenTimestamp: freezed == fcmTokenTimestamp
-          ? _self.fcmTokenTimestamp
-          : fcmTokenTimestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      pendingAccountLinkingEmail: freezed == pendingAccountLinkingEmail
-          ? _self.pendingAccountLinkingEmail
-          : pendingAccountLinkingEmail // ignore: cast_nullable_to_non_nullable
-              as String?,
-      recentMarketplaceSearches: freezed == recentMarketplaceSearches
-          ? _self._recentMarketplaceSearches
-          : recentMarketplaceSearches // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
     ));
   }
 }

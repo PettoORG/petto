@@ -1,3 +1,7 @@
+import 'package:dartz/dartz.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:petto/core/domain/failure.dart';
+import 'package:petto/preferences/shared/domain/app_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Repository for application preferences.
@@ -9,122 +13,57 @@ class AppPreferencesRepository {
   /// SharedPreferences instance.
   final SharedPreferences sharedPreferences;
 
-  // /// Saves the pending account linking email in case of authentication errors.
-  // /// This email is stored when the error codes 'email-already-in-use' or
-  // /// 'account-exists-with-different-credential' occur, so that once the user has successfully
-  // /// authenticated, this information can be checked and the user can be directed to the account linking flow.
-  // Future<Either<Failure, Unit>> setPendingAccountLinkingEmail(String? email) async {
-  //   try {
-  //     if (email == null) {
-  //       await sharedPreferences.remove(AppPreferencesKeys.pendingAccountLinkingEmail.name);
-  //       return right(unit);
-  //     }
-  //     await sharedPreferences.setString(
-  //       AppPreferencesKeys.pendingAccountLinkingEmail.name,
-  //       email,
-  //     );
-  //     return right(unit);
-  //   } catch (e) {
-  //     return left(
-  //       const Failure.unexpected(message: 'Error saving pending account linking email'),
-  //     );
-  //   }
-  // }
+  /// Saves whether the dark theme is enabled.
+  Future<Either<Failure, Unit>> setIsDarkTheme(bool isDarkTheme) async {
+    try {
+      await sharedPreferences.setBool(
+        AppPreferencesKeys.isDarkTheme.name,
+        isDarkTheme,
+      );
+      return right(unit);
+    } catch (_) {
+      return left(
+        Failure.unexpected(message: 'savingThemePreference'.tr()),
+      );
+    }
+  }
 
-  // /// Retrieves the pending account linking email from local storage.
-  // Either<Failure, String?> getPendingAccountLinkingEmail() {
-  //   try {
-  //     final email = sharedPreferences.getString(AppPreferencesKeys.pendingAccountLinkingEmail.name);
-  //     return right(email);
-  //   } catch (e) {
-  //     return left(
-  //       const Failure.unexpected(message: 'Error retrieving pending account linking email'),
-  //     );
-  //   }
-  // }
+  /// Retrieves whether the dark theme is enabled. Defaults to false.
+  Either<Failure, bool> getIsDarkTheme() {
+    try {
+      final value = sharedPreferences.getBool(AppPreferencesKeys.isDarkTheme.name);
+      return right(value ?? false);
+    } catch (_) {
+      return left(
+        Failure.unexpected(message: 'retrievingThemePreference'.tr()),
+      );
+    }
+  }
 
-  /// Saves the FCM token for Firebase Cloud Messaging (FCM) in the device's local storage.
-  // Future<Either<Failure, Unit>> setFcmToken(FcmToken? fcmToken) async {
-  //   try {
-  //     if (fcmToken == null) {
-  //       await sharedPreferences.remove(AppPreferencesKeys.fcmTokenId.name);
-  //       await sharedPreferences.remove(AppPreferencesKeys.fcmTokenRole.name);
-  //       await sharedPreferences.remove(AppPreferencesKeys.fcmTokenUid.name);
-  //       await sharedPreferences.remove(AppPreferencesKeys.fcmTokenTimestamp.name);
-  //       return right(unit);
-  //     }
+  /// Saves the current language code (e.g. 'es', 'en').
+  Future<Either<Failure, Unit>> setLanguageCode(String code) async {
+    try {
+      await sharedPreferences.setString(
+        AppPreferencesKeys.languageCode.name,
+        code,
+      );
+      return right(unit);
+    } catch (_) {
+      return left(
+        Failure.unexpected(message: 'savingLanguageCode'.tr()),
+      );
+    }
+  }
 
-  //     await sharedPreferences.setString(AppPreferencesKeys.fcmTokenId.name, fcmToken.id);
-  //     await sharedPreferences.setString(AppPreferencesKeys.fcmTokenRole.name, fcmToken.role);
-  //     await sharedPreferences.setString(AppPreferencesKeys.fcmTokenUid.name, fcmToken.uid);
-  //     await sharedPreferences.setString(
-  //       AppPreferencesKeys.fcmTokenTimestamp.name,
-  //       fcmToken.timestamp.toIso8601String(),
-  //     );
-
-  //     return right(unit);
-  //   } catch (e) {
-  //     return left(
-  //       const Failure.unexpected(message: 'Error saving FCM token'),
-  //     );
-  //   }
-  // }
-
-  /// Retrieves the FCM token for Firebase Cloud Messaging (FCM) from the device's local storage.
-  // Either<Failure, FcmToken?> getFcmToken() {
-  //   try {
-  //     final id = sharedPreferences.getString(AppPreferencesKeys.fcmTokenId.name);
-  //     final role = sharedPreferences.getString(AppPreferencesKeys.fcmTokenRole.name);
-  //     final uid = sharedPreferences.getString(AppPreferencesKeys.fcmTokenUid.name);
-  //     final timestampString = sharedPreferences.getString(AppPreferencesKeys.fcmTokenTimestamp.name);
-
-  //     if (id == null || role == null || uid == null || timestampString == null) {
-  //       return right(null);
-  //     }
-
-  //     return right(FcmToken(
-  //       id: id,
-  //       role: role,
-  //       uid: uid,
-  //       timestamp: DateTime.parse(timestampString),
-  //     ));
-  //   } catch (e) {
-  //     return left(
-  //       const Failure.unexpected(message: 'Error retrieving FCM token'),
-  //     );
-  //   }
-  // }
-
-  /// Saves the list of recent marketplace searches.
-  // Future<Either<Failure, Unit>> setRecentMarketplaceSearches(String searchString) async {
-  //   try {
-  //     final recentSearches = sharedPreferences.getStringList(AppPreferencesKeys.recentMarketplaceSearches.name) ?? [];
-  //     final newRecentSearches = [searchString, ...recentSearches].take(7).toList();
-  //     await sharedPreferences.setStringList(
-  //       AppPreferencesKeys.recentMarketplaceSearches.name,
-  //       newRecentSearches,
-  //     );
-  //     return right(unit);
-  //   } catch (e) {
-  //     return left(
-  //       const Failure.unexpected(
-  //         message: 'Error saving recent marketplace searches.',
-  //       ),
-  //     );
-  //   }
-  // }
-
-  /// Retrieves the list of recent marketplace searches.
-  // Either<Failure, List<String>> getRecentMarketplaceSearches() {
-  //   try {
-  //     final recentSearches = sharedPreferences.getStringList(AppPreferencesKeys.recentMarketplaceSearches.name);
-  //     return right(recentSearches ?? []);
-  //   } catch (e) {
-  //     return left(
-  //       const Failure.unexpected(
-  //         message: 'Error retrieving recent marketplace searches.',
-  //       ),
-  //     );
-  //   }
-  // }
+  /// Retrieves the saved language code. Defaults to 'es'.
+  Either<Failure, String> getLanguageCode() {
+    try {
+      final value = sharedPreferences.getString(AppPreferencesKeys.languageCode.name);
+      return right(value ?? 'es');
+    } catch (_) {
+      return left(
+        Failure.unexpected(message: 'retrievingLanguageCode'.tr()),
+      );
+    }
+  }
 }
