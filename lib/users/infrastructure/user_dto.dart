@@ -9,7 +9,7 @@ part 'user_dto.freezed.dart';
 part 'user_dto.g.dart';
 
 @freezed
-sealed class UserDTO with _$UserDTO implements BaseDTO<User> {
+abstract class UserDTO with _$UserDTO implements BaseDTO<User> {
   const UserDTO._();
 
   const factory UserDTO({
