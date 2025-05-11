@@ -3,6 +3,7 @@ import 'package:petto/app/theme/app_theme_color.dart';
 
 class AppTheme {
   static ThemeData light() => ThemeData(
+        fontFamily: 'Montserrat',
         useMaterial3: true,
         scaffoldBackgroundColor: AppThemeColor.surface,
         colorScheme: ColorScheme.fromSeed(
@@ -32,6 +33,7 @@ class AppTheme {
       );
 
   static ThemeData dark() => ThemeData(
+        fontFamily: 'Montserrat',
         useMaterial3: true,
       );
 }
