@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:petto/auth/presentation/pages/auth_screen.dart';
+import 'package:petto/auth/presentation/screens/auth_screen.dart';
 
 part 'app_router.g.dart';
 
