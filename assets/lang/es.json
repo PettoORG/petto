@@ -1,5 +1,6 @@
 {
   "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "back": "Atrás",
   "confirmPassword": "Confirmar contraseña",
   "email": "Correo electrónico",
   "error": {
@@ -42,7 +43,16 @@
     "unexpectedError": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.",
     "userDisabled": "Tu cuenta ha sido desactivada. Contacta al soporte si necesitas ayuda."
   },
+  "next": "Siguiente",
   "noAccount": "¿No tienes una cuenta?",
+  "onboardingMedicalHistoryBody": "Guarda y consulta el carnet de vacunación, diagnósticos, tratamientos y documentos de cada mascota cuando los necesites.",
+  "onboardingMedicalHistoryTitle": "Toda la historia médica, en un solo lugar",
+  "onboardingMultiPetBody": "Agrega una o varias mascotas, personaliza su perfil y mantén su información actualizada sin complicaciones.",
+  "onboardingMultiPetTitle": "Una app, todas tus mascotas",
+  "onboardingReminderBody": "Vacunas, desparasitaciones, citas veterinarias, baños y más... Petto te avisa justo a tiempo para que tu peludo esté siempre al día.",
+  "onboardingReminderTitle": "Nunca olvides una cita importante",
+  "onboardingWelcomeBody": "Tu nueva aliada para cuidar la salud y bienestar de tus mascotas. Organiza, recuerda y protege lo que más amas.",
+  "onboardingWelcomeTitle": "¡Bienvenido a Petto!",
   "orRegisterWith": "O regístrate con",
   "orSignInWith": "O inicia sesión con",
   "password": "Contraseña",
@@ -123,5 +133,7 @@
     "weekly": "Semanal",
     "yearly": "Anual"
   },
-  "signIn": "Iniciar sesión"
+  "signIn": "Iniciar sesión",
+  "skip": "Saltar",
+  "start": "Comenzar"
 }

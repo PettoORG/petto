@@ -4,7 +4,7 @@ class AppThemeColor {
   // Primary colors
   static const Color primary = Color(0xffff6b81);
   static const Color onPrimary = Color(0xffffffff);
-  static const Color primaryContainer = Color(0xfff6e4e4);
+  static const Color primaryContainer = Color.fromARGB(255, 243, 218, 218);
   static const Color onPrimaryContainer = Color(0xff000000);
 
   // Secondary colors
