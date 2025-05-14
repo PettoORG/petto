@@ -31,6 +31,10 @@ class AppTheme {
         onSurface: AppThemeColor.onSurface,
         onSurfaceVariant: AppThemeColor.onSurfaceVariant,
       ),
+      dividerTheme: DividerThemeData(
+        color: AppThemeColor.tertiaryContainer,
+      ),
+      dividerColor: AppThemeColor.tertiaryContainer,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppThemeColor.primary,
@@ -40,10 +44,7 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(AppThemeRadius.large),
-          borderSide: BorderSide(
-            color: AppThemeColor.tertiary,
-            width: 2,
-          ),
+          borderSide: BorderSide(color: AppThemeColor.tertiaryContainer),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(AppThemeRadius.large),

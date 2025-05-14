@@ -1,4 +1,7 @@
 {
+  "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "confirmPassword": "Confirmar contraseña",
+  "email": "Correo electrónico",
   "error": {
     "cancelledByUser": "La operación fue cancelada por el usuario.",
     "emailDoesNotExist": "No encontramos una cuenta con este correo electrónico.",
@@ -39,6 +42,10 @@
     "unexpectedError": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.",
     "userDisabled": "Tu cuenta ha sido desactivada. Contacta al soporte si necesitas ayuda."
   },
+  "noAccount": "¿No tienes una cuenta?",
+  "orRegisterWith": "O regístrate con",
+  "orSignInWith": "O inicia sesión con",
+  "password": "Contraseña",
   "petBreeds": {
     "africanGrey": "Loro Gris Africano",
     "amazonParrot": "Loro Amazónico",
@@ -107,6 +114,7 @@
     "other": "Otro",
     "rabbit": "Conejo"
   },
+  "register": "Regístrate",
   "reminderFrequencyEnum": {
     "biweekly": "Quincenal",
     "daily": "Diario",
@@ -114,5 +122,6 @@
     "none": "No recurrente",
     "weekly": "Semanal",
     "yearly": "Anual"
-  }
+  },
+  "signIn": "Iniciar sesión"
 }
