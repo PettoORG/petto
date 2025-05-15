@@ -31,10 +31,6 @@ class AppTheme {
         onSurface: AppThemeColor.onSurface,
         onSurfaceVariant: AppThemeColor.onSurfaceVariant,
       ),
-      dividerTheme: DividerThemeData(
-        color: AppThemeColor.tertiaryContainer,
-      ),
-      dividerColor: AppThemeColor.tertiaryContainer,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppThemeColor.primary,
@@ -44,34 +40,21 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(AppThemeRadius.large),
-          borderSide: BorderSide(color: AppThemeColor.tertiaryContainer),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(AppThemeRadius.large),
-          borderSide: BorderSide(
-            color: AppThemeColor.tertiary,
-            width: 2,
-          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(AppThemeRadius.large),
-          borderSide: BorderSide(
-            color: AppThemeColor.tertiary,
-            width: 2,
-          ),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(AppThemeRadius.large),
-          borderSide: BorderSide(
-            color: AppThemeColor.tertiaryContainer,
-            width: 2,
-          ),
         ),
       ),
       textTheme: TextTheme(
-        titleLarge: TextStyle(fontFamily: 'Comfortaa'),
-        titleMedium: TextStyle(fontFamily: 'Comfortaa'),
-        titleSmall: TextStyle(fontFamily: 'Comfortaa'),
+        titleLarge: TextStyle(fontFamily: 'Comfortaa', fontWeight: FontWeight.w600),
+        titleMedium: TextStyle(fontFamily: 'Comfortaa', fontWeight: FontWeight.w600),
+        titleSmall: TextStyle(fontFamily: 'Comfortaa', fontWeight: FontWeight.w600),
       ));
 
   static ThemeData dark() => ThemeData(

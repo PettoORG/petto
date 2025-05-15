@@ -48,7 +48,7 @@ class SignInScreen extends StatelessWidget {
                       decoration: InputDecoration(labelText: 'password'.tr()),
                     ),
                     ElevatedButton(
-                      onPressed: () => const PetRegisterRoute().go(context),
+                      onPressed: () => const CreateOrImportPetRoute().go(context),
                       child: Text('signIn'.tr()),
                     ),
                     Row(

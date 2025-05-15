@@ -4,7 +4,8 @@ import 'package:petto/auth/presentation/screens/sign_in_screen.dart';
 import 'package:petto/auth/presentation/screens/sign_up_screen.dart';
 import 'package:petto/home/presentation/home_screen.dart';
 import 'package:petto/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:petto/pets/presentation/screens/pet_register_screen.dart'; // 1️⃣ importa SignUpScreen
+import 'package:petto/pets/presentation/screens/create_or_import_pet_screen.dart';
+import 'package:petto/pets/presentation/screens/pet_register_screen.dart';
 
 part 'app_router.g.dart';
 
@@ -14,6 +15,15 @@ final GoRouter appRouter = GoRouter(
   debugLogDiagnostics: true,
   routes: $appRoutes,
 );
+
+@TypedGoRoute<CreateOrImportPetRoute>(
+  path: '/createorimportpet',
+)
+class CreateOrImportPetRoute extends GoRouteData {
+  const CreateOrImportPetRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const CreateOrImportPetScreen();
+}
 
 @TypedGoRoute<PetRegisterRoute>(
   path: '/petregister',

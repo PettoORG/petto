@@ -7,12 +7,36 @@ part of 'app_router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
+      $createOrImportPetRoute,
       $petRegisterRoute,
       $homeRoute,
       $onboardingRoute,
       $signInRoute,
       $signUpRoute,
     ];
+
+RouteBase get $createOrImportPetRoute => GoRouteData.$route(
+      path: '/createorimportpet',
+      factory: $CreateOrImportPetRouteExtension._fromState,
+    );
+
+extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
+  static CreateOrImportPetRoute _fromState(GoRouterState state) =>
+      const CreateOrImportPetRoute();
+
+  String get location => GoRouteData.$location(
+        '/createorimportpet',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $petRegisterRoute => GoRouteData.$route(
       path: '/petregister',
