@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petto/auth/presentation/screens/sign_in_screen.dart';
 import 'package:petto/auth/presentation/screens/sign_up_screen.dart';
-import 'package:petto/onboarding/presentation/screens/onboarding_screen.dart'; // 1️⃣ importa SignUpScreen
+import 'package:petto/home/presentation/home_screen.dart';
+import 'package:petto/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:petto/pets/presentation/screens/pet_register_screen.dart'; // 1️⃣ importa SignUpScreen
 
 part 'app_router.g.dart';
 
@@ -12,6 +14,24 @@ final GoRouter appRouter = GoRouter(
   debugLogDiagnostics: true,
   routes: $appRoutes,
 );
+
+@TypedGoRoute<PetRegisterRoute>(
+  path: '/petregister',
+)
+class PetRegisterRoute extends GoRouteData {
+  const PetRegisterRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const PetRegisterScreen();
+}
+
+@TypedGoRoute<HomeRoute>(
+  path: '/home',
+)
+class HomeRoute extends GoRouteData {
+  const HomeRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const HomeScreen();
+}
 
 @TypedGoRoute<OnboardingRoute>(
   path: '/onboarding',

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:petto/core/domain/base_entity.dart';
 import 'package:petto/pets/domain/food_type.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
 import 'package:petto/pets/domain/pet_size.dart';
@@ -10,7 +11,7 @@ part 'pet.freezed.dart';
 /// Stores relevant information for personalized care, tracking, and notifications.
 
 @freezed
-sealed class Pet with _$Pet {
+sealed class Pet with _$Pet implements BaseEntity {
   const Pet._();
 
   const factory Pet({
@@ -24,7 +25,7 @@ sealed class Pet with _$Pet {
     required String name,
 
     /// Pet type (e.g. dog, cat, rabbit).
-    required PetSpecie species,
+    required PetSpecie specie,
 
     /// Pet breed (e.g. Labrador, Persian).
     required PetBreed breed,
@@ -73,7 +74,7 @@ sealed class Pet with _$Pet {
         id: '0',
         ownerId: '',
         name: '',
-        species: PetSpecie.other,
+        specie: PetSpecie.other,
         breed: PetBreed.other,
         sex: '',
         birthDate: DateTime.now(),

@@ -7,10 +7,57 @@ part of 'app_router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
+      $petRegisterRoute,
+      $homeRoute,
       $onboardingRoute,
       $signInRoute,
       $signUpRoute,
     ];
+
+RouteBase get $petRegisterRoute => GoRouteData.$route(
+      path: '/petregister',
+      factory: $PetRegisterRouteExtension._fromState,
+    );
+
+extension $PetRegisterRouteExtension on PetRegisterRoute {
+  static PetRegisterRoute _fromState(GoRouterState state) =>
+      const PetRegisterRoute();
+
+  String get location => GoRouteData.$location(
+        '/petregister',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $homeRoute => GoRouteData.$route(
+      path: '/home',
+      factory: $HomeRouteExtension._fromState,
+    );
+
+extension $HomeRouteExtension on HomeRoute {
+  static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
+
+  String get location => GoRouteData.$location(
+        '/home',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $onboardingRoute => GoRouteData.$route(
       path: '/onboarding',

@@ -12,6 +12,9 @@ abstract interface class FormStateInterface<Entity, EntityVM> {
   /// Whether the form has already been validated.
   abstract bool alreadyValidated;
 
+  /// The values of the form.
+  abstract EntityVM values;
+
   /// Transforms the Entity into a FormModel and populates the form.
   EntityVM populate(Entity entity);
 
@@ -30,6 +33,9 @@ abstract interface class FormStateInterface<Entity, EntityVM> {
 
   /// Checks if the form's 'touched' state has changed and updates it.
   void checkTouched();
+
+  /// Sets the 'touched' state of the form.
+  void setTouchedState(bool touched);
 
   /// REturns a FormBuilderFieldState from a [fieldName].
   FormBuilderFieldState<FormBuilderField<dynamic>, dynamic>? fieldRef(String fieldName);

@@ -116,6 +116,10 @@
     "special": "Alimento especial (medicado o prescrito)",
     "wet": "Alimento húmedo"
   },
+  "petSexEnum": {
+    "female": "Hembra",
+    "male": "Macho"
+  },
   "petSpecieEnum": {
     "bird": "Ave",
     "cat": "Gato",

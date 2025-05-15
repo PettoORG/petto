@@ -10,7 +10,6 @@ class SignInScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
     final minHeight = size.height - padding.top - padding.bottom;
@@ -18,7 +17,6 @@ class SignInScreen extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: colors.primaryContainer,
       body: SafeArea(
         child: SingleChildScrollView(
           child: ConstrainedBox(
@@ -50,7 +48,7 @@ class SignInScreen extends StatelessWidget {
                       decoration: InputDecoration(labelText: 'password'.tr()),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => const PetRegisterRoute().go(context),
                       child: Text('signIn'.tr()),
                     ),
                     Row(

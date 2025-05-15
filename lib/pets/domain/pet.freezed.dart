@@ -25,7 +25,7 @@ mixin _$Pet {
   String get name;
 
   /// Pet type (e.g. dog, cat, rabbit).
-  PetSpecie get species;
+  PetSpecie get specie;
 
   /// Pet breed (e.g. Labrador, Persian).
   PetBreed get breed;
@@ -84,7 +84,7 @@ mixin _$Pet {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.species, species) || other.species == species) &&
+            (identical(other.specie, specie) || other.specie == specie) &&
             (identical(other.breed, breed) || other.breed == breed) &&
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
@@ -115,7 +115,7 @@ mixin _$Pet {
       id,
       ownerId,
       name,
-      species,
+      specie,
       breed,
       sex,
       birthDate,
@@ -133,7 +133,7 @@ mixin _$Pet {
 
   @override
   String toString() {
-    return 'Pet(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -145,7 +145,7 @@ abstract mixin class $PetCopyWith<$Res> {
       {String id,
       String ownerId,
       String name,
-      PetSpecie species,
+      PetSpecie specie,
       PetBreed breed,
       String sex,
       DateTime birthDate,
@@ -177,7 +177,7 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
     Object? id = null,
     Object? ownerId = null,
     Object? name = null,
-    Object? species = null,
+    Object? specie = null,
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
@@ -206,9 +206,9 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      species: null == species
-          ? _self.species
-          : species // ignore: cast_nullable_to_non_nullable
+      specie: null == specie
+          ? _self.specie
+          : specie // ignore: cast_nullable_to_non_nullable
               as PetSpecie,
       breed: null == breed
           ? _self.breed
@@ -277,7 +277,7 @@ class _Pet extends Pet {
       {required this.id,
       required this.ownerId,
       required this.name,
-      required this.species,
+      required this.specie,
       required this.breed,
       required this.sex,
       required this.birthDate,
@@ -308,7 +308,7 @@ class _Pet extends Pet {
 
   /// Pet type (e.g. dog, cat, rabbit).
   @override
-  final PetSpecie species;
+  final PetSpecie specie;
 
   /// Pet breed (e.g. Labrador, Persian).
   @override
@@ -382,7 +382,7 @@ class _Pet extends Pet {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.ownerId, ownerId) || other.ownerId == ownerId) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.species, species) || other.species == species) &&
+            (identical(other.specie, specie) || other.specie == specie) &&
             (identical(other.breed, breed) || other.breed == breed) &&
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
@@ -413,7 +413,7 @@ class _Pet extends Pet {
       id,
       ownerId,
       name,
-      species,
+      specie,
       breed,
       sex,
       birthDate,
@@ -431,7 +431,7 @@ class _Pet extends Pet {
 
   @override
   String toString() {
-    return 'Pet(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -445,7 +445,7 @@ abstract mixin class _$PetCopyWith<$Res> implements $PetCopyWith<$Res> {
       {String id,
       String ownerId,
       String name,
-      PetSpecie species,
+      PetSpecie specie,
       PetBreed breed,
       String sex,
       DateTime birthDate,
@@ -477,7 +477,7 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
     Object? id = null,
     Object? ownerId = null,
     Object? name = null,
-    Object? species = null,
+    Object? specie = null,
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
@@ -506,9 +506,9 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
           ? _self.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      species: null == species
-          ? _self.species
-          : species // ignore: cast_nullable_to_non_nullable
+      specie: null == specie
+          ? _self.specie
+          : specie // ignore: cast_nullable_to_non_nullable
               as PetSpecie,
       breed: null == breed
           ? _self.breed
