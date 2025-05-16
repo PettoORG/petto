@@ -34,8 +34,9 @@ class CreateOrImportPetScreen extends StatelessWidget {
               height: size.height * .12,
               padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer,
+                color: colorScheme.surface,
                 borderRadius: BorderRadius.all(AppThemeRadius.small),
+                boxShadow: [AppThemeShadow.small],
               ),
               child: Center(
                 child: Row(
@@ -72,8 +73,9 @@ class CreateOrImportPetScreen extends StatelessWidget {
               height: size.height * .12,
               padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer,
+                color: colorScheme.surface,
                 borderRadius: BorderRadius.all(AppThemeRadius.small),
+                boxShadow: [AppThemeShadow.small],
               ),
               child: Center(
                 child: Row(

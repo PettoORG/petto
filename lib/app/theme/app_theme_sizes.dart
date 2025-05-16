@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AppThemeSpacing {
   static const double tiny = 0.01; // 1%
   static const double extraSmall = 0.02; // 2%
@@ -19,4 +21,27 @@ class AppThemeRadius {
   static const Radius extraLarge = Radius.circular(24);
   static const Radius doubleXL = Radius.circular(32);
   static const Radius tripleXL = Radius.circular(48);
+}
+
+class AppThemeShadow {
+  static const BoxShadow small = BoxShadow(
+    color: Color.fromARGB(20, 0, 0, 0),
+    blurRadius: 4,
+    offset: Offset(0, 2),
+  );
+  static const BoxShadow medium = BoxShadow(
+    color: Color.fromARGB(30, 0, 0, 0),
+    blurRadius: 8,
+    offset: Offset(0, 4),
+  );
+  static const BoxShadow large = BoxShadow(
+    color: Color.fromARGB(40, 0, 0, 0),
+    blurRadius: 12,
+    offset: Offset(0, 8),
+  );
+  static const BoxShadow extraLarge = BoxShadow(
+    color: Color.fromARGB(50, 0, 0, 0),
+    blurRadius: 16,
+    offset: Offset(0, 12),
+  );
 }

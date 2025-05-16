@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/form/application/form_state_interface.dart';
 import 'package:petto/core/form/application/touched_provider.dart';
@@ -46,6 +47,9 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
   /// Track the currently selected gender
   Gender? _selectedGender;
 
+  /// Track the currently selected species
+  PetSpecie? _selectedSpecie;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -58,30 +62,52 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
         spacing: size.height * AppThemeSpacing.extraSmall,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FormBuilderTextField(
             name: 'name',
-            decoration: const InputDecoration(
-              label: Text('Nombre'),
+            decoration: InputDecoration(
+              label: Text('name'.tr()),
             ),
           ),
           Row(
             children: [
               Expanded(
                 child: FormBuilderDropdown<PetSpecie>(
-                  name: 'Especie',
+                  name: 'specie',
                   autovalidateMode: autovalidateMode,
-                  decoration: const InputDecoration(labelText: 'Especie'),
-                  items: <DropdownMenuItem<PetSpecie>>[],
+                  decoration: InputDecoration(labelText: 'specie'.tr()),
+                  // Populate species using displayName
+                  items: PetSpecie.values
+                      .map((specie) => DropdownMenuItem(
+                            value: specie,
+                            child: Text(specie.displayName),
+                          ))
+                      .toList(),
+                  onChanged: (PetSpecie? value) {
+                    setState(() {
+                      _selectedSpecie = value;
+                      // Reset breed when species changes
+                      fk.currentState?.fields['breed']?.didChange(null);
+                    });
+                  },
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: FormBuilderDropdown<PetBreed>(
-                  name: 'Raza',
+                  name: 'breed',
                   autovalidateMode: autovalidateMode,
-                  decoration: const InputDecoration(labelText: 'Raza'),
-                  items: <DropdownMenuItem<PetBreed>>[],
+                  decoration: InputDecoration(labelText: 'breed'.tr()),
+                  // Filter breeds by selected species and use displayName
+                  items: (_selectedSpecie == null
+                          ? <PetBreed>[]
+                          : PetBreed.values.where((breed) => breed.specie == _selectedSpecie).toList())
+                      .map((breed) => DropdownMenuItem(
+                            value: breed,
+                            child: Text(breed.displayName),
+                          ))
+                      .toList(),
                 ),
               ),
             ],
@@ -93,21 +119,20 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                   onTap: () {
                     setState(() {
                       _selectedGender = Gender.male;
-                      // Store value in form
-                      fk.currentState?.fields['gender']?.didChange('male');
                     });
                   },
                   borderRadius: BorderRadius.all(AppThemeRadius.medium),
                   child: Ink(
                     padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
                     decoration: BoxDecoration(
-                      color: _selectedGender == Gender.male ? colorScheme.primary : colorScheme.primaryContainer,
+                      color: _selectedGender == Gender.male ? colorScheme.primaryContainer : colorScheme.surface,
                       borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                      boxShadow: [AppThemeShadow.small],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Macho'),
+                        Text('male'.tr()),
                         SizedBox(width: size.width * AppThemeSpacing.small),
                         Icon(
                           Icons.male,
@@ -124,20 +149,20 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                   onTap: () {
                     setState(() {
                       _selectedGender = Gender.female;
-                      fk.currentState?.fields['gender']?.didChange('female');
                     });
                   },
                   borderRadius: BorderRadius.all(AppThemeRadius.medium),
                   child: Ink(
                     padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
                     decoration: BoxDecoration(
-                      color: _selectedGender == Gender.female ? colorScheme.primary : colorScheme.primaryContainer,
+                      color: _selectedGender == Gender.female ? colorScheme.primaryContainer : colorScheme.surface,
                       borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                      boxShadow: [AppThemeShadow.small],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Hembra'),
+                        Text('female'.tr()),
                         SizedBox(width: size.width * AppThemeSpacing.small),
                         Icon(
                           Icons.female,
@@ -157,7 +182,11 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
             inputType: InputType.date,
             firstDate: DateTime(1900),
             lastDate: DateTime.now(),
-            decoration: const InputDecoration(labelText: 'Fecha de nacimiento'),
+            decoration: InputDecoration(labelText: 'birthDate'.tr()),
+          ),
+          ElevatedButton(
+            onPressed: () => HomeRoute().go(context),
+            child: Text('continue'.tr()),
           ),
         ],
       ),

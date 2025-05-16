@@ -6,7 +6,7 @@ class AppTheme {
   static ThemeData light() => ThemeData(
       fontFamily: 'Montserrat',
       useMaterial3: true,
-      scaffoldBackgroundColor: AppThemeColor.surface,
+      scaffoldBackgroundColor: AppThemeColor.background,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppThemeColor.primary,
         primary: AppThemeColor.primary,
@@ -22,15 +22,10 @@ class AppTheme {
         tertiaryContainer: AppThemeColor.tertiaryContainer,
         onTertiaryContainer: AppThemeColor.onTertiaryContainer,
         surface: AppThemeColor.surface,
-        surfaceBright: AppThemeColor.surfaceBright,
-        surfaceContainerLowest: AppThemeColor.surfaceContainerLowest,
-        surfaceContainerLow: AppThemeColor.surfaceContainerLow,
-        surfaceContainer: AppThemeColor.surfaceContainer,
-        surfaceContainerHigh: AppThemeColor.surfaceContainerHigh,
-        surfaceContainerHighest: AppThemeColor.surfaceContainerHighest,
         onSurface: AppThemeColor.onSurface,
         onSurfaceVariant: AppThemeColor.onSurfaceVariant,
       ),
+      appBarTheme: AppBarTheme(backgroundColor: AppThemeColor.background),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppThemeColor.primary,

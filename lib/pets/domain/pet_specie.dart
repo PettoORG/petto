@@ -4,10 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 enum PetSpecie {
   dog,
   cat,
-  rabbit,
-  bird,
-  fish,
   other;
+  // rabbit,
+  // bird,
+  // fish,
 
   /// Localized label for UI display.
   String get displayName => 'petSpecieEnum.$name'.tr();

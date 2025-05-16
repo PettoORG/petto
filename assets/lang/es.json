@@ -3,7 +3,10 @@
   "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o por alguien más desde otro dispositivo.",
   "alreadyHaveAccount": "¿Ya tienes una cuenta?",
   "back": "Atrás",
+  "birthDate": "Fecha de nacimiento",
+  "breed": "Raza",
   "confirmPassword": "Confirmar contraseña",
+  "continue": "Continuar",
   "createNewPet": "Crear mascota nueva",
   "createNewPetDescription": "Registra por primera vez los datos de tu mascota y comienza a llevar su control.",
   "email": "Correo electrónico",
@@ -47,6 +50,9 @@
     "unexpectedError": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.",
     "userDisabled": "Tu cuenta ha sido desactivada. Contacta al soporte si necesitas ayuda."
   },
+  "female": "Hembra",
+  "male": "Macho",
+  "name": "Nombre",
   "next": "Siguiente",
   "noAccount": "¿No tienes una cuenta?",
   "onboardingMedicalHistoryBody": "Guarda y consulta el carnet de vacunación, diagnósticos, tratamientos y documentos de cada mascota cuando los necesites.",
@@ -60,7 +66,7 @@
   "orRegisterWith": "O regístrate con",
   "orSignInWith": "O inicia sesión con",
   "password": "Contraseña",
-  "petBreeds": {
+  "petBreedEnum": {
     "africanGrey": "Loro Gris Africano",
     "amazonParrot": "Loro Amazónico",
     "americanShorthair": "Americano de Pelo Corto",
@@ -143,5 +149,6 @@
   },
   "signIn": "Iniciar sesión",
   "skip": "Saltar",
+  "specie": "Especie",
   "start": "Comenzar"
 }
