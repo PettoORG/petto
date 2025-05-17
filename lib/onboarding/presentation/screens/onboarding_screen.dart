@@ -18,18 +18,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'onboardingWelcomeTitle'.tr(),
       'body': 'onboardingWelcomeBody'.tr(),
+      'asset': 'assets/images/dog-and-men.png',
     },
     {
       'title': 'onboardingReminderTitle'.tr(),
       'body': 'onboardingReminderBody'.tr(),
+      'asset': 'assets/images/cat-and-reminder.png',
     },
     {
       'title': 'onboardingMedicalHistoryTitle'.tr(),
       'body': 'onboardingMedicalHistoryBody'.tr(),
+      'asset': 'assets/images/dog-and-veterinary.png',
     },
     {
       'title': 'onboardingMultiPetTitle'.tr(),
       'body': 'onboardingMultiPetBody'.tr(),
+      'asset': 'assets/images/pet-family.png',
     },
   ];
 
@@ -38,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
-    final placeholderSize = size.height * .35;
+    final placeholderSize = size.height * .4;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -51,31 +55,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               onPageChanged: (i) => setState(() => _current = i),
               itemBuilder: (context, i) {
                 final page = _pages[i];
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: size.width * AppThemeSpacing.medium,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: placeholderSize,
-                        height: placeholderSize,
-                        child: Placeholder(),
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      page['asset']!,
+                      height: placeholderSize,
+                      width: placeholderSize,
+                      fit: BoxFit.cover,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: size.width * AppThemeSpacing.medium,
                       ),
-                      SizedBox(height: size.height * AppThemeSpacing.large),
-                      Text(
-                        page['title']!,
-                        style: textTheme.titleLarge,
-                        textAlign: TextAlign.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(height: size.height * AppThemeSpacing.large),
+                          Text(
+                            page['title']!,
+                            style: textTheme.titleLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: size.height * AppThemeSpacing.extraSmall),
+                          Text(
+                            page['body']!,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
-                      SizedBox(height: size.height * AppThemeSpacing.extraSmall),
-                      Text(
-                        page['body']!,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
             ),

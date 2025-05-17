@@ -54,6 +54,7 @@ flutter:
     - assets/
     - assets/lang/
     - assets/svgs/
+    - assets/images/
 
   fonts:
     # Comfortaa
