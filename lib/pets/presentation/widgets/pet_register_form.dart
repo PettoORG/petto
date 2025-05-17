@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
@@ -8,12 +9,10 @@ import 'package:petto/core/form/application/form_state_interface.dart';
 import 'package:petto/core/form/application/touched_provider.dart';
 import 'package:petto/pets/domain/pet.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
+import 'package:petto/pets/domain/pet_sex.dart';
 import 'package:petto/pets/domain/pet_specie.dart';
 import 'package:petto/pets/domain/pet_vm.dart';
 import 'package:petto/pets/shared/constant.dart';
-
-/// Simple enum to track gender selection
-enum Gender { male, female }
 
 class PetRegisterForm extends StatefulHookConsumerWidget {
   const PetRegisterForm({
@@ -45,7 +44,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
   PetVM values = PetVM.empty();
 
   /// Track the currently selected gender
-  Gender? _selectedGender;
+  PetSex? _selectedGender;
 
   /// Track the currently selected species
   PetSpecie? _selectedSpecie;
@@ -60,135 +59,137 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
       key: fk,
       onChanged: onChanged,
       autovalidateMode: AutovalidateMode.disabled,
-      child: Column(
-        spacing: size.height * AppThemeSpacing.extraSmall,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          FormBuilderTextField(
-            name: 'name',
-            decoration: InputDecoration(
-              label: Text('name'.tr()),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: size.width * AppThemeSpacing.medium),
+        child: Column(
+          spacing: size.height * AppThemeSpacing.extraSmall,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(child: _PetAvatar(specie: _selectedSpecie)),
+            SizedBox(height: size.height * AppThemeSpacing.extraSmall),
+            FormBuilderTextField(
+              name: 'name',
+              decoration: InputDecoration(
+                label: Text('name'.tr()),
+              ),
             ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: FormBuilderDropdown<PetSpecie>(
-                  name: 'specie',
-                  autovalidateMode: autovalidateMode,
-                  decoration: InputDecoration(labelText: 'specie'.tr()),
-                  // Populate species using displayName
-                  items: PetSpecie.values
-                      .map((specie) => DropdownMenuItem(
-                            value: specie,
-                            child: Text(specie.displayName),
-                          ))
-                      .toList(),
-                  onChanged: (PetSpecie? value) {
-                    setState(() {
-                      _selectedSpecie = value;
-                      // Reset breed when species changes
-                      fk.currentState?.fields['breed']?.didChange(null);
-                    });
-                  },
+            Row(
+              children: [
+                Expanded(
+                  child: FormBuilderDropdown<PetSpecie>(
+                    name: 'specie',
+                    autovalidateMode: autovalidateMode,
+                    decoration: InputDecoration(labelText: 'specie'.tr()),
+                    items: PetSpecie.values
+                        .map((specie) => DropdownMenuItem(
+                              value: specie,
+                              child: Text(specie.displayName),
+                            ))
+                        .toList(),
+                    onChanged: (PetSpecie? value) {
+                      setState(() {
+                        _selectedSpecie = value;
+                        fk.currentState?.fields['breed']?.didChange(null);
+                      });
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: FormBuilderDropdown<PetBreed>(
-                  name: 'breed',
-                  autovalidateMode: autovalidateMode,
-                  decoration: InputDecoration(labelText: 'breed'.tr()),
-                  // Filter breeds by selected species and use displayName
-                  items: (_selectedSpecie == null
-                          ? <PetBreed>[]
-                          : PetBreed.values.where((breed) => breed.specie == _selectedSpecie).toList())
-                      .map((breed) => DropdownMenuItem(
-                            value: breed,
-                            child: Text(breed.displayName),
-                          ))
-                      .toList(),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: FormBuilderDropdown<PetBreed>(
+                    name: 'breed',
+                    autovalidateMode: autovalidateMode,
+                    decoration: InputDecoration(labelText: 'breed'.tr()),
+                    items: (_selectedSpecie == null
+                            ? <PetBreed>[]
+                            : PetBreed.values.where((breed) => breed.specie == _selectedSpecie).toList())
+                        .map((breed) => DropdownMenuItem(
+                              value: breed,
+                              child: Text(breed.displayName),
+                            ))
+                        .toList(),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedGender = Gender.male;
-                    });
-                  },
-                  borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                  child: Ink(
-                    padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
-                    decoration: BoxDecoration(
-                      color: _selectedGender == Gender.male ? colorScheme.primaryContainer : colorScheme.surface,
-                      borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                      boxShadow: [AppThemeShadow.small],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('male'.tr()),
-                        SizedBox(width: size.width * AppThemeSpacing.small),
-                        Icon(
-                          Icons.male,
-                          size: size.height * AppThemeSpacing.small,
-                        ),
-                      ],
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedGender = PetSex.male;
+                      });
+                    },
+                    borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                    child: Ink(
+                      padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+                      decoration: BoxDecoration(
+                        color: _selectedGender == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
+                        borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                        boxShadow: [AppThemeShadow.small],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(PetSex.male.displayName),
+                          SizedBox(width: size.width * AppThemeSpacing.small),
+                          Icon(
+                            Icons.male,
+                            size: size.height * AppThemeSpacing.small,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(width: size.width * AppThemeSpacing.small),
-              Expanded(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      _selectedGender = Gender.female;
-                    });
-                  },
-                  borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                  child: Ink(
-                    padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
-                    decoration: BoxDecoration(
-                      color: _selectedGender == Gender.female ? colorScheme.primaryContainer : colorScheme.surface,
-                      borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                      boxShadow: [AppThemeShadow.small],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('female'.tr()),
-                        SizedBox(width: size.width * AppThemeSpacing.small),
-                        Icon(
-                          Icons.female,
-                          size: size.height * AppThemeSpacing.small,
-                        ),
-                      ],
+                SizedBox(width: size.width * AppThemeSpacing.small),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedGender = PetSex.female;
+                      });
+                    },
+                    borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                    child: Ink(
+                      padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+                      decoration: BoxDecoration(
+                        color: _selectedGender == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
+                        borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                        boxShadow: [AppThemeShadow.small],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(PetSex.female.displayName),
+                          SizedBox(width: size.width * AppThemeSpacing.small),
+                          Icon(
+                            Icons.female,
+                            size: size.height * AppThemeSpacing.small,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          FormBuilderDateTimePicker(
-            name: 'birthDate',
-            locale: context.locale,
-            format: DateFormat.yMd(context.locale.languageCode),
-            inputType: InputType.date,
-            firstDate: DateTime(1900),
-            lastDate: DateTime.now(),
-            decoration: InputDecoration(labelText: 'birthDate'.tr()),
-          ),
-          ElevatedButton(
-            onPressed: () => HomeRoute().go(context),
-            child: Text('continue'.tr()),
-          ),
-        ],
+              ],
+            ),
+            FormBuilderDateTimePicker(
+              name: 'birthDate',
+              locale: context.locale,
+              format: DateFormat.yMd(context.locale.languageCode),
+              inputType: InputType.date,
+              firstDate: DateTime(1900),
+              lastDate: DateTime.now(),
+              decoration: InputDecoration(labelText: 'birthDate'.tr()),
+            ),
+            ElevatedButton(
+              onPressed: () => HomeRoute().go(context),
+              child: Text('continue'.tr()),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -252,5 +253,61 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
   @override
   void setField(String fieldName, dynamic value) {
     fieldRef(fieldName)?.didChange(value);
+  }
+}
+
+/// Avatar widget extracted from the form
+class _PetAvatar extends StatelessWidget {
+  const _PetAvatar({required this.specie});
+
+  final PetSpecie? specie;
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final double radius = size.height * AppThemeSpacing.extraLarge;
+    final double avatarSize = radius * 2;
+    final String assetPath = specie == PetSpecie.cat ? 'assets/images/cat.png' : 'assets/images/dog.png';
+
+    final Widget imageWidget = assetPath.endsWith('.svg')
+        ? SvgPicture.asset(assetPath, fit: BoxFit.cover, width: avatarSize, height: avatarSize)
+        : Image.asset(assetPath, fit: BoxFit.cover, width: avatarSize, height: avatarSize);
+
+    return SizedBox(
+      width: avatarSize,
+      height: avatarSize,
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+            width: avatarSize,
+            height: avatarSize,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              shape: BoxShape.circle,
+              boxShadow: [AppThemeShadow.small],
+            ),
+            child: ClipOval(child: imageWidget),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                shape: BoxShape.circle,
+                boxShadow: [AppThemeShadow.small],
+              ),
+              child: Icon(
+                Icons.camera_alt,
+                size: size.height * AppThemeSpacing.small,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

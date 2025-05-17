@@ -76,7 +76,7 @@ class _PetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: colorScheme.surface,
-      elevation: 1,
+      elevation: .3,
       borderRadius: const BorderRadius.all(AppThemeRadius.small),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -84,24 +84,28 @@ class _PetCard extends StatelessWidget {
         borderRadius: const BorderRadius.all(AppThemeRadius.small),
         child: Padding(
           padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(titleKey.tr(), style: textTheme.titleMedium),
-                    Text(
-                      descriptionKey.tr(),
-                      maxLines: 3,
-                    ),
-                  ],
+          child: SizedBox(
+            height: size.height * .1,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(titleKey.tr(), style: textTheme.titleMedium),
+                      Text(
+                        descriptionKey.tr(),
+                        maxLines: 3,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: size.width * AppThemeSpacing.extraSmall),
-              const Icon(Icons.arrow_forward_ios_rounded),
-            ],
+                SizedBox(width: size.width * AppThemeSpacing.extraSmall),
+                const Icon(Icons.arrow_forward_ios_rounded),
+              ],
+            ),
           ),
         ),
       ),

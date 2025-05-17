@@ -1,6 +1,6 @@
 {
   "addExistingPet": "Agregar mascota existente",
-  "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o por alguien más desde otro dispositivo.",
+  "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o alguien más en otro dispositivo.",
   "alreadyHaveAccount": "¿Ya tienes una cuenta?",
   "back": "Atrás",
   "birthDate": "Fecha de nacimiento",
@@ -8,7 +8,7 @@
   "confirmPassword": "Confirmar contraseña",
   "continue": "Continuar",
   "createNewPet": "Crear mascota nueva",
-  "createNewPetDescription": "Registra por primera vez los datos de tu mascota y comienza a llevar su control.",
+  "createNewPetDescription": "Registra a tu mascota y empieza a llevar su control.",
   "email": "Correo electrónico",
   "error": {
     "cancelledByUser": "La operación fue cancelada por el usuario.",
