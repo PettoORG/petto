@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppThemeColor {
-  static const Color background = Color(0xfff9f9f9);
+  static const Color background = Color.fromARGB(255, 253, 237, 223);
   // Primary colors
   static const Color primary = Color(0xffff6b81);
   static const Color onPrimary = Color(0xffffffff);
@@ -21,7 +21,7 @@ class AppThemeColor {
   static const Color onTertiaryContainer = Color(0xffffffff);
 
   // Surface colors
-  static const Color surface = Color(0xffffffff);
+  static const Color surface = Color.fromARGB(255, 255, 245, 236);
 
   static const Color onSurface = Color(0xff000000);
   static const Color onSurfaceVariant = Color(0xff4A4A4A);

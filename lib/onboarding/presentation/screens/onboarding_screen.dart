@@ -42,10 +42,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
-    final placeholderSize = size.height * .4;
+    final placeholderSize = size.height * .35;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       body: Column(
         children: [
           Expanded(
@@ -100,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: active ? size.height * .04 : size.height * .01,
                 height: size.height * .01,
                 decoration: BoxDecoration(
-                  color: active ? colors.primary : colors.surfaceContainerHigh,
+                  color: active ? colors.primary : colors.primaryContainer.withValues(alpha: .7),
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
