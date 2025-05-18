@@ -28,6 +28,7 @@ class AppTheme {
       appBarTheme: AppBarTheme(backgroundColor: AppThemeColor.background),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          textStyle: TextStyle(fontFamily: 'Comfortaa', fontWeight: FontWeight.w600, fontSize: 16),
           backgroundColor: AppThemeColor.primary,
           foregroundColor: AppThemeColor.onPrimary,
         ),

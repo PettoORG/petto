@@ -83,7 +83,7 @@ class _PetCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: const BorderRadius.all(AppThemeRadius.small),
         child: Padding(
-          padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+          padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
           child: SizedBox(
             height: size.height * .1,
             child: Row(

@@ -116,7 +116,7 @@ class _SocialButton extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * AppThemeSpacing.tiny),
+        padding: EdgeInsets.symmetric(vertical: size.height * AppThemeSpacing.extraTiny),
         child: SvgPicture.asset(
           asset,
           height: size.height * AppThemeSpacing.small,

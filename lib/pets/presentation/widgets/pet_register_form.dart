@@ -123,7 +123,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                     },
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
                     child: Ink(
-                      padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+                      padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
                       decoration: BoxDecoration(
                         color: _selectedGender == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
                         borderRadius: BorderRadius.all(AppThemeRadius.medium),
@@ -153,7 +153,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                     },
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
                     child: Ink(
-                      padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+                      padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
                       decoration: BoxDecoration(
                         color: _selectedGender == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
                         borderRadius: BorderRadius.all(AppThemeRadius.medium),
@@ -279,7 +279,7 @@ class _PetAvatar extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+            padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
             width: avatarSize,
             height: avatarSize,
             decoration: BoxDecoration(
@@ -293,7 +293,7 @@ class _PetAvatar extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.all(size.height * AppThemeSpacing.tiny),
+              padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 shape: BoxShape.circle,

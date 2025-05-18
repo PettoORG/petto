@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           color: colorScheme.surface,
           padding: EdgeInsets.symmetric(
-            vertical: size.height * AppThemeSpacing.tiny,
+            vertical: size.height * AppThemeSpacing.extraTiny,
             horizontal: size.width * AppThemeSpacing.medium,
           ),
           child: GNav(
