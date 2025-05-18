@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 
@@ -41,8 +42,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final size = MediaQuery.of(context).size;
-    final placeholderSize = size.height * .35;
+
+    // Placeholder size is 35% of screen height
+    final placeholderSize = 0.35.sh;
 
     return Scaffold(
       body: Column(
@@ -65,18 +67,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: size.width * AppThemeSpacing.medium,
+                        horizontal: AppThemeSpacing.mediumH,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: size.height * AppThemeSpacing.large),
+                          SizedBox(height: AppThemeSpacing.largeV),
                           Text(
                             page['title']!,
                             style: textTheme.titleLarge,
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: size.height * AppThemeSpacing.extraSmall),
+                          SizedBox(height: AppThemeSpacing.extraSmallV),
                           Text(
                             page['body']!,
                             textAlign: TextAlign.center,
@@ -95,12 +97,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               final active = dot == _current;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: active ? size.height * .04 : size.height * .01,
-                height: size.height * .01,
+                margin: EdgeInsets.symmetric(horizontal: 4.r),
+                width: active ? 0.04.sh : 0.01.sh,
+                height: 0.01.sh,
                 decoration: BoxDecoration(
                   color: active ? colors.primary : colors.primaryContainer.withValues(alpha: .7),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
               );
             }),
@@ -109,8 +111,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             top: false,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: size.width * AppThemeSpacing.medium,
-                vertical: size.height * AppThemeSpacing.extraSmall,
+                horizontal: AppThemeSpacing.mediumH,
+                vertical: AppThemeSpacing.extraSmallV,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

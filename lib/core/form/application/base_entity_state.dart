@@ -5,7 +5,7 @@ part 'base_entity_state.freezed.dart';
 
 /// Entity State retrieved from Firestore.
 @freezed
-sealed class BaseEntityState<T> with _$BaseEntityState<T> {
+abstract class BaseEntityState<T> with _$BaseEntityState<T> {
   const BaseEntityState._();
 
   /// Entity loading state (also the initial state, with a null entity).

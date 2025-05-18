@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/home/presentation/widgets/calendar_view.dart';
 import 'package:petto/home/presentation/widgets/profile_view.dart';
@@ -30,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
           }(),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none_rounded)),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_none_rounded),
+          ),
         ],
       ),
       body: PageView(
@@ -65,14 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
           ProfileView(),
         ],
       ),
-
-      // ---------- Bottom Navigation ----------
       bottomNavigationBar: SafeArea(
         child: Container(
           color: colorScheme.surface,
           padding: EdgeInsets.symmetric(
-            vertical: size.height * AppThemeSpacing.extraTiny,
-            horizontal: size.width * AppThemeSpacing.medium,
+            vertical: AppThemeSpacing.extraTinyV,
+            horizontal: AppThemeSpacing.mediumH,
           ),
           child: GNav(
             selectedIndex: _index,
@@ -85,14 +86,14 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             gap: 0,
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12.r),
             rippleColor: colorScheme.primaryContainer,
             hoverColor: colorScheme.primaryContainer,
             duration: Duration.zero,
             curve: Curves.easeOut,
             activeColor: colorScheme.surface,
             tabBackgroundColor: colorScheme.primaryContainer,
-            tabBorderRadius: 30,
+            tabBorderRadius: 30.r,
             tabs: const [
               GButton(icon: Icons.home_rounded),
               GButton(icon: Icons.alarm_rounded),

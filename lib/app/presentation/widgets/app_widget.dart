@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme.dart';
 import 'package:petto/app/theme/app_theme_notifier.dart';
+import 'package:petto/core/shared/providers.dart';
 
 class AppWidget extends StatefulHookConsumerWidget {
   const AppWidget({super.key});
@@ -15,7 +16,8 @@ class AppWidget extends StatefulHookConsumerWidget {
 class _AppWidgetState extends ConsumerState<AppWidget> {
   @override
   Widget build(BuildContext context) {
-    final ThemeData? theme = ref.watch(appThemeNotifierProvider).value;
+    final theme = ref.watch(appThemeNotifierProvider).value;
+    ref.watch(internetConnectionProvider);
 
     return MaterialApp.router(
       routerConfig: appRouter,

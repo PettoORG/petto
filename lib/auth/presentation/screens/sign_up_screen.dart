@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 
@@ -10,10 +11,10 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
-    final minHeight = size.height - padding.top - padding.bottom;
-    final placeholderSize = size.height * .2;
+    // Full usable height inside SafeArea
+    final double minHeight = 1.sh - ScreenUtil().statusBarHeight - ScreenUtil().bottomBarHeight;
+    // 20% of screen height
+    final double placeholderSize = 0.2.sh;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -24,13 +25,13 @@ class SignUpScreen extends StatelessWidget {
             child: IntrinsicHeight(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: size.width * AppThemeSpacing.medium,
+                  horizontal: AppThemeSpacing.mediumH,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: size.height * AppThemeSpacing.extraSmall,
+                  spacing: AppThemeSpacing.extraSmallV,
                   children: [
-                    Spacer(),
+                    const Spacer(),
                     Center(
                       child: SizedBox(
                         width: placeholderSize,
@@ -38,14 +39,18 @@ class SignUpScreen extends StatelessWidget {
                         child: Placeholder(),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     FormBuilderTextField(
                       name: 'email',
-                      decoration: InputDecoration(labelText: 'email'.tr()),
+                      decoration: InputDecoration(
+                        labelText: 'email'.tr(),
+                      ),
                     ),
                     FormBuilderTextField(
                       name: 'password',
-                      decoration: InputDecoration(labelText: 'password'.tr()),
+                      decoration: InputDecoration(
+                        labelText: 'password'.tr(),
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () {},
@@ -55,13 +60,13 @@ class SignUpScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Divider(
-                            endIndent: size.width * AppThemeSpacing.extraSmall,
+                            endIndent: AppThemeSpacing.extraSmallH,
                           ),
                         ),
                         Text('orRegisterWith'.tr()),
                         Expanded(
                           child: Divider(
-                            indent: size.width * AppThemeSpacing.extraSmall,
+                            indent: AppThemeSpacing.extraSmallH,
                           ),
                         ),
                       ],
@@ -69,9 +74,15 @@ class SignUpScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _SocialButton(asset: 'assets/svgs/google.svg', onPressed: () {}),
-                        SizedBox(width: size.width * AppThemeSpacing.small),
-                        _SocialButton(asset: 'assets/svgs/apple.svg', onPressed: () {}),
+                        _SocialButton(
+                          asset: 'assets/svgs/google.svg',
+                          onPressed: () {},
+                        ),
+                        SizedBox(width: AppThemeSpacing.smallH),
+                        _SocialButton(
+                          asset: 'assets/svgs/apple.svg',
+                          onPressed: () {},
+                        ),
                       ],
                     ),
                     const Spacer(),
@@ -85,7 +96,7 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox.shrink()
+                    const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -100,12 +111,16 @@ class SignUpScreen extends StatelessWidget {
 class _SocialButton extends StatelessWidget {
   final String asset;
   final VoidCallback onPressed;
-  const _SocialButton({required this.asset, required this.onPressed});
+
+  const _SocialButton({
+    required this.asset,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final size = MediaQuery.of(context).size;
+
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -116,10 +131,12 @@ class _SocialButton extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * AppThemeSpacing.extraTiny),
+        padding: EdgeInsets.symmetric(
+          vertical: AppThemeSpacing.extraTinyV,
+        ),
         child: SvgPicture.asset(
           asset,
-          height: size.height * AppThemeSpacing.small,
+          height: AppThemeSpacing.smallV,
         ),
       ),
     );

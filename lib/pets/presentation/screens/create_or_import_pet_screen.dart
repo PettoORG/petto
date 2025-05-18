@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 
@@ -9,17 +10,16 @@ class CreateOrImportPetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final placeholderSize = size.height * .35;
+    final placeholderSize = 0.35.sh;
 
     return Scaffold(
       body: Stack(
         children: [
           const Positioned.fill(child: _BackgroundPaws()),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * AppThemeSpacing.medium),
+            padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumH),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -28,21 +28,19 @@ class CreateOrImportPetScreen extends StatelessWidget {
                   width: placeholderSize,
                   height: placeholderSize,
                 ),
-                SizedBox(height: size.width * AppThemeSpacing.medium),
+                SizedBox(height: AppThemeSpacing.mediumV),
                 _PetCard(
                   onTap: () => PetRegisterRoute().push(context),
                   titleKey: 'createNewPet',
                   descriptionKey: 'createNewPetDescription',
-                  size: size,
                   colorScheme: colorScheme,
                   textTheme: textTheme,
                 ),
-                SizedBox(height: size.width * AppThemeSpacing.medium),
+                SizedBox(height: AppThemeSpacing.extraSmallV),
                 _PetCard(
                   onTap: () {},
                   titleKey: 'addExistingPet',
                   descriptionKey: 'addExistingPetDescription',
-                  size: size,
                   colorScheme: colorScheme,
                   textTheme: textTheme,
                 ),
@@ -60,7 +58,6 @@ class _PetCard extends StatelessWidget {
     required this.onTap,
     required this.titleKey,
     required this.descriptionKey,
-    required this.size,
     required this.colorScheme,
     required this.textTheme,
   });
@@ -68,7 +65,6 @@ class _PetCard extends StatelessWidget {
   final VoidCallback onTap;
   final String titleKey;
   final String descriptionKey;
-  final Size size;
   final ColorScheme colorScheme;
   final TextTheme textTheme;
 
@@ -77,15 +73,15 @@ class _PetCard extends StatelessWidget {
     return Material(
       color: colorScheme.surface,
       elevation: .3,
-      borderRadius: const BorderRadius.all(AppThemeRadius.small),
+      borderRadius: BorderRadius.all(AppThemeRadius.small),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: const BorderRadius.all(AppThemeRadius.small),
+        borderRadius: BorderRadius.all(AppThemeRadius.small),
         child: Padding(
-          padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
+          padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
           child: SizedBox(
-            height: size.height * .1,
+            height: 0.1.sh,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -102,7 +98,7 @@ class _PetCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: size.width * AppThemeSpacing.extraSmall),
+                SizedBox(width: AppThemeSpacing.extraSmallH),
                 const Icon(Icons.arrow_forward_ios_rounded),
               ],
             ),
@@ -140,32 +136,28 @@ class _BackgroundPaws extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return IgnorePointer(
       child: Stack(
-        children: _paws
-            .map(
-              (p) => Positioned(
-                left: size.width * p.xFactor,
-                top: size.height * p.yFactor,
-                child: Transform.rotate(
-                  angle: p.rotation,
-                  child: Transform.scale(
-                    scale: p.scale,
-                    child: Opacity(
-                      opacity: 0.3,
-                      child: Image.asset(
-                        'assets/images/paw.png',
-                        width: 80,
-                        height: 80,
-                      ),
-                    ),
+        children: _paws.map((p) {
+          return Positioned(
+            left: p.xFactor.sw,
+            top: p.yFactor.sh,
+            child: Transform.rotate(
+              angle: p.rotation,
+              child: Transform.scale(
+                scale: p.scale,
+                child: Opacity(
+                  opacity: 0.3,
+                  child: Image.asset(
+                    'assets/images/paw.png',
+                    width: 80.r,
+                    height: 80.r,
                   ),
                 ),
               ),
-            )
-            .toList(),
+            ),
+          );
+        }).toList(),
       ),
     );
   }

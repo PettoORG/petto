@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 
 class ProfileView extends StatelessWidget {
@@ -6,12 +7,10 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
-    // Dynamic list of cards to display
-    final List<_ProfileOption> options = [
+    final options = [
       _ProfileOption(title: 'Editar perfil', icon: Icons.edit, onTap: () {}),
       _ProfileOption(title: 'Seguridad', icon: Icons.security, onTap: () {}),
       _ProfileOption(title: 'Volverme Premium', icon: Icons.star, onTap: () {}),
@@ -25,40 +24,40 @@ class ProfileView extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.width * AppThemeSpacing.medium),
+        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumH),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: size.height * AppThemeSpacing.extraSmall,
+          spacing: AppThemeSpacing.extraSmallV,
           children: [
             const Center(child: _UserAvatar()),
             Container(
-              height: size.height * .1,
+              height: 0.1.sh,
               color: colorScheme.surface,
             ),
-            ...options.map(
-              (option) => InkWell(
-                onTap: option.onTap,
-                borderRadius: const BorderRadius.all(AppThemeRadius.medium),
-                child: Ink(
-                  padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(AppThemeRadius.medium),
-                    color: colorScheme.surface,
-                    boxShadow: const [AppThemeShadow.small],
+            ...options.map((option) => InkWell(
+                  onTap: option.onTap,
+                  borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                  child: Ink(
+                    padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                      color: colorScheme.surface,
+                      boxShadow: [AppThemeShadow.small],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(option.icon),
+                        Text(option.title, style: textTheme.titleMedium),
+                        const Icon(Icons.arrow_forward_ios_rounded),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(option.icon),
-                      Text(option.title, style: textTheme.titleMedium),
-                      const Icon(Icons.arrow_forward_ios_rounded),
-                    ],
-                  ),
-                ),
-              ),
+                )),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Text('Cerrar sesión'),
             ),
-            // Existing logout button remains unchanged
-            ElevatedButton(onPressed: () {}, child: const Text('Cerrar sesión')),
           ],
         ),
       ),
@@ -66,14 +65,14 @@ class ProfileView extends StatelessWidget {
   }
 }
 
-/// Avatar widget for the user profile.
 class _UserAvatar extends StatelessWidget {
   const _UserAvatar();
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    final double radius = size.height * AppThemeSpacing.extraLarge;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final double radius = AppThemeSpacing.extraLargeV;
     final double avatarSize = radius * 2;
 
     return SizedBox(
@@ -81,40 +80,37 @@ class _UserAvatar extends StatelessWidget {
       height: avatarSize,
       child: Stack(
         children: [
-          // Circular background container
           Container(
-            padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
+            padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
             width: avatarSize,
             height: avatarSize,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
+              color: colorScheme.surface,
               shape: BoxShape.circle,
               boxShadow: [AppThemeShadow.small],
             ),
-            // Centered person icon
             child: Center(
               child: Icon(
                 Icons.person,
-                size: avatarSize * 0.6,
-                color: Theme.of(context).colorScheme.primary,
+                size: AppThemeSpacing.doubleXLV,
+                color: colorScheme.primary,
               ),
             ),
           ),
-          // Camera overlay icon for future avatar editing
           Positioned(
             bottom: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.all(size.height * AppThemeSpacing.extraTiny),
+              padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: colorScheme.primary,
                 shape: BoxShape.circle,
                 boxShadow: [AppThemeShadow.small],
               ),
               child: Icon(
                 Icons.camera_alt,
-                size: size.height * AppThemeSpacing.small,
-                color: Theme.of(context).colorScheme.onPrimary,
+                size: AppThemeSpacing.smallV,
+                color: colorScheme.onPrimary,
               ),
             ),
           ),
@@ -124,7 +120,6 @@ class _UserAvatar extends StatelessWidget {
   }
 }
 
-/// Simple data holder for each profile option card.
 class _ProfileOption {
   const _ProfileOption({
     required this.title,
