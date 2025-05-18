@@ -17,6 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$AppPreferences {
   String? get isDarkTheme;
   String? get languageCode;
+  String? get hasSeenOnboarding;
 
   /// Create a copy of AppPreferences
   /// with the given fields replaced by the non-null parameter values.
@@ -34,15 +35,18 @@ mixin _$AppPreferences {
             (identical(other.isDarkTheme, isDarkTheme) ||
                 other.isDarkTheme == isDarkTheme) &&
             (identical(other.languageCode, languageCode) ||
-                other.languageCode == languageCode));
+                other.languageCode == languageCode) &&
+            (identical(other.hasSeenOnboarding, hasSeenOnboarding) ||
+                other.hasSeenOnboarding == hasSeenOnboarding));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isDarkTheme, languageCode);
+  int get hashCode =>
+      Object.hash(runtimeType, isDarkTheme, languageCode, hasSeenOnboarding);
 
   @override
   String toString() {
-    return 'AppPreferences(isDarkTheme: $isDarkTheme, languageCode: $languageCode)';
+    return 'AppPreferences(isDarkTheme: $isDarkTheme, languageCode: $languageCode, hasSeenOnboarding: $hasSeenOnboarding)';
   }
 }
 
@@ -52,7 +56,8 @@ abstract mixin class $AppPreferencesCopyWith<$Res> {
           AppPreferences value, $Res Function(AppPreferences) _then) =
       _$AppPreferencesCopyWithImpl;
   @useResult
-  $Res call({String? isDarkTheme, String? languageCode});
+  $Res call(
+      {String? isDarkTheme, String? languageCode, String? hasSeenOnboarding});
 }
 
 /// @nodoc
@@ -70,6 +75,7 @@ class _$AppPreferencesCopyWithImpl<$Res>
   $Res call({
     Object? isDarkTheme = freezed,
     Object? languageCode = freezed,
+    Object? hasSeenOnboarding = freezed,
   }) {
     return _then(_self.copyWith(
       isDarkTheme: freezed == isDarkTheme
@@ -80,6 +86,10 @@ class _$AppPreferencesCopyWithImpl<$Res>
           ? _self.languageCode
           : languageCode // ignore: cast_nullable_to_non_nullable
               as String?,
+      hasSeenOnboarding: freezed == hasSeenOnboarding
+          ? _self.hasSeenOnboarding
+          : hasSeenOnboarding // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -87,13 +97,18 @@ class _$AppPreferencesCopyWithImpl<$Res>
 /// @nodoc
 
 class _AppPreferences extends AppPreferences {
-  const _AppPreferences({required this.isDarkTheme, required this.languageCode})
+  const _AppPreferences(
+      {required this.isDarkTheme,
+      required this.languageCode,
+      required this.hasSeenOnboarding})
       : super._();
 
   @override
   final String? isDarkTheme;
   @override
   final String? languageCode;
+  @override
+  final String? hasSeenOnboarding;
 
   /// Create a copy of AppPreferences
   /// with the given fields replaced by the non-null parameter values.
@@ -111,15 +126,18 @@ class _AppPreferences extends AppPreferences {
             (identical(other.isDarkTheme, isDarkTheme) ||
                 other.isDarkTheme == isDarkTheme) &&
             (identical(other.languageCode, languageCode) ||
-                other.languageCode == languageCode));
+                other.languageCode == languageCode) &&
+            (identical(other.hasSeenOnboarding, hasSeenOnboarding) ||
+                other.hasSeenOnboarding == hasSeenOnboarding));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isDarkTheme, languageCode);
+  int get hashCode =>
+      Object.hash(runtimeType, isDarkTheme, languageCode, hasSeenOnboarding);
 
   @override
   String toString() {
-    return 'AppPreferences(isDarkTheme: $isDarkTheme, languageCode: $languageCode)';
+    return 'AppPreferences(isDarkTheme: $isDarkTheme, languageCode: $languageCode, hasSeenOnboarding: $hasSeenOnboarding)';
   }
 }
 
@@ -131,7 +149,8 @@ abstract mixin class _$AppPreferencesCopyWith<$Res>
       __$AppPreferencesCopyWithImpl;
   @override
   @useResult
-  $Res call({String? isDarkTheme, String? languageCode});
+  $Res call(
+      {String? isDarkTheme, String? languageCode, String? hasSeenOnboarding});
 }
 
 /// @nodoc
@@ -149,6 +168,7 @@ class __$AppPreferencesCopyWithImpl<$Res>
   $Res call({
     Object? isDarkTheme = freezed,
     Object? languageCode = freezed,
+    Object? hasSeenOnboarding = freezed,
   }) {
     return _then(_AppPreferences(
       isDarkTheme: freezed == isDarkTheme
@@ -158,6 +178,10 @@ class __$AppPreferencesCopyWithImpl<$Res>
       languageCode: freezed == languageCode
           ? _self.languageCode
           : languageCode // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hasSeenOnboarding: freezed == hasSeenOnboarding
+          ? _self.hasSeenOnboarding
+          : hasSeenOnboarding // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }

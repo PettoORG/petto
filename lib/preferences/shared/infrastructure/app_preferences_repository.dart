@@ -66,4 +66,31 @@ class AppPreferencesRepository {
       );
     }
   }
+
+  /// Saves whether the user has seen the onboarding flow.
+  Future<Either<Failure, Unit>> setHasSeenOnboarding(bool hasSeen) async {
+    try {
+      await sharedPreferences.setBool(
+        AppPreferencesKeys.hasSeenOnboarding.name,
+        hasSeen,
+      );
+      return right(unit);
+    } catch (_) {
+      return left(
+        Failure.unexpected(message: 'savingOnboardingPreference'.tr()),
+      );
+    }
+  }
+
+  /// Retrieves whether the user has seen the onboarding flow. Defaults to false.
+  Either<Failure, bool> getHasSeenOnboarding() {
+    try {
+      final value = sharedPreferences.getBool(AppPreferencesKeys.hasSeenOnboarding.name);
+      return right(value ?? false);
+    } catch (_) {
+      return left(
+        Failure.unexpected(message: 'retrievingOnboardingPreference'.tr()),
+      );
+    }
+  }
 }

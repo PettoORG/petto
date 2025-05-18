@@ -1,17 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/preferences/shared/providers.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final PageController _controller = PageController();
   int _current = 0;
 
@@ -42,9 +44,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-
-    // Placeholder size is 35% of screen height
     final placeholderSize = 0.35.sh;
+    final appPreferences = ref.read(appPreferencesRepositoryProvider);
 
     return Scaffold(
       body: Column(
@@ -101,7 +102,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: active ? 0.04.sh : 0.01.sh,
                 height: 0.01.sh,
                 decoration: BoxDecoration(
-                  color: active ? colors.primary : colors.primaryContainer.withValues(alpha: .7),
+                  color: active ? colors.primary : colors.primaryContainer.withAlpha(179),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
               );
@@ -119,7 +120,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   if (_current == 0)
                     TextButton(
-                      onPressed: () => SignInRoute().go(context),
+                      onPressed: () async {
+                        await appPreferences.setHasSeenOnboarding(true);
+                        if (context.mounted) {
+                          SignInRoute().go(context);
+                        }
+                      },
                       child: Text('skip'.tr()),
                     )
                   else
@@ -140,8 +146,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     )
                   else
                     ElevatedButton(
-                      onPressed: () {
-                        SignInRoute().go(context);
+                      onPressed: () async {
+                        await appPreferences.setHasSeenOnboarding(true);
+                        if (context.mounted) {
+                          SignInRoute().go(context);
+                        }
                       },
                       child: Text('start'.tr()),
                     ),

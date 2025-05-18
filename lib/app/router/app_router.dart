@@ -1,3 +1,5 @@
+// lib/app/router/app_router.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petto/auth/presentation/screens/sign_in_screen.dart';
@@ -9,12 +11,27 @@ import 'package:petto/pets/presentation/screens/pet_register_screen.dart';
 
 part 'app_router.g.dart';
 
-/// App router configuration using generated routes
-final GoRouter appRouter = GoRouter(
-  initialLocation: '/onboarding',
-  debugLogDiagnostics: true,
-  routes: $appRoutes,
-);
+class AppRouter {
+  /// Key for the root Navigator
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  /// Internal GoRouter instance
+  late final GoRouter _router;
+
+  AppRouter({GlobalKey<NavigatorState>? navigatorKey}) : navigatorKey = navigatorKey ?? GlobalKey<NavigatorState>() {
+    _router = GoRouter(
+      initialLocation: '/',
+      debugLogDiagnostics: true,
+      navigatorKey: this.navigatorKey,
+      routes: $appRoutes, // <-- generated list from your @TypedGoRoute
+    );
+  }
+
+  /// Exposes the configured GoRouter
+  GoRouter get router => _router;
+}
+
+/// Typed (and generated) route definitions below
 
 @TypedGoRoute<CreateOrImportPetRoute>(
   path: '/createorimportpet',
@@ -57,7 +74,6 @@ class OnboardingRoute extends GoRouteData {
 )
 class SignInRoute extends GoRouteData {
   const SignInRoute();
-
   @override
   Widget build(BuildContext context, GoRouterState state) => const SignInScreen();
 }
@@ -67,7 +83,6 @@ class SignInRoute extends GoRouteData {
 )
 class SignUpRoute extends GoRouteData {
   const SignUpRoute();
-
   @override
   Widget build(BuildContext context, GoRouterState state) => const SignUpScreen();
 }

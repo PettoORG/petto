@@ -9,6 +9,9 @@ enum AppPreferencesKeys {
 
   /// The key for the language preference.
   languageCode,
+
+  /// The key for the onboarding preference.
+  hasSeenOnboarding,
 }
 
 /// Describes the model for the application's preferences (stored in the device's local storage).
@@ -20,5 +23,6 @@ sealed class AppPreferences with _$AppPreferences {
   const factory AppPreferences({
     required String? isDarkTheme,
     required String? languageCode,
+    required String? hasSeenOnboarding,
   }) = _AppPreferences;
 }
