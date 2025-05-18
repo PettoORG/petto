@@ -22,7 +22,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _Unexpected;
+  }) = Unexpected;
 
   /// Represents a network or internet connectivity failure.
   const factory AuthFailure.network({
@@ -30,7 +30,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _NoNetworkConnection;
+  }) = Network;
 
   /// Represents too many requests to the server failure.
   const factory AuthFailure.tooManyRequests({
@@ -38,7 +38,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _TooManyRequests;
+  }) = TooManyRequests;
 
   /// Represents a disabled user failure.
   const factory AuthFailure.userDisabled({
@@ -46,7 +46,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _UserDisabled;
+  }) = UserDisabled;
 
   /// Represents an email that does not exist failure.
   const factory AuthFailure.emailDoesNotExist({
@@ -54,7 +54,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _EmailDoesNotExist;
+  }) = EmailDoesNotExist;
 
   /// Represents a cancelled by user failure.
   const factory AuthFailure.cancelledByUser({
@@ -62,7 +62,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _CancelledByUser;
+  }) = CancelledByUser;
 
   /// Represents an invalid email and password combination failure.
   const factory AuthFailure.invalidEmailAndPasswordCombination({
@@ -70,7 +70,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _InvalidEmailAndPasswordCombination;
+  }) = InvalidEmailAndPasswordCombination;
 
   /// Represents an email already in use failure.
   const factory AuthFailure.emailInUse({
@@ -79,7 +79,7 @@ sealed class AuthFailure with _$AuthFailure {
     dynamic cause,
     StackTrace? stackTrace,
     String? email,
-  }) = _EmailInUse;
+  }) = EmailInUse;
 
   /// Represents an invalid role failure.
   const factory AuthFailure.invalidRole({
@@ -87,7 +87,7 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _InvalidRole;
+  }) = InvalidRole;
 
   /// Represents an invalid phone number failure.
   const factory AuthFailure.invalidPhoneNumber({
@@ -95,15 +95,18 @@ sealed class AuthFailure with _$AuthFailure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _InvalidPhoneNumber;
+  }) = InvalidPhoneNumber;
 }
 
 /// Class with static methods to create failures from FirebaseAuthException.
 class AuthFailureFactory {
   /// Returns an [AuthFailure] from a FirebaseAuthException, with appropriate
   /// message and code.
-  static AuthFailure fromFirebaseAuthException(FirebaseAuthException exception, StackTrace stackTrace,
-      {String email = ''}) {
+  static AuthFailure fromFirebaseAuthException(
+    FirebaseAuthException exception,
+    StackTrace stackTrace, {
+    String email = '',
+  }) {
     final code = exception.code;
     switch (code) {
       case 'network-request-failed':

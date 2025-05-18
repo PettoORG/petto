@@ -21,8 +21,8 @@ sealed class AppPreferences with _$AppPreferences {
   const AppPreferences._();
 
   const factory AppPreferences({
-    required String? isDarkTheme,
+    required bool? isDarkTheme,
     required String? languageCode,
-    required String? hasSeenOnboarding,
+    required bool? hasSeenOnboarding,
   }) = _AppPreferences;
 }

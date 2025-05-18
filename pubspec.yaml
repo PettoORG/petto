@@ -17,6 +17,7 @@ dependencies:
   firebase_crashlytics: ^4.3.5
   firebase_storage: ^12.4.5
   firebase_ui_firestore: ^1.7.1
+  flash: ^3.1.1
   flutter:
     sdk: flutter
   flutter_form_builder: ^9.7.0

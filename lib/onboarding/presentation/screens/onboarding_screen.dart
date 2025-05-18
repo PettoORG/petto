@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
-import 'package:petto/preferences/shared/providers.dart';
+import 'package:petto/preferences/application/app_preferences_notifier.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -45,7 +45,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final placeholderSize = 0.35.sh;
-    final appPreferences = ref.read(appPreferencesRepositoryProvider);
+    final prefs = ref.read(appPreferencesNotifierProvider.notifier);
 
     return Scaffold(
       body: Column(
@@ -121,7 +121,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   if (_current == 0)
                     TextButton(
                       onPressed: () async {
-                        await appPreferences.setHasSeenOnboarding(true);
+                        await prefs.setHasSeenOnboarding(true);
                         if (context.mounted) {
                           SignInRoute().go(context);
                         }
@@ -147,7 +147,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   else
                     ElevatedButton(
                       onPressed: () async {
-                        await appPreferences.setHasSeenOnboarding(true);
+                        await prefs.setHasSeenOnboarding(true);
                         if (context.mounted) {
                           SignInRoute().go(context);
                         }

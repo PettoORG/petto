@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:petto/core/domain/failure.dart';
-import 'package:petto/preferences/shared/domain/app_preferences.dart';
+import 'package:petto/preferences/domain/app_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Repository for application preferences.

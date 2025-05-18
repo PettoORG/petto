@@ -3,18 +3,66 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/auth/application/auth_notifier.dart';
+import 'package:petto/auth/application/auth_state.dart';
+import 'package:petto/auth/domain/auth_failure.dart';
+import 'package:petto/core/presentation/widgets/flash.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends HookConsumerWidget {
   const SignInScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Calculate full usable height inside SafeArea
     final double minHeight = 1.sh - ScreenUtil().statusBarHeight - ScreenUtil().bottomBarHeight;
     // 20% of screen height
     final double placeholderSize = 0.2.sh;
+
+    ref.listen<AuthState>(authNotifierProvider, (previous, next) async {
+      switch (next) {
+        case FailureState(failure: final failure):
+          // Handle each failure case via nested switch
+          switch (failure) {
+            case Unexpected(message: final msg):
+              // Show unexpected error
+              showCustomFlash(context, msg ?? 'error.unexpectedError'.tr());
+              break;
+            case Network(message: final msg):
+              // Show no internet connection error
+              showCustomFlash(context, msg ?? 'error.noInternetConnection'.tr());
+              break;
+            case TooManyRequests(message: final msg):
+              // Show too many attempts error
+              showCustomFlash(context, msg ?? 'error.tooManyAttempts'.tr());
+              break;
+            case UserDisabled(message: final msg):
+              // Show user disabled error
+              showCustomFlash(context, msg ?? 'error.userDisabled'.tr());
+              break;
+            case InvalidEmailAndPasswordCombination(message: final msg):
+              // Show incorrect email/password error
+              showCustomFlash(context, msg ?? 'error.incorrectEmailOrPassword'.tr());
+              break;
+            case InvalidRole(message: final msg):
+              // Show invalid role error
+              showCustomFlash(context, msg ?? 'error.invalidRole'.tr());
+              break;
+            case EmailInUse(message: final msg):
+              showCustomFlash(context, msg ?? 'error.emailInUse'.tr());
+              break;
+            default:
+              // No action for other AuthFailure cases
+              break;
+          }
+          break;
+        default:
+          // No action on initial, loading, authenticated, or unauthenticated
+          break;
+      }
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: true,

@@ -9,7 +9,6 @@ import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
 import 'package:petto/core/shared/providers.dart';
 import 'package:petto/preferences/shared/providers.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:petto/users/domain/user.dart';
 
 class AppWidget extends StatefulHookConsumerWidget {
@@ -23,27 +22,19 @@ class AppWidget extends StatefulHookConsumerWidget {
 
 class _AppWidgetState extends ConsumerState<AppWidget> {
   @override
-  void initState() {
-    super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      final result = ref.read(appPreferencesRepositoryProvider).getHasSeenOnboarding();
-      result.fold(
-        (_) => AppWidget.appRouter.router.go(OnboardingRoute().location),
-        (seen) {
-          if (!seen) {
-            AppWidget.appRouter.router.go(OnboardingRoute().location);
-          }
-        },
-      );
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeNotifierProvider).value;
     ref.watch(internetConnectionProvider);
 
     ref.listen<AuthState>(authNotifierProvider, (prev, next) {
+      // Navigate to onboarding only if the flag is explicitly false (ignore failures)
+      final seen = ref.read(appPreferencesRepositoryProvider).getHasSeenOnboarding().getOrElse(() => false);
+      if (!seen) {
+        AppWidget.appRouter.router.go(OnboardingRoute().location);
+        return;
+      }
+
+      // Existing auth navigation logic
       if (next is Authenticated) {
         final User user = next.user;
         final String location = GoRouter.of(context).state.matchedLocation;

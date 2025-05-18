@@ -15,9 +15,9 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$AppPreferences {
-  String? get isDarkTheme;
+  bool? get isDarkTheme;
   String? get languageCode;
-  String? get hasSeenOnboarding;
+  bool? get hasSeenOnboarding;
 
   /// Create a copy of AppPreferences
   /// with the given fields replaced by the non-null parameter values.
@@ -56,8 +56,7 @@ abstract mixin class $AppPreferencesCopyWith<$Res> {
           AppPreferences value, $Res Function(AppPreferences) _then) =
       _$AppPreferencesCopyWithImpl;
   @useResult
-  $Res call(
-      {String? isDarkTheme, String? languageCode, String? hasSeenOnboarding});
+  $Res call({bool? isDarkTheme, String? languageCode, bool? hasSeenOnboarding});
 }
 
 /// @nodoc
@@ -81,7 +80,7 @@ class _$AppPreferencesCopyWithImpl<$Res>
       isDarkTheme: freezed == isDarkTheme
           ? _self.isDarkTheme
           : isDarkTheme // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as bool?,
       languageCode: freezed == languageCode
           ? _self.languageCode
           : languageCode // ignore: cast_nullable_to_non_nullable
@@ -89,7 +88,7 @@ class _$AppPreferencesCopyWithImpl<$Res>
       hasSeenOnboarding: freezed == hasSeenOnboarding
           ? _self.hasSeenOnboarding
           : hasSeenOnboarding // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as bool?,
     ));
   }
 }
@@ -104,11 +103,11 @@ class _AppPreferences extends AppPreferences {
       : super._();
 
   @override
-  final String? isDarkTheme;
+  final bool? isDarkTheme;
   @override
   final String? languageCode;
   @override
-  final String? hasSeenOnboarding;
+  final bool? hasSeenOnboarding;
 
   /// Create a copy of AppPreferences
   /// with the given fields replaced by the non-null parameter values.
@@ -149,8 +148,7 @@ abstract mixin class _$AppPreferencesCopyWith<$Res>
       __$AppPreferencesCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {String? isDarkTheme, String? languageCode, String? hasSeenOnboarding});
+  $Res call({bool? isDarkTheme, String? languageCode, bool? hasSeenOnboarding});
 }
 
 /// @nodoc
@@ -174,7 +172,7 @@ class __$AppPreferencesCopyWithImpl<$Res>
       isDarkTheme: freezed == isDarkTheme
           ? _self.isDarkTheme
           : isDarkTheme // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as bool?,
       languageCode: freezed == languageCode
           ? _self.languageCode
           : languageCode // ignore: cast_nullable_to_non_nullable
@@ -182,7 +180,7 @@ class __$AppPreferencesCopyWithImpl<$Res>
       hasSeenOnboarding: freezed == hasSeenOnboarding
           ? _self.hasSeenOnboarding
           : hasSeenOnboarding // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as bool?,
     ));
   }
 }

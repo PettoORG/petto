@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:petto/preferences/shared/infrastructure/app_preferences_repository.dart';
+import 'package:petto/preferences/infrastructure/app_preferences_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

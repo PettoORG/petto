@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petto/app/theme/app_theme.dart';
-import 'package:petto/preferences/shared/infrastructure/app_preferences_repository.dart';
+import 'package:petto/preferences/infrastructure/app_preferences_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

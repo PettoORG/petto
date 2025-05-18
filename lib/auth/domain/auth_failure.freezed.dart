@@ -99,8 +99,8 @@ class _$AuthFailureCopyWithImpl<$Res> implements $AuthFailureCopyWith<$Res> {
 
 /// @nodoc
 
-class _Unexpected extends AuthFailure {
-  const _Unexpected({this.message, this.code, this.cause, this.stackTrace})
+class Unexpected extends AuthFailure {
+  const Unexpected({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -117,14 +117,14 @@ class _Unexpected extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$UnexpectedCopyWith<_Unexpected> get copyWith =>
-      __$UnexpectedCopyWithImpl<_Unexpected>(this, _$identity);
+  $UnexpectedCopyWith<Unexpected> get copyWith =>
+      _$UnexpectedCopyWithImpl<Unexpected>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Unexpected &&
+            other is Unexpected &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -143,11 +143,11 @@ class _Unexpected extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$UnexpectedCopyWith<$Res>
+abstract mixin class $UnexpectedCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$UnexpectedCopyWith(
-          _Unexpected value, $Res Function(_Unexpected) _then) =
-      __$UnexpectedCopyWithImpl;
+  factory $UnexpectedCopyWith(
+          Unexpected value, $Res Function(Unexpected) _then) =
+      _$UnexpectedCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -155,11 +155,11 @@ abstract mixin class _$UnexpectedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$UnexpectedCopyWithImpl<$Res> implements _$UnexpectedCopyWith<$Res> {
-  __$UnexpectedCopyWithImpl(this._self, this._then);
+class _$UnexpectedCopyWithImpl<$Res> implements $UnexpectedCopyWith<$Res> {
+  _$UnexpectedCopyWithImpl(this._self, this._then);
 
-  final _Unexpected _self;
-  final $Res Function(_Unexpected) _then;
+  final Unexpected _self;
+  final $Res Function(Unexpected) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -171,7 +171,7 @@ class __$UnexpectedCopyWithImpl<$Res> implements _$UnexpectedCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_Unexpected(
+    return _then(Unexpected(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -194,9 +194,8 @@ class __$UnexpectedCopyWithImpl<$Res> implements _$UnexpectedCopyWith<$Res> {
 
 /// @nodoc
 
-class _NoNetworkConnection extends AuthFailure {
-  const _NoNetworkConnection(
-      {this.message, this.code, this.cause, this.stackTrace})
+class Network extends AuthFailure {
+  const Network({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -213,15 +212,14 @@ class _NoNetworkConnection extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$NoNetworkConnectionCopyWith<_NoNetworkConnection> get copyWith =>
-      __$NoNetworkConnectionCopyWithImpl<_NoNetworkConnection>(
-          this, _$identity);
+  $NetworkCopyWith<Network> get copyWith =>
+      _$NetworkCopyWithImpl<Network>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _NoNetworkConnection &&
+            other is Network &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -240,11 +238,10 @@ class _NoNetworkConnection extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$NoNetworkConnectionCopyWith<$Res>
+abstract mixin class $NetworkCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$NoNetworkConnectionCopyWith(_NoNetworkConnection value,
-          $Res Function(_NoNetworkConnection) _then) =
-      __$NoNetworkConnectionCopyWithImpl;
+  factory $NetworkCopyWith(Network value, $Res Function(Network) _then) =
+      _$NetworkCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -252,12 +249,11 @@ abstract mixin class _$NoNetworkConnectionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$NoNetworkConnectionCopyWithImpl<$Res>
-    implements _$NoNetworkConnectionCopyWith<$Res> {
-  __$NoNetworkConnectionCopyWithImpl(this._self, this._then);
+class _$NetworkCopyWithImpl<$Res> implements $NetworkCopyWith<$Res> {
+  _$NetworkCopyWithImpl(this._self, this._then);
 
-  final _NoNetworkConnection _self;
-  final $Res Function(_NoNetworkConnection) _then;
+  final Network _self;
+  final $Res Function(Network) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -269,7 +265,7 @@ class __$NoNetworkConnectionCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_NoNetworkConnection(
+    return _then(Network(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -292,8 +288,8 @@ class __$NoNetworkConnectionCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _TooManyRequests extends AuthFailure {
-  const _TooManyRequests({this.message, this.code, this.cause, this.stackTrace})
+class TooManyRequests extends AuthFailure {
+  const TooManyRequests({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -310,14 +306,14 @@ class _TooManyRequests extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$TooManyRequestsCopyWith<_TooManyRequests> get copyWith =>
-      __$TooManyRequestsCopyWithImpl<_TooManyRequests>(this, _$identity);
+  $TooManyRequestsCopyWith<TooManyRequests> get copyWith =>
+      _$TooManyRequestsCopyWithImpl<TooManyRequests>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _TooManyRequests &&
+            other is TooManyRequests &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -336,11 +332,11 @@ class _TooManyRequests extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$TooManyRequestsCopyWith<$Res>
+abstract mixin class $TooManyRequestsCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$TooManyRequestsCopyWith(
-          _TooManyRequests value, $Res Function(_TooManyRequests) _then) =
-      __$TooManyRequestsCopyWithImpl;
+  factory $TooManyRequestsCopyWith(
+          TooManyRequests value, $Res Function(TooManyRequests) _then) =
+      _$TooManyRequestsCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -348,12 +344,12 @@ abstract mixin class _$TooManyRequestsCopyWith<$Res>
 }
 
 /// @nodoc
-class __$TooManyRequestsCopyWithImpl<$Res>
-    implements _$TooManyRequestsCopyWith<$Res> {
-  __$TooManyRequestsCopyWithImpl(this._self, this._then);
+class _$TooManyRequestsCopyWithImpl<$Res>
+    implements $TooManyRequestsCopyWith<$Res> {
+  _$TooManyRequestsCopyWithImpl(this._self, this._then);
 
-  final _TooManyRequests _self;
-  final $Res Function(_TooManyRequests) _then;
+  final TooManyRequests _self;
+  final $Res Function(TooManyRequests) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -365,7 +361,7 @@ class __$TooManyRequestsCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_TooManyRequests(
+    return _then(TooManyRequests(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -388,8 +384,8 @@ class __$TooManyRequestsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _UserDisabled extends AuthFailure {
-  const _UserDisabled({this.message, this.code, this.cause, this.stackTrace})
+class UserDisabled extends AuthFailure {
+  const UserDisabled({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -406,14 +402,14 @@ class _UserDisabled extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$UserDisabledCopyWith<_UserDisabled> get copyWith =>
-      __$UserDisabledCopyWithImpl<_UserDisabled>(this, _$identity);
+  $UserDisabledCopyWith<UserDisabled> get copyWith =>
+      _$UserDisabledCopyWithImpl<UserDisabled>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UserDisabled &&
+            other is UserDisabled &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -432,11 +428,11 @@ class _UserDisabled extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$UserDisabledCopyWith<$Res>
+abstract mixin class $UserDisabledCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$UserDisabledCopyWith(
-          _UserDisabled value, $Res Function(_UserDisabled) _then) =
-      __$UserDisabledCopyWithImpl;
+  factory $UserDisabledCopyWith(
+          UserDisabled value, $Res Function(UserDisabled) _then) =
+      _$UserDisabledCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -444,12 +440,11 @@ abstract mixin class _$UserDisabledCopyWith<$Res>
 }
 
 /// @nodoc
-class __$UserDisabledCopyWithImpl<$Res>
-    implements _$UserDisabledCopyWith<$Res> {
-  __$UserDisabledCopyWithImpl(this._self, this._then);
+class _$UserDisabledCopyWithImpl<$Res> implements $UserDisabledCopyWith<$Res> {
+  _$UserDisabledCopyWithImpl(this._self, this._then);
 
-  final _UserDisabled _self;
-  final $Res Function(_UserDisabled) _then;
+  final UserDisabled _self;
+  final $Res Function(UserDisabled) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -461,7 +456,7 @@ class __$UserDisabledCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_UserDisabled(
+    return _then(UserDisabled(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -484,8 +479,8 @@ class __$UserDisabledCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _EmailDoesNotExist extends AuthFailure {
-  const _EmailDoesNotExist(
+class EmailDoesNotExist extends AuthFailure {
+  const EmailDoesNotExist(
       {this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
@@ -503,14 +498,14 @@ class _EmailDoesNotExist extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$EmailDoesNotExistCopyWith<_EmailDoesNotExist> get copyWith =>
-      __$EmailDoesNotExistCopyWithImpl<_EmailDoesNotExist>(this, _$identity);
+  $EmailDoesNotExistCopyWith<EmailDoesNotExist> get copyWith =>
+      _$EmailDoesNotExistCopyWithImpl<EmailDoesNotExist>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _EmailDoesNotExist &&
+            other is EmailDoesNotExist &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -529,11 +524,11 @@ class _EmailDoesNotExist extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$EmailDoesNotExistCopyWith<$Res>
+abstract mixin class $EmailDoesNotExistCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$EmailDoesNotExistCopyWith(
-          _EmailDoesNotExist value, $Res Function(_EmailDoesNotExist) _then) =
-      __$EmailDoesNotExistCopyWithImpl;
+  factory $EmailDoesNotExistCopyWith(
+          EmailDoesNotExist value, $Res Function(EmailDoesNotExist) _then) =
+      _$EmailDoesNotExistCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -541,12 +536,12 @@ abstract mixin class _$EmailDoesNotExistCopyWith<$Res>
 }
 
 /// @nodoc
-class __$EmailDoesNotExistCopyWithImpl<$Res>
-    implements _$EmailDoesNotExistCopyWith<$Res> {
-  __$EmailDoesNotExistCopyWithImpl(this._self, this._then);
+class _$EmailDoesNotExistCopyWithImpl<$Res>
+    implements $EmailDoesNotExistCopyWith<$Res> {
+  _$EmailDoesNotExistCopyWithImpl(this._self, this._then);
 
-  final _EmailDoesNotExist _self;
-  final $Res Function(_EmailDoesNotExist) _then;
+  final EmailDoesNotExist _self;
+  final $Res Function(EmailDoesNotExist) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -558,7 +553,7 @@ class __$EmailDoesNotExistCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_EmailDoesNotExist(
+    return _then(EmailDoesNotExist(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -581,8 +576,8 @@ class __$EmailDoesNotExistCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _CancelledByUser extends AuthFailure {
-  const _CancelledByUser({this.message, this.code, this.cause, this.stackTrace})
+class CancelledByUser extends AuthFailure {
+  const CancelledByUser({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -599,14 +594,14 @@ class _CancelledByUser extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$CancelledByUserCopyWith<_CancelledByUser> get copyWith =>
-      __$CancelledByUserCopyWithImpl<_CancelledByUser>(this, _$identity);
+  $CancelledByUserCopyWith<CancelledByUser> get copyWith =>
+      _$CancelledByUserCopyWithImpl<CancelledByUser>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _CancelledByUser &&
+            other is CancelledByUser &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -625,11 +620,11 @@ class _CancelledByUser extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$CancelledByUserCopyWith<$Res>
+abstract mixin class $CancelledByUserCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$CancelledByUserCopyWith(
-          _CancelledByUser value, $Res Function(_CancelledByUser) _then) =
-      __$CancelledByUserCopyWithImpl;
+  factory $CancelledByUserCopyWith(
+          CancelledByUser value, $Res Function(CancelledByUser) _then) =
+      _$CancelledByUserCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -637,12 +632,12 @@ abstract mixin class _$CancelledByUserCopyWith<$Res>
 }
 
 /// @nodoc
-class __$CancelledByUserCopyWithImpl<$Res>
-    implements _$CancelledByUserCopyWith<$Res> {
-  __$CancelledByUserCopyWithImpl(this._self, this._then);
+class _$CancelledByUserCopyWithImpl<$Res>
+    implements $CancelledByUserCopyWith<$Res> {
+  _$CancelledByUserCopyWithImpl(this._self, this._then);
 
-  final _CancelledByUser _self;
-  final $Res Function(_CancelledByUser) _then;
+  final CancelledByUser _self;
+  final $Res Function(CancelledByUser) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -654,7 +649,7 @@ class __$CancelledByUserCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_CancelledByUser(
+    return _then(CancelledByUser(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -677,8 +672,8 @@ class __$CancelledByUserCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _InvalidEmailAndPasswordCombination extends AuthFailure {
-  const _InvalidEmailAndPasswordCombination(
+class InvalidEmailAndPasswordCombination extends AuthFailure {
+  const InvalidEmailAndPasswordCombination(
       {this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
@@ -696,16 +691,16 @@ class _InvalidEmailAndPasswordCombination extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$InvalidEmailAndPasswordCombinationCopyWith<
-          _InvalidEmailAndPasswordCombination>
-      get copyWith => __$InvalidEmailAndPasswordCombinationCopyWithImpl<
-          _InvalidEmailAndPasswordCombination>(this, _$identity);
+  $InvalidEmailAndPasswordCombinationCopyWith<
+          InvalidEmailAndPasswordCombination>
+      get copyWith => _$InvalidEmailAndPasswordCombinationCopyWithImpl<
+          InvalidEmailAndPasswordCombination>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _InvalidEmailAndPasswordCombination &&
+            other is InvalidEmailAndPasswordCombination &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -724,12 +719,12 @@ class _InvalidEmailAndPasswordCombination extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$InvalidEmailAndPasswordCombinationCopyWith<$Res>
+abstract mixin class $InvalidEmailAndPasswordCombinationCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$InvalidEmailAndPasswordCombinationCopyWith(
-          _InvalidEmailAndPasswordCombination value,
-          $Res Function(_InvalidEmailAndPasswordCombination) _then) =
-      __$InvalidEmailAndPasswordCombinationCopyWithImpl;
+  factory $InvalidEmailAndPasswordCombinationCopyWith(
+          InvalidEmailAndPasswordCombination value,
+          $Res Function(InvalidEmailAndPasswordCombination) _then) =
+      _$InvalidEmailAndPasswordCombinationCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -737,12 +732,12 @@ abstract mixin class _$InvalidEmailAndPasswordCombinationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$InvalidEmailAndPasswordCombinationCopyWithImpl<$Res>
-    implements _$InvalidEmailAndPasswordCombinationCopyWith<$Res> {
-  __$InvalidEmailAndPasswordCombinationCopyWithImpl(this._self, this._then);
+class _$InvalidEmailAndPasswordCombinationCopyWithImpl<$Res>
+    implements $InvalidEmailAndPasswordCombinationCopyWith<$Res> {
+  _$InvalidEmailAndPasswordCombinationCopyWithImpl(this._self, this._then);
 
-  final _InvalidEmailAndPasswordCombination _self;
-  final $Res Function(_InvalidEmailAndPasswordCombination) _then;
+  final InvalidEmailAndPasswordCombination _self;
+  final $Res Function(InvalidEmailAndPasswordCombination) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -754,7 +749,7 @@ class __$InvalidEmailAndPasswordCombinationCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_InvalidEmailAndPasswordCombination(
+    return _then(InvalidEmailAndPasswordCombination(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -777,8 +772,8 @@ class __$InvalidEmailAndPasswordCombinationCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _EmailInUse extends AuthFailure {
-  const _EmailInUse(
+class EmailInUse extends AuthFailure {
+  const EmailInUse(
       {this.message, this.code, this.cause, this.stackTrace, this.email})
       : super._();
 
@@ -797,14 +792,14 @@ class _EmailInUse extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$EmailInUseCopyWith<_EmailInUse> get copyWith =>
-      __$EmailInUseCopyWithImpl<_EmailInUse>(this, _$identity);
+  $EmailInUseCopyWith<EmailInUse> get copyWith =>
+      _$EmailInUseCopyWithImpl<EmailInUse>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _EmailInUse &&
+            other is EmailInUse &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -824,11 +819,11 @@ class _EmailInUse extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$EmailInUseCopyWith<$Res>
+abstract mixin class $EmailInUseCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$EmailInUseCopyWith(
-          _EmailInUse value, $Res Function(_EmailInUse) _then) =
-      __$EmailInUseCopyWithImpl;
+  factory $EmailInUseCopyWith(
+          EmailInUse value, $Res Function(EmailInUse) _then) =
+      _$EmailInUseCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -840,11 +835,11 @@ abstract mixin class _$EmailInUseCopyWith<$Res>
 }
 
 /// @nodoc
-class __$EmailInUseCopyWithImpl<$Res> implements _$EmailInUseCopyWith<$Res> {
-  __$EmailInUseCopyWithImpl(this._self, this._then);
+class _$EmailInUseCopyWithImpl<$Res> implements $EmailInUseCopyWith<$Res> {
+  _$EmailInUseCopyWithImpl(this._self, this._then);
 
-  final _EmailInUse _self;
-  final $Res Function(_EmailInUse) _then;
+  final EmailInUse _self;
+  final $Res Function(EmailInUse) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -857,7 +852,7 @@ class __$EmailInUseCopyWithImpl<$Res> implements _$EmailInUseCopyWith<$Res> {
     Object? stackTrace = freezed,
     Object? email = freezed,
   }) {
-    return _then(_EmailInUse(
+    return _then(EmailInUse(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -884,8 +879,8 @@ class __$EmailInUseCopyWithImpl<$Res> implements _$EmailInUseCopyWith<$Res> {
 
 /// @nodoc
 
-class _InvalidRole extends AuthFailure {
-  const _InvalidRole({this.message, this.code, this.cause, this.stackTrace})
+class InvalidRole extends AuthFailure {
+  const InvalidRole({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -902,14 +897,14 @@ class _InvalidRole extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$InvalidRoleCopyWith<_InvalidRole> get copyWith =>
-      __$InvalidRoleCopyWithImpl<_InvalidRole>(this, _$identity);
+  $InvalidRoleCopyWith<InvalidRole> get copyWith =>
+      _$InvalidRoleCopyWithImpl<InvalidRole>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _InvalidRole &&
+            other is InvalidRole &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -928,11 +923,11 @@ class _InvalidRole extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$InvalidRoleCopyWith<$Res>
+abstract mixin class $InvalidRoleCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$InvalidRoleCopyWith(
-          _InvalidRole value, $Res Function(_InvalidRole) _then) =
-      __$InvalidRoleCopyWithImpl;
+  factory $InvalidRoleCopyWith(
+          InvalidRole value, $Res Function(InvalidRole) _then) =
+      _$InvalidRoleCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -940,11 +935,11 @@ abstract mixin class _$InvalidRoleCopyWith<$Res>
 }
 
 /// @nodoc
-class __$InvalidRoleCopyWithImpl<$Res> implements _$InvalidRoleCopyWith<$Res> {
-  __$InvalidRoleCopyWithImpl(this._self, this._then);
+class _$InvalidRoleCopyWithImpl<$Res> implements $InvalidRoleCopyWith<$Res> {
+  _$InvalidRoleCopyWithImpl(this._self, this._then);
 
-  final _InvalidRole _self;
-  final $Res Function(_InvalidRole) _then;
+  final InvalidRole _self;
+  final $Res Function(InvalidRole) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -956,7 +951,7 @@ class __$InvalidRoleCopyWithImpl<$Res> implements _$InvalidRoleCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_InvalidRole(
+    return _then(InvalidRole(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -979,8 +974,8 @@ class __$InvalidRoleCopyWithImpl<$Res> implements _$InvalidRoleCopyWith<$Res> {
 
 /// @nodoc
 
-class _InvalidPhoneNumber extends AuthFailure {
-  const _InvalidPhoneNumber(
+class InvalidPhoneNumber extends AuthFailure {
+  const InvalidPhoneNumber(
       {this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
@@ -998,14 +993,14 @@ class _InvalidPhoneNumber extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$InvalidPhoneNumberCopyWith<_InvalidPhoneNumber> get copyWith =>
-      __$InvalidPhoneNumberCopyWithImpl<_InvalidPhoneNumber>(this, _$identity);
+  $InvalidPhoneNumberCopyWith<InvalidPhoneNumber> get copyWith =>
+      _$InvalidPhoneNumberCopyWithImpl<InvalidPhoneNumber>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _InvalidPhoneNumber &&
+            other is InvalidPhoneNumber &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -1024,11 +1019,11 @@ class _InvalidPhoneNumber extends AuthFailure {
 }
 
 /// @nodoc
-abstract mixin class _$InvalidPhoneNumberCopyWith<$Res>
+abstract mixin class $InvalidPhoneNumberCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory _$InvalidPhoneNumberCopyWith(
-          _InvalidPhoneNumber value, $Res Function(_InvalidPhoneNumber) _then) =
-      __$InvalidPhoneNumberCopyWithImpl;
+  factory $InvalidPhoneNumberCopyWith(
+          InvalidPhoneNumber value, $Res Function(InvalidPhoneNumber) _then) =
+      _$InvalidPhoneNumberCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -1036,12 +1031,12 @@ abstract mixin class _$InvalidPhoneNumberCopyWith<$Res>
 }
 
 /// @nodoc
-class __$InvalidPhoneNumberCopyWithImpl<$Res>
-    implements _$InvalidPhoneNumberCopyWith<$Res> {
-  __$InvalidPhoneNumberCopyWithImpl(this._self, this._then);
+class _$InvalidPhoneNumberCopyWithImpl<$Res>
+    implements $InvalidPhoneNumberCopyWith<$Res> {
+  _$InvalidPhoneNumberCopyWithImpl(this._self, this._then);
 
-  final _InvalidPhoneNumber _self;
-  final $Res Function(_InvalidPhoneNumber) _then;
+  final InvalidPhoneNumber _self;
+  final $Res Function(InvalidPhoneNumber) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -1053,7 +1048,7 @@ class __$InvalidPhoneNumberCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_InvalidPhoneNumber(
+    return _then(InvalidPhoneNumber(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
