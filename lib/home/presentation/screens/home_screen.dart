@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/home/presentation/widgets/calendar_view.dart';
 import 'package:petto/home/presentation/widgets/profile_view.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: const [
           Center(child: Text('HomeScreen')),
           SizedBox.shrink(),
-          SizedBox.shrink(),
+          CalendarView(),
           ProfileView(),
         ],
       ),
