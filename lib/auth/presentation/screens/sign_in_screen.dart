@@ -9,6 +9,7 @@ import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
 import 'package:petto/auth/domain/auth_failure.dart';
+import 'package:petto/auth/presentation/widgets/sign_in_form.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
 
 class SignInScreen extends HookConsumerWidget {
@@ -16,6 +17,8 @@ class SignInScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     // Calculate full usable height inside SafeArea
     final double minHeight = 1.sh - ScreenUtil().statusBarHeight - ScreenUtil().bottomBarHeight;
     // 20% of screen height
@@ -64,94 +67,93 @@ class SignInScreen extends HookConsumerWidget {
       }
     });
 
+    // true if loading or authenticated, false otherwise
+    final loading = ref.watch(authNotifierProvider) is Loading || ref.watch(authNotifierProvider) is Authenticated;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: minHeight),
-            child: IntrinsicHeight(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppThemeSpacing.mediumH,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  // If you have a custom Column that supports spacing:
-                  spacing: AppThemeSpacing.extraSmallV,
-                  children: [
-                    const Spacer(),
-                    Center(
-                      child: SizedBox(
-                        width: placeholderSize,
-                        height: placeholderSize,
-                        child: Placeholder(),
-                      ),
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppThemeSpacing.mediumH,
                     ),
-                    const Spacer(),
-                    FormBuilderTextField(
-                      name: 'email',
-                      decoration: InputDecoration(
-                        labelText: 'email'.tr(),
-                      ),
-                    ),
-                    FormBuilderTextField(
-                      name: 'password',
-                      decoration: InputDecoration(
-                        labelText: 'password'.tr(),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => const CreateOrImportPetRoute().go(context),
-                      child: Text('signIn'.tr()),
-                    ),
-                    Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: AppThemeSpacing.extraSmallV,
                       children: [
-                        Expanded(
-                          child: Divider(
-                            endIndent: AppThemeSpacing.extraSmallH,
+                        const Spacer(),
+                        Center(
+                          child: SizedBox(
+                            width: placeholderSize,
+                            height: placeholderSize,
+                            child: Placeholder(),
                           ),
                         ),
-                        Text('orSignInWith'.tr()),
-                        Expanded(
-                          child: Divider(
-                            indent: AppThemeSpacing.extraSmallH,
-                          ),
+                        const Spacer(),
+                        SignInForm(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                endIndent: AppThemeSpacing.extraSmallH,
+                              ),
+                            ),
+                            Text('orSignInWith'.tr()),
+                            Expanded(
+                              child: Divider(
+                                indent: AppThemeSpacing.extraSmallH,
+                              ),
+                            ),
+                          ],
                         ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _SocialButton(
+                              asset: 'assets/svgs/google.svg',
+                              onPressed: () {},
+                            ),
+                            SizedBox(width: AppThemeSpacing.smallH),
+                            _SocialButton(
+                              asset: 'assets/svgs/apple.svg',
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('noAccount'.tr()),
+                            TextButton(
+                              onPressed: () => const SignUpRoute().go(context),
+                              child: Text('register'.tr()),
+                            ),
+                          ],
+                        ),
+                        const SizedBox.shrink(),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _SocialButton(
-                          asset: 'assets/svgs/google.svg',
-                          onPressed: () {},
-                        ),
-                        SizedBox(width: AppThemeSpacing.smallH),
-                        _SocialButton(
-                          asset: 'assets/svgs/apple.svg',
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('noAccount'.tr()),
-                        TextButton(
-                          onPressed: () => const SignUpRoute().go(context),
-                          child: Text('register'.tr()),
-                        ),
-                      ],
-                    ),
-                    const SizedBox.shrink(),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          // Show loading overlay when loading is true
+          if (loading)
+            Container(
+              height: 1.sh,
+              width: 1.sw,
+              color: colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+        ],
       ),
     );
   }

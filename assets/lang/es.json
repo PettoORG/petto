@@ -10,6 +10,10 @@
   "createNewPet": "Crear mascota nueva",
   "createNewPetDescription": "Registra a tu mascota y empieza a llevar su control.",
   "email": "Correo electrónico",
+   "validators": {
+    "fieldRequired": "Este campo es obligatorio.",
+    "invalidEmail": "Ingresa un correo electrónico válido."
+  },
   "error": {
     "cancelledByUser": "La operación fue cancelada por el usuario.",
     "emailDoesNotExist": "No encontramos una cuenta con este correo electrónico.",
