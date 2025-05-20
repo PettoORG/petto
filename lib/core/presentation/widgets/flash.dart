@@ -114,7 +114,7 @@ class _CustomFlashContent extends StatelessWidget {
           : null,
       content: Text(
         message,
-        style: themeData.inputDecorationTheme.labelStyle!.copyWith(
+        style: themeData.inputDecorationTheme.labelStyle?.copyWith(
           fontSize: textTheme.bodyMedium!.fontSize,
           color: colorScheme.surface,
         ),

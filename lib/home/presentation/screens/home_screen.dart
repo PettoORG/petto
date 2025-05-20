@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/home/presentation/widgets/calendar_view.dart';
 import 'package:petto/home/presentation/widgets/profile_view.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatefulHookConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   late final PageController _pageController;
   int _index = 0;
 
@@ -61,8 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
         controller: _pageController,
         physics: const BouncingScrollPhysics(),
         onPageChanged: (i) => setState(() => _index = i),
-        children: const [
-          Center(child: Text('HomeScreen')),
+        children: [
+          Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    ref.read(authNotifierProvider.notifier).signOut();
+                  },
+                  child: Text(''))),
           SizedBox.shrink(),
           CalendarView(),
           ProfileView(),

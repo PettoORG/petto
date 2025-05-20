@@ -73,72 +73,69 @@ class SignInScreen extends HookConsumerWidget {
       resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          SafeArea(
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: minHeight),
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppThemeSpacing.mediumH,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      spacing: AppThemeSpacing.extraSmallV,
-                      children: [
-                        const Spacer(),
-                        Center(
-                          child: SizedBox(
-                            width: placeholderSize,
-                            height: placeholderSize,
-                            child: Placeholder(),
+          SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: minHeight),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppThemeSpacing.mediumH,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: AppThemeSpacing.extraSmallV,
+                    children: [
+                      const Spacer(),
+                      Center(
+                        child: SizedBox(
+                          width: placeholderSize,
+                          height: placeholderSize,
+                          child: Placeholder(),
+                        ),
+                      ),
+                      const Spacer(),
+                      SignInForm(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              endIndent: AppThemeSpacing.extraSmallH,
+                            ),
                           ),
-                        ),
-                        const Spacer(),
-                        SignInForm(),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                endIndent: AppThemeSpacing.extraSmallH,
-                              ),
+                          Text('orSignInWith'.tr()),
+                          Expanded(
+                            child: Divider(
+                              indent: AppThemeSpacing.extraSmallH,
                             ),
-                            Text('orSignInWith'.tr()),
-                            Expanded(
-                              child: Divider(
-                                indent: AppThemeSpacing.extraSmallH,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _SocialButton(
-                              asset: 'assets/svgs/google.svg',
-                              onPressed: () {},
-                            ),
-                            SizedBox(width: AppThemeSpacing.smallH),
-                            _SocialButton(
-                              asset: 'assets/svgs/apple.svg',
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('noAccount'.tr()),
-                            TextButton(
-                              onPressed: () => const SignUpRoute().go(context),
-                              child: Text('register'.tr()),
-                            ),
-                          ],
-                        ),
-                        const SizedBox.shrink(),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _SocialButton(
+                            asset: 'assets/svgs/google.svg',
+                            onPressed: () {},
+                          ),
+                          SizedBox(width: AppThemeSpacing.smallH),
+                          _SocialButton(
+                            asset: 'assets/svgs/apple.svg',
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('noAccount'.tr()),
+                          TextButton(
+                            onPressed: () => const SignUpRoute().go(context),
+                            child: Text('register'.tr()),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
