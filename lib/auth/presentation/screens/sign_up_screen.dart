@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/auth/presentation/widgets/sign_up_form.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -40,22 +41,7 @@ class SignUpScreen extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    FormBuilderTextField(
-                      name: 'email',
-                      decoration: InputDecoration(
-                        labelText: 'email'.tr(),
-                      ),
-                    ),
-                    FormBuilderTextField(
-                      name: 'password',
-                      decoration: InputDecoration(
-                        labelText: 'password'.tr(),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text('register'.tr()),
-                    ),
+                    SignUpForm(),
                     Row(
                       children: [
                         Expanded(
