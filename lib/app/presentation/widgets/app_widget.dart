@@ -8,9 +8,10 @@ import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
 import 'package:petto/core/shared/providers.dart';
 import 'package:petto/preferences/shared/providers.dart';
+import 'package:petto/users/domain/user.dart';
 
 class AppWidget extends StatefulHookConsumerWidget {
-  const AppWidget({Key? key}) : super(key: key);
+  const AppWidget({super.key});
 
   static final AppRouter appRouter = AppRouter(navigatorKey: GlobalKey<NavigatorState>());
 
@@ -40,7 +41,14 @@ class _AppWidgetState extends ConsumerState<AppWidget> {
         }
 
         if (next is Authenticated) {
-          // Authenticated user → navigate to Home.
+          User user = next.user;
+
+          if (!user.emailVerified) {
+            // router.go(EmailVerificationRoute().location);
+            router.go(HomeRoute().location);
+            return;
+          }
+
           router.go(HomeRoute().location);
         } else if (next is Unauthenticated) {
           // Allowed routes without authentication.

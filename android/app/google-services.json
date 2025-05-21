@@ -1,40 +1,48 @@
 {
   "project_info": {
-    "project_number": "617052409783",
-    "project_id": "petto-18ace",
-    "storage_bucket": "petto-18ace.appspot.com"
+    "project_number": "655298113786",
+    "project_id": "petto-85bfc",
+    "storage_bucket": "petto-85bfc.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:617052409783:android:cff89f92a1695a1b46e232",
+        "mobilesdk_app_id": "1:655298113786:android:81d1136200f1d1de561943",
         "android_client_info": {
           "package_name": "com.petto"
         }
       },
       "oauth_client": [
         {
-          "client_id": "617052409783-ds8mstnm4kqsvmugbntbgcd6jisjs76o.apps.googleusercontent.com",
+          "client_id": "655298113786-crgjeb7aea12ejge5197q90m27lva0o5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.petto",
+            "certificate_hash": "0884a6aa8813104fa0f8dbfc27f55f06745451d4"
+          }
+        },
+        {
+          "client_id": "655298113786-79ukl6mana2j6ugma1d37bm3ktole1cq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBr0P5RVvM9_uK9cXLahx6GygfsyC7nEKA"
+          "current_key": "AIzaSyBAN4g6r38mEEAgLdCGbLJWrLTZ1n45uYM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "617052409783-ds8mstnm4kqsvmugbntbgcd6jisjs76o.apps.googleusercontent.com",
+              "client_id": "655298113786-79ukl6mana2j6ugma1d37bm3ktole1cq.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "617052409783-tslhbo0f6ol2f4da1kk5089b7pnuro7i.apps.googleusercontent.com",
+              "client_id": "655298113786-06cl20poi25puf2mngjo3n81ltm3k3ah.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.pettoApp"
+                "bundle_id": "com.petto"
               }
             }
           ]

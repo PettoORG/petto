@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'selection_notifier.g.dart';
 
 /// This provider holds a List of selected items usually from a Grid (or ListView).
-/// It asumes that the selected items is a List<dynamic>. If typecast is required,
+/// It asumes that the selected items is a List dynamic. If typecast is required,
 /// use ```final selected = next.whereType<MarketplaceProduct>().toList();```.
 ///
 /// Use [family] to reuse the provider.

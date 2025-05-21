@@ -7,6 +7,7 @@ part of 'app_router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
+      $emailVerificationRoute,
       $createOrImportPetRoute,
       $petRegisterRoute,
       $homeRoute,
@@ -14,6 +15,29 @@ List<RouteBase> get $appRoutes => [
       $signInRoute,
       $signUpRoute,
     ];
+
+RouteBase get $emailVerificationRoute => GoRouteData.$route(
+      path: '/emailVerification',
+      factory: $EmailVerificationRouteExtension._fromState,
+    );
+
+extension $EmailVerificationRouteExtension on EmailVerificationRoute {
+  static EmailVerificationRoute _fromState(GoRouterState state) =>
+      const EmailVerificationRoute();
+
+  String get location => GoRouteData.$location(
+        '/emailVerification',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $createOrImportPetRoute => GoRouteData.$route(
       path: '/createorimportpet',
@@ -62,7 +86,7 @@ extension $PetRegisterRouteExtension on PetRegisterRoute {
 }
 
 RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/home',
+      path: '/',
       factory: $HomeRouteExtension._fromState,
     );
 
@@ -70,7 +94,7 @@ extension $HomeRouteExtension on HomeRoute {
   static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
 
   String get location => GoRouteData.$location(
-        '/home',
+        '/',
       );
 
   void go(BuildContext context) => context.go(location);

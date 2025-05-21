@@ -39,19 +39,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBr0P5RVvM9_uK9cXLahx6GygfsyC7nEKA',
-    appId: '1:617052409783:android:cff89f92a1695a1b46e232',
-    messagingSenderId: '617052409783',
-    projectId: 'petto-18ace',
-    storageBucket: 'petto-18ace.appspot.com',
+    apiKey: 'AIzaSyBAN4g6r38mEEAgLdCGbLJWrLTZ1n45uYM',
+    appId: '1:655298113786:android:81d1136200f1d1de561943',
+    messagingSenderId: '655298113786',
+    projectId: 'petto-85bfc',
+    storageBucket: 'petto-85bfc.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAz-I4N2UYJ42vYJUsYdHKXVzmfW4sqEs0',
-    appId: '1:617052409783:ios:945d65b26de8ccc646e232',
-    messagingSenderId: '617052409783',
-    projectId: 'petto-18ace',
-    storageBucket: 'petto-18ace.appspot.com',
+    apiKey: 'AIzaSyAogSD_iJgzrLq_DWBwr1JLUPJY6O3j1hA',
+    appId: '1:655298113786:ios:0a5a9a73f66ae7bb561943',
+    messagingSenderId: '655298113786',
+    projectId: 'petto-85bfc',
+    storageBucket: 'petto-85bfc.firebasestorage.app',
     iosBundleId: 'com.petto',
   );
+
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:petto/auth/presentation/screens/email_verification_screen.dart';
 import 'package:petto/auth/presentation/screens/sign_in_screen.dart';
 import 'package:petto/auth/presentation/screens/sign_up_screen.dart';
 import 'package:petto/home/presentation/screens/home_screen.dart';
@@ -23,7 +24,7 @@ class AppRouter {
       initialLocation: '/',
       debugLogDiagnostics: true,
       navigatorKey: this.navigatorKey,
-      routes: $appRoutes, // <-- generated list from your @TypedGoRoute
+      routes: $appRoutes,
     );
   }
 
@@ -32,6 +33,15 @@ class AppRouter {
 }
 
 /// Typed (and generated) route definitions below
+
+@TypedGoRoute<EmailVerificationRoute>(
+  path: '/emailVerification',
+)
+class EmailVerificationRoute extends GoRouteData {
+  const EmailVerificationRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const EmailVerificationScreen();
+}
 
 @TypedGoRoute<CreateOrImportPetRoute>(
   path: '/createorimportpet',
@@ -52,7 +62,7 @@ class PetRegisterRoute extends GoRouteData {
 }
 
 @TypedGoRoute<HomeRoute>(
-  path: '/home',
+  path: '/',
 )
 class HomeRoute extends GoRouteData {
   const HomeRoute();

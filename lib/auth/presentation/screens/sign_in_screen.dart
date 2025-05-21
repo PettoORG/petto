@@ -115,7 +115,9 @@ class SignInScreen extends HookConsumerWidget {
                         children: [
                           _SocialButton(
                             asset: 'assets/svgs/google.svg',
-                            onPressed: () {},
+                            onPressed: () {
+                              ref.read(authNotifierProvider.notifier).signInWithGoogle();
+                            },
                           ),
                           SizedBox(width: AppThemeSpacing.smallH),
                           _SocialButton(

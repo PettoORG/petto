@@ -1,4 +1,3 @@
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -126,20 +125,28 @@ class AuthRepository {
           return left(AuthFailure.unexpected());
         }
 
-        // Call the ExistingUserValidation cloud function to check if the user exists in Firestore
-        final callable = FirebaseFunctions.instance.httpsCallable('ExistingUserValidation');
-        final response = await callable.call();
-        final data = response.data as Map<String, dynamic>;
+        // Check if user document already exists using the repository
+        final existsResult = await _userRepository.existsById(firebaseUser.uid);
 
-        // If the user doesn't exist in Firestore, create a new user
-        if (data['success'] == true && data['exists'] == false) {
+        if (existsResult.isLeft()) {
+          // Resume the stream before returning error
+          pauseStream.add(false);
+          return left(AuthFailure.unexpected());
+        }
+
+        final exists = existsResult.getOrElse(() => false);
+
+        if (!exists) {
           final newUser = app_user.User.empty().copyWith(
             email: firebaseUser.email!,
             id: firebaseUser.uid,
             uid: firebaseUser.uid,
           );
-          await _userRepository.create(newUser.copyWith(emailVerified: firebaseUser.emailVerified));
+          await _userRepository.create(
+            newUser.copyWith(emailVerified: firebaseUser.emailVerified),
+          );
         }
+
         // Resume the stream after the document is created.
         pauseStream.add(false);
 

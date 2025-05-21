@@ -61,6 +61,18 @@ class UserFirestoreRepository {
     });
   }
 
+  /// Checks if a user exists in Firestore by UID.
+  Future<Either<Failure, bool>> existsById(String uid) async {
+    try {
+      final doc = await firestore.collection(collectionPath).doc(uid).get();
+      return right(doc.exists);
+    } on FirebaseException catch (e, st) {
+      return left(FailureFactory.fromFirebaseException(e, st));
+    } on Exception catch (e, st) {
+      return left(FailureFactory.fromException(e, st));
+    }
+  }
+
   /// Returns Future with "a Failure or a List of Entities", provided a [query].
   Future<Either<Failure, List<User>>> fetchQuery(Query<User> query) async {
     try {
