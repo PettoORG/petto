@@ -56,13 +56,13 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
       onChanged: onChanged,
       autovalidateMode: autovalidateMode,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumH),
+        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppThemeSpacing.extraSmallV,
+          spacing: AppThemeSpacing.extraSmallH,
           children: [
             Center(child: _PetAvatar(specie: _selectedSpecie)),
-            SizedBox(height: AppThemeSpacing.extraSmallV),
+            SizedBox(height: AppThemeSpacing.extraSmallH),
             FormBuilderTextField(
               name: 'name',
               decoration: InputDecoration(labelText: 'name'.tr()),
@@ -88,7 +88,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                     },
                   ),
                 ),
-                SizedBox(width: AppThemeSpacing.smallH),
+                SizedBox(width: AppThemeSpacing.smallW),
                 Expanded(
                   child: FormBuilderDropdown<PetBreed>(
                     name: 'breed',
@@ -113,7 +113,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                     onTap: () => setState(() => _selectedGender = PetSex.male),
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
                     child: Ink(
-                      padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+                      padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
                       decoration: BoxDecoration(
                         color: _selectedGender == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
                         borderRadius: BorderRadius.all(AppThemeRadius.medium),
@@ -123,23 +123,23 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(PetSex.male.displayName),
-                          SizedBox(width: AppThemeSpacing.smallH),
+                          SizedBox(width: AppThemeSpacing.smallW),
                           Icon(
                             Icons.male,
-                            size: AppThemeSpacing.smallV,
+                            size: AppThemeSpacing.smallH,
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: AppThemeSpacing.smallH),
+                SizedBox(width: AppThemeSpacing.smallW),
                 Expanded(
                   child: InkWell(
                     onTap: () => setState(() => _selectedGender = PetSex.female),
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
                     child: Ink(
-                      padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+                      padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
                       decoration: BoxDecoration(
                         color: _selectedGender == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
                         borderRadius: BorderRadius.all(AppThemeRadius.medium),
@@ -149,10 +149,10 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(PetSex.female.displayName),
-                          SizedBox(width: AppThemeSpacing.smallH),
+                          SizedBox(width: AppThemeSpacing.smallW),
                           Icon(
                             Icons.female,
-                            size: AppThemeSpacing.smallV,
+                            size: AppThemeSpacing.smallH,
                           ),
                         ],
                       ),
@@ -249,7 +249,7 @@ class _PetAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double radius = AppThemeSpacing.extraLargeV;
+    final double radius = AppThemeSpacing.extraLargeH;
     final double avatarSize = radius * 2;
     final String assetPath = specie == PetSpecie.cat ? 'assets/images/cat.png' : 'assets/images/dog.png';
 
@@ -273,7 +273,7 @@ class _PetAvatar extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
             width: avatarSize,
             height: avatarSize,
             decoration: BoxDecoration(
@@ -287,7 +287,7 @@ class _PetAvatar extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+              padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 shape: BoxShape.circle,
@@ -295,7 +295,7 @@ class _PetAvatar extends StatelessWidget {
               ),
               child: Icon(
                 Icons.camera_alt,
-                size: AppThemeSpacing.smallV,
+                size: AppThemeSpacing.smallH,
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
             ),

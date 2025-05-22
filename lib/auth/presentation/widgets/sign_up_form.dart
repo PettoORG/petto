@@ -35,7 +35,7 @@ class _SignInFormState extends ConsumerState<SignUpForm> {
       key: fk,
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
-        spacing: AppThemeSpacing.extraSmallV,
+        spacing: AppThemeSpacing.extraSmallH,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FormBuilderTextField(

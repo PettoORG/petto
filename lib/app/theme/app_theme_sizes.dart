@@ -4,28 +4,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// Defines horizontal and vertical spacing constants
 class AppThemeSpacing {
   /// Horizontal spacing as a percentage of screen width
-  static double get extraTinyH => 0.01.sw; // 1% of screen width
-  static double get tinyH => 0.015.sw; // 1.5% of screen width
-  static double get extraSmallH => 0.02.sw; // 2% of screen width
-  static double get smallH => 0.04.sw; // 4% of screen width
-  static double get mediumH => 0.06.sw; // 6% of screen width
-  static double get largeH => 0.08.sw; // 8% of screen width
-  static double get extraLargeH => 0.10.sw; // 10% of screen width
-  static double get doubleXLH => 0.12.sw; // 12% of screen width
-  static double get tripleXLH => 0.15.sw; // 15% of screen width
-  static double get ultraH => 0.20.sw; // 20% of screen width
+  static double get extraTinyW => 0.01.sw; // 1% of screen width
+  static double get tinyW => 0.015.sw; // 1.5% of screen width
+  static double get extraSmallW => 0.02.sw; // 2% of screen width
+  static double get smallW => 0.04.sw; // 4% of screen width
+  static double get mediumW => 0.06.sw; // 6% of screen width
+  static double get largeW => 0.08.sw; // 8% of screen width
+  static double get extraLargeW => 0.10.sw; // 10% of screen width
+  static double get doubleXLW => 0.12.sw; // 12% of screen width
+  static double get tripleXLW => 0.15.sw; // 15% of screen width
+  static double get ultraW => 0.20.sw; // 20% of screen width
 
   /// Vertical spacing as a percentage of screen height
-  static double get extraTinyV => 0.01.sh; // 1% of screen height
-  static double get tinyV => 0.015.sh; // 1.5% of screen height
-  static double get extraSmallV => 0.02.sh; // 2% of screen height
-  static double get smallV => 0.04.sh; // 4% of screen height
-  static double get mediumV => 0.06.sh; // 6% of screen height
-  static double get largeV => 0.08.sh; // 8% of screen height
-  static double get extraLargeV => 0.10.sh; // 10% of screen height
-  static double get doubleXLV => 0.12.sh; // 12% of screen height
-  static double get tripleXLV => 0.15.sh; // 15% of screen height
-  static double get ultraV => 0.20.sh; // 20% of screen height
+  static double get extraTinyH => 0.01.sh; // 1% of screen height
+  static double get tinyH => 0.015.sh; // 1.5% of screen height
+  static double get extraSmallH => 0.02.sh; // 2% of screen height
+  static double get smallH => 0.04.sh; // 4% of screen height
+  static double get mediumH => 0.06.sh; // 6% of screen height
+  static double get largeH => 0.08.sh; // 8% of screen height
+  static double get extraLargeH => 0.10.sh; // 10% of screen height
+  static double get doubleXLH => 0.12.sh; // 12% of screen height
+  static double get tripleXLH => 0.15.sh; // 15% of screen height
+  static double get ultraH => 0.20.sh; // 20% of screen height
 }
 
 /// Defines radii scaled with screen util

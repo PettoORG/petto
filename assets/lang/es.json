@@ -2,6 +2,7 @@
   "addExistingPet": "Agregar mascota existente",
   "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o alguien más en otro dispositivo.",
   "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "alreadyVerifiedEmail": "Ya verifiqué mi correo",
   "back": "Atrás",
   "birthDate": "Fecha de nacimiento",
   "breed": "Raza",
@@ -10,10 +11,7 @@
   "createNewPet": "Crear mascota nueva",
   "createNewPetDescription": "Registra a tu mascota y empieza a llevar su control.",
   "email": "Correo electrónico",
-   "validators": {
-    "fieldRequired": "Este campo es obligatorio.",
-    "invalidEmail": "Ingresa un correo electrónico válido."
-  },
+  "enterEmailToReset": "Ingresa tu correo para restablecer la contraseña.",
   "error": {
     "cancelledByUser": "La operación fue cancelada por el usuario.",
     "emailDoesNotExist": "No encontramos una cuenta con este correo electrónico.",
@@ -55,6 +53,7 @@
     "userDisabled": "Tu cuenta ha sido desactivada. Contacta al soporte si necesitas ayuda."
   },
   "female": "Hembra",
+  "forgotPassword": "¿Olvidaste tu contraseña?",
   "male": "Macho",
   "name": "Nombre",
   "next": "Siguiente",
@@ -151,8 +150,21 @@
     "weekly": "Semanal",
     "yearly": "Anual"
   },
+  "resendInValue":{
+    "many": "Reenviar en {} segundos.",
+      "one": "Reenviar en {} segundo.",
+      "other": "Reenviar en {} segundos."
+  },
+  "resendVerificationEmail": "Reenviar correo de verificación",
+  "send": "Enviar",
   "signIn": "Iniciar sesión",
   "skip": "Saltar",
   "specie": "Especie",
-  "start": "Comenzar"
+  "start": "Comenzar",
+  "validators": {
+    "fieldRequired": "Este campo es obligatorio.",
+    "invalidEmail": "Ingresa un correo electrónico válido."
+  },
+  "verifyEmailHeading": "Verifica tu correo electrónico",
+  "verifyEmailMessage": "Te hemos enviado un enlace para confirmar tu dirección de correo. Por favor, revisa tu bandeja de entrada y verifica tu cuenta para continuar."
 }

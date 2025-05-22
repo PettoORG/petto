@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
@@ -35,7 +36,6 @@ class _SignInFormState extends ConsumerState<SignInForm> {
       key: fk,
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
-        spacing: AppThemeSpacing.extraSmallV,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FormBuilderTextField(
@@ -49,6 +49,7 @@ class _SignInFormState extends ConsumerState<SignInForm> {
               FormBuilderValidators.email(errorText: 'validators.invalidEmail'.tr()),
             ]),
           ),
+          SizedBox(height: AppThemeSpacing.extraSmallH),
           FormBuilderTextField(
             name: 'password',
             autovalidateMode: autovalidateMode,
@@ -63,6 +64,15 @@ class _SignInFormState extends ConsumerState<SignInForm> {
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
             ]),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                ForgotPasswordRoute().push(context);
+              },
+              child: Text('forgotPassword'.tr()),
+            ),
           ),
           ElevatedButton(
             onPressed: !loading ? _signInWithEmailAndPassword : null,

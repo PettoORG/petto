@@ -24,10 +24,10 @@ class ProfileView extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumH),
+        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppThemeSpacing.extraSmallV,
+          spacing: AppThemeSpacing.extraSmallH,
           children: [
             const Center(child: _UserAvatar()),
             Container(
@@ -38,7 +38,7 @@ class ProfileView extends StatelessWidget {
                   onTap: option.onTap,
                   borderRadius: BorderRadius.all(AppThemeRadius.medium),
                   child: Ink(
-                    padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+                    padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(AppThemeRadius.medium),
                       color: colorScheme.surface,
@@ -72,7 +72,7 @@ class _UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final double radius = AppThemeSpacing.extraLargeV;
+    final double radius = AppThemeSpacing.extraLargeH;
     final double avatarSize = radius * 2;
 
     return SizedBox(
@@ -81,7 +81,7 @@ class _UserAvatar extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
             width: avatarSize,
             height: avatarSize,
             decoration: BoxDecoration(
@@ -92,7 +92,7 @@ class _UserAvatar extends StatelessWidget {
             child: Center(
               child: Icon(
                 Icons.person,
-                size: AppThemeSpacing.doubleXLV,
+                size: AppThemeSpacing.doubleXLH,
                 color: colorScheme.primary,
               ),
             ),
@@ -101,7 +101,7 @@ class _UserAvatar extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+              padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
               decoration: BoxDecoration(
                 color: colorScheme.primary,
                 shape: BoxShape.circle,
@@ -109,7 +109,7 @@ class _UserAvatar extends StatelessWidget {
               ),
               child: Icon(
                 Icons.camera_alt,
-                size: AppThemeSpacing.smallV,
+                size: AppThemeSpacing.smallH,
                 color: colorScheme.onPrimary,
               ),
             ),

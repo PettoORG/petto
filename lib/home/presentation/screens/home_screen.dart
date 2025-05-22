@@ -79,8 +79,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Container(
           color: colorScheme.surface,
           padding: EdgeInsets.symmetric(
-            vertical: AppThemeSpacing.extraTinyV,
-            horizontal: AppThemeSpacing.mediumH,
+            vertical: AppThemeSpacing.extraTinyH,
+            horizontal: AppThemeSpacing.mediumW,
           ),
           child: GNav(
             selectedIndex: _index,

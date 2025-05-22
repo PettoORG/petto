@@ -7,6 +7,7 @@ part of 'app_router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
+      $forgotPasswordRoute,
       $emailVerificationRoute,
       $createOrImportPetRoute,
       $petRegisterRoute,
@@ -15,6 +16,29 @@ List<RouteBase> get $appRoutes => [
       $signInRoute,
       $signUpRoute,
     ];
+
+RouteBase get $forgotPasswordRoute => GoRouteData.$route(
+      path: '/forgotPassword',
+      factory: $ForgotPasswordRouteExtension._fromState,
+    );
+
+extension $ForgotPasswordRouteExtension on ForgotPasswordRoute {
+  static ForgotPasswordRoute _fromState(GoRouterState state) =>
+      const ForgotPasswordRoute();
+
+  String get location => GoRouteData.$location(
+        '/forgotPassword',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $emailVerificationRoute => GoRouteData.$route(
       path: '/emailVerification',

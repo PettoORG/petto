@@ -19,7 +19,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
         children: [
           const Positioned.fill(child: _BackgroundPaws()),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumH),
+            padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -28,7 +28,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
                   width: placeholderSize,
                   height: placeholderSize,
                 ),
-                SizedBox(height: AppThemeSpacing.mediumV),
+                SizedBox(height: AppThemeSpacing.mediumH),
                 _PetCard(
                   onTap: () => PetRegisterRoute().push(context),
                   titleKey: 'createNewPet',
@@ -36,7 +36,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
                   colorScheme: colorScheme,
                   textTheme: textTheme,
                 ),
-                SizedBox(height: AppThemeSpacing.extraSmallV),
+                SizedBox(height: AppThemeSpacing.extraSmallH),
                 _PetCard(
                   onTap: () {},
                   titleKey: 'addExistingPet',
@@ -79,7 +79,7 @@ class _PetCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.all(AppThemeRadius.small),
         child: Padding(
-          padding: EdgeInsets.all(AppThemeSpacing.extraTinyV),
+          padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
           child: SizedBox(
             height: 0.1.sh,
             child: Row(
@@ -98,7 +98,7 @@ class _PetCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: AppThemeSpacing.extraSmallH),
+                SizedBox(width: AppThemeSpacing.extraSmallW),
                 const Icon(Icons.arrow_forward_ios_rounded),
               ],
             ),

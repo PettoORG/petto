@@ -44,12 +44,21 @@ class _AppWidgetState extends ConsumerState<AppWidget> {
           User user = next.user;
 
           if (!user.emailVerified) {
-            // router.go(EmailVerificationRoute().location);
-            router.go(HomeRoute().location);
+            router.go(EmailVerificationRoute().location);
             return;
           }
 
-          router.go(HomeRoute().location);
+          final homeAllowedRoutes = [
+            SignInRoute().location,
+            SignUpRoute().location,
+            OnboardingRoute().location,
+            EmailVerificationRoute().location
+          ];
+
+          if (homeAllowedRoutes.contains(currentLocation)) {
+            router.go(HomeRoute().location);
+            return;
+          }
         } else if (next is Unauthenticated) {
           // Allowed routes without authentication.
           final unauthenticated = [

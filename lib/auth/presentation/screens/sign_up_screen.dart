@@ -78,11 +78,11 @@ class SignUpScreen extends HookConsumerWidget {
               child: IntrinsicHeight(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: AppThemeSpacing.mediumH,
+                    horizontal: AppThemeSpacing.mediumW,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    spacing: AppThemeSpacing.extraSmallV,
+                    spacing: AppThemeSpacing.extraSmallH,
                     children: [
                       const Spacer(),
                       Center(
@@ -98,13 +98,13 @@ class SignUpScreen extends HookConsumerWidget {
                         children: [
                           Expanded(
                             child: Divider(
-                              endIndent: AppThemeSpacing.extraSmallH,
+                              endIndent: AppThemeSpacing.extraSmallW,
                             ),
                           ),
                           Text('orRegisterWith'.tr()),
                           Expanded(
                             child: Divider(
-                              indent: AppThemeSpacing.extraSmallH,
+                              indent: AppThemeSpacing.extraSmallW,
                             ),
                           ),
                         ],
@@ -118,7 +118,7 @@ class SignUpScreen extends HookConsumerWidget {
                               ref.read(authNotifierProvider.notifier).signInWithGoogle();
                             },
                           ),
-                          SizedBox(width: AppThemeSpacing.smallH),
+                          SizedBox(width: AppThemeSpacing.smallW),
                           _SocialButton(
                             asset: 'assets/svgs/apple.svg',
                             onPressed: () {},
@@ -180,11 +180,11 @@ class _SocialButton extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: AppThemeSpacing.extraTinyV,
+          vertical: AppThemeSpacing.extraTinyH,
         ),
         child: SvgPicture.asset(
           asset,
-          height: AppThemeSpacing.smallV,
+          height: AppThemeSpacing.smallH,
         ),
       ),
     );

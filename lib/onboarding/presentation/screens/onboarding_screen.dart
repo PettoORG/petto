@@ -68,18 +68,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: AppThemeSpacing.mediumH,
+                        horizontal: AppThemeSpacing.mediumW,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: AppThemeSpacing.largeV),
+                          SizedBox(height: AppThemeSpacing.largeH),
                           Text(
                             page['title']!,
                             style: textTheme.titleLarge,
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: AppThemeSpacing.extraSmallV),
+                          SizedBox(height: AppThemeSpacing.extraSmallH),
                           Text(
                             page['body']!,
                             textAlign: TextAlign.center,
@@ -112,8 +112,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             top: false,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: AppThemeSpacing.mediumH,
-                vertical: AppThemeSpacing.extraSmallV,
+                horizontal: AppThemeSpacing.mediumW,
+                vertical: AppThemeSpacing.extraSmallH,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

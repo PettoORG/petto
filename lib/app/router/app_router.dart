@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petto/auth/presentation/screens/email_verification_screen.dart';
+import 'package:petto/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:petto/auth/presentation/screens/sign_in_screen.dart';
 import 'package:petto/auth/presentation/screens/sign_up_screen.dart';
 import 'package:petto/home/presentation/screens/home_screen.dart';
@@ -33,6 +34,15 @@ class AppRouter {
 }
 
 /// Typed (and generated) route definitions below
+
+@TypedGoRoute<ForgotPasswordRoute>(
+  path: '/forgotPassword',
+)
+class ForgotPasswordRoute extends GoRouteData {
+  const ForgotPasswordRoute();
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const ForgotPasswordScreen();
+}
 
 @TypedGoRoute<EmailVerificationRoute>(
   path: '/emailVerification',
