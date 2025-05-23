@@ -2,8 +2,8 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/pets/router.dart';
 
 class CreateOrImportPetScreen extends StatelessWidget {
   const CreateOrImportPetScreen({super.key});

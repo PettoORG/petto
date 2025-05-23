@@ -6,7 +6,10 @@ import 'package:petto/app/theme/app_theme.dart';
 import 'package:petto/app/theme/app_theme_notifier.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
+import 'package:petto/auth/router.dart';
 import 'package:petto/core/shared/providers.dart';
+import 'package:petto/home/router.dart';
+import 'package:petto/onboarding/router.dart';
 import 'package:petto/preferences/shared/providers.dart';
 import 'package:petto/users/domain/user.dart';
 

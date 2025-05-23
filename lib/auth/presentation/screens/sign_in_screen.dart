@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
 import 'package:petto/auth/domain/auth_failure.dart';
 import 'package:petto/auth/presentation/widgets/sign_in_form.dart';
+import 'package:petto/auth/router.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
 
 class SignInScreen extends HookConsumerWidget {

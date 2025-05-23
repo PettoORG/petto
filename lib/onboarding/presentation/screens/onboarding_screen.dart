@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:petto/app/router/app_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/auth/router.dart';
 import 'package:petto/preferences/application/app_preferences_notifier.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
