@@ -150,10 +150,24 @@
     "weekly": "Semanal",
     "yearly": "Anual"
   },
-  "resendInValue":{
+  "reminderTypeEnum": {
+    "anniversary": "Cumpleaños / aniversario de adopción",
+    "bath": "Baño",
+    "custom": "Recordatorio personalizado",
+    "deworming": "Desparasitación",
+    "feeding": "Alimentación",
+    "grooming": "Aseo y cuidado de pelaje",
+    "medication": "Medicación",
+    "training": "Entrenamiento",
+    "vaccination": "Vacunación",
+    "vetAppointment": "Cita veterinaria",
+    "walk": "Paseo",
+    "weightCheck": "Control de peso"
+  },
+  "resendInValue": {
     "many": "Reenviar en {} segundos.",
-      "one": "Reenviar en {} segundo.",
-      "other": "Reenviar en {} segundos."
+    "one": "Reenviar en {} segundo.",
+    "other": "Reenviar en {} segundos."
   },
   "resendVerificationEmail": "Reenviar correo de verificación",
   "send": "Enviar",

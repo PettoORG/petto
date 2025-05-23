@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/reminders/domain/reminder_frecuency.dart';
+import 'package:petto/reminders/domain/reminder_type.dart';
 
 part 'reminder.freezed.dart';
 
@@ -14,11 +15,14 @@ sealed class Reminder with _$Reminder {
     /// Document ID in the database.
     required String id,
 
-    /// ID of the user who created the reminder.
-    required String userId,
-
     /// List of pet IDs the reminder applies to. Can be empty for general reminders.
     required List<String> petIds,
+
+    /// List of user IDs assigned to receive the reminder. Useful when pets are shared.
+    required List<String> assigneeIds,
+
+    /// Reminder type (e.g., "Vaccine", "Bath").
+    required ReminderType type,
 
     /// Reminder title (e.g., "Rabies vaccine", "Monthly bath").
     required String title,
@@ -56,8 +60,9 @@ sealed class Reminder with _$Reminder {
 
   factory Reminder.empty() => Reminder(
         id: '0',
-        userId: '',
         petIds: [],
+        assigneeIds: [],
+        type: ReminderType.custom,
         title: '',
         description: '',
         scheduledAt: DateTime.now(),

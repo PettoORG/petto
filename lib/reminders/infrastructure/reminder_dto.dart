@@ -4,6 +4,7 @@ import 'package:petto/core/infrastructure/base_dto.dart';
 import 'package:petto/core/domain/json_converter/timestamp_converter.dart';
 import 'package:petto/reminders/domain/reminder.dart';
 import 'package:petto/reminders/domain/reminder_frecuency.dart';
+import 'package:petto/reminders/domain/reminder_type.dart';
 import 'package:petto/users/domain/user.dart';
 
 part 'reminder_dto.freezed.dart';
@@ -15,8 +16,9 @@ sealed class ReminderDTO with _$ReminderDTO implements BaseDTO<Reminder> {
 
   const factory ReminderDTO({
     @Default('0') String id,
-    required String userId,
     required List<String> petIds,
+    required List<String> assigneeIds,
+    required ReminderType type,
     required String title,
     required String description,
     @TimestampConverter() required DateTime scheduledAt,
@@ -40,7 +42,8 @@ sealed class ReminderDTO with _$ReminderDTO implements BaseDTO<Reminder> {
   factory ReminderDTO.fromDomain(Reminder reminder) {
     return ReminderDTO(
       id: reminder.id,
-      userId: reminder.userId,
+      assigneeIds: reminder.assigneeIds,
+      type: reminder.type,
       petIds: reminder.petIds,
       title: reminder.title,
       description: reminder.description,
@@ -85,7 +88,8 @@ sealed class ReminderDTO with _$ReminderDTO implements BaseDTO<Reminder> {
   Reminder toDomain() {
     return Reminder(
       id: id,
-      userId: userId,
+      type: type,
+      assigneeIds: assigneeIds,
       petIds: petIds,
       title: title,
       description: description,

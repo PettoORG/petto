@@ -8,9 +8,12 @@ part of 'reminder_dto.dart';
 
 _ReminderDTO _$ReminderDTOFromJson(Map<String, dynamic> json) => _ReminderDTO(
       id: json['id'] as String? ?? '0',
-      userId: json['userId'] as String,
       petIds:
           (json['petIds'] as List<dynamic>).map((e) => e as String).toList(),
+      assigneeIds: (json['assigneeIds'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      type: $enumDecode(_$ReminderTypeEnumMap, json['type']),
       title: json['title'] as String,
       description: json['description'] as String,
       scheduledAt:
@@ -31,8 +34,9 @@ _ReminderDTO _$ReminderDTOFromJson(Map<String, dynamic> json) => _ReminderDTO(
 Map<String, dynamic> _$ReminderDTOToJson(_ReminderDTO instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'userId': instance.userId,
       'petIds': instance.petIds,
+      'assigneeIds': instance.assigneeIds,
+      'type': _$ReminderTypeEnumMap[instance.type]!,
       'title': instance.title,
       'description': instance.description,
       'scheduledAt': const TimestampConverter().toJson(instance.scheduledAt),
@@ -48,6 +52,21 @@ Map<String, dynamic> _$ReminderDTOToJson(_ReminderDTO instance) =>
       'createdBy': instance.createdBy,
       'modifiedBy': instance.modifiedBy,
     };
+
+const _$ReminderTypeEnumMap = {
+  ReminderType.vaccination: 'vaccination',
+  ReminderType.medication: 'medication',
+  ReminderType.feeding: 'feeding',
+  ReminderType.bath: 'bath',
+  ReminderType.grooming: 'grooming',
+  ReminderType.walk: 'walk',
+  ReminderType.vetAppointment: 'vetAppointment',
+  ReminderType.training: 'training',
+  ReminderType.deworming: 'deworming',
+  ReminderType.weightCheck: 'weightCheck',
+  ReminderType.anniversary: 'anniversary',
+  ReminderType.custom: 'custom',
+};
 
 const _$ReminderFrequencyEnumMap = {
   ReminderFrequency.none: 'none',

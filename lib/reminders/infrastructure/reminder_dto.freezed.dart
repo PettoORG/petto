@@ -16,8 +16,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReminderDTO {
   String get id;
-  String get userId;
   List<String> get petIds;
+  List<String> get assigneeIds;
+  ReminderType get type;
   String get title;
   String get description;
   @TimestampConverter()
@@ -50,8 +51,10 @@ mixin _$ReminderDTO {
         (other.runtimeType == runtimeType &&
             other is ReminderDTO &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
             const DeepCollectionEquality().equals(other.petIds, petIds) &&
+            const DeepCollectionEquality()
+                .equals(other.assigneeIds, assigneeIds) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -79,8 +82,9 @@ mixin _$ReminderDTO {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      userId,
       const DeepCollectionEquality().hash(petIds),
+      const DeepCollectionEquality().hash(assigneeIds),
+      type,
       title,
       description,
       scheduledAt,
@@ -95,7 +99,7 @@ mixin _$ReminderDTO {
 
   @override
   String toString() {
-    return 'ReminderDTO(id: $id, userId: $userId, petIds: $petIds, title: $title, description: $description, scheduledAt: $scheduledAt, isRecurring: $isRecurring, frequency: $frequency, recurrenceEndsAt: $recurrenceEndsAt, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'ReminderDTO(id: $id, petIds: $petIds, assigneeIds: $assigneeIds, type: $type, title: $title, description: $description, scheduledAt: $scheduledAt, isRecurring: $isRecurring, frequency: $frequency, recurrenceEndsAt: $recurrenceEndsAt, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -107,8 +111,9 @@ abstract mixin class $ReminderDTOCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String userId,
       List<String> petIds,
+      List<String> assigneeIds,
+      ReminderType type,
       String title,
       String description,
       @TimestampConverter() DateTime scheduledAt,
@@ -135,8 +140,9 @@ class _$ReminderDTOCopyWithImpl<$Res> implements $ReminderDTOCopyWith<$Res> {
   @override
   $Res call({
     Object? id = null,
-    Object? userId = null,
     Object? petIds = null,
+    Object? assigneeIds = null,
+    Object? type = null,
     Object? title = null,
     Object? description = null,
     Object? scheduledAt = null,
@@ -154,14 +160,18 @@ class _$ReminderDTOCopyWithImpl<$Res> implements $ReminderDTOCopyWith<$Res> {
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: null == userId
-          ? _self.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
       petIds: null == petIds
           ? _self.petIds
           : petIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      assigneeIds: null == assigneeIds
+          ? _self.assigneeIds
+          : assigneeIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      type: null == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ReminderType,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -215,8 +225,9 @@ class _$ReminderDTOCopyWithImpl<$Res> implements $ReminderDTOCopyWith<$Res> {
 class _ReminderDTO extends ReminderDTO {
   const _ReminderDTO(
       {this.id = '0',
-      required this.userId,
       required final List<String> petIds,
+      required final List<String> assigneeIds,
+      required this.type,
       required this.title,
       required this.description,
       @TimestampConverter() required this.scheduledAt,
@@ -229,6 +240,7 @@ class _ReminderDTO extends ReminderDTO {
       required this.createdBy,
       required this.modifiedBy})
       : _petIds = petIds,
+        _assigneeIds = assigneeIds,
         super._();
   factory _ReminderDTO.fromJson(Map<String, dynamic> json) =>
       _$ReminderDTOFromJson(json);
@@ -236,8 +248,6 @@ class _ReminderDTO extends ReminderDTO {
   @override
   @JsonKey()
   final String id;
-  @override
-  final String userId;
   final List<String> _petIds;
   @override
   List<String> get petIds {
@@ -246,6 +256,16 @@ class _ReminderDTO extends ReminderDTO {
     return EqualUnmodifiableListView(_petIds);
   }
 
+  final List<String> _assigneeIds;
+  @override
+  List<String> get assigneeIds {
+    if (_assigneeIds is EqualUnmodifiableListView) return _assigneeIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_assigneeIds);
+  }
+
+  @override
+  final ReminderType type;
   @override
   final String title;
   @override
@@ -294,8 +314,10 @@ class _ReminderDTO extends ReminderDTO {
         (other.runtimeType == runtimeType &&
             other is _ReminderDTO &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
             const DeepCollectionEquality().equals(other._petIds, _petIds) &&
+            const DeepCollectionEquality()
+                .equals(other._assigneeIds, _assigneeIds) &&
+            (identical(other.type, type) || other.type == type) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -323,8 +345,9 @@ class _ReminderDTO extends ReminderDTO {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      userId,
       const DeepCollectionEquality().hash(_petIds),
+      const DeepCollectionEquality().hash(_assigneeIds),
+      type,
       title,
       description,
       scheduledAt,
@@ -339,7 +362,7 @@ class _ReminderDTO extends ReminderDTO {
 
   @override
   String toString() {
-    return 'ReminderDTO(id: $id, userId: $userId, petIds: $petIds, title: $title, description: $description, scheduledAt: $scheduledAt, isRecurring: $isRecurring, frequency: $frequency, recurrenceEndsAt: $recurrenceEndsAt, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'ReminderDTO(id: $id, petIds: $petIds, assigneeIds: $assigneeIds, type: $type, title: $title, description: $description, scheduledAt: $scheduledAt, isRecurring: $isRecurring, frequency: $frequency, recurrenceEndsAt: $recurrenceEndsAt, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -353,8 +376,9 @@ abstract mixin class _$ReminderDTOCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      String userId,
       List<String> petIds,
+      List<String> assigneeIds,
+      ReminderType type,
       String title,
       String description,
       @TimestampConverter() DateTime scheduledAt,
@@ -381,8 +405,9 @@ class __$ReminderDTOCopyWithImpl<$Res> implements _$ReminderDTOCopyWith<$Res> {
   @pragma('vm:prefer-inline')
   $Res call({
     Object? id = null,
-    Object? userId = null,
     Object? petIds = null,
+    Object? assigneeIds = null,
+    Object? type = null,
     Object? title = null,
     Object? description = null,
     Object? scheduledAt = null,
@@ -400,14 +425,18 @@ class __$ReminderDTOCopyWithImpl<$Res> implements _$ReminderDTOCopyWith<$Res> {
           ? _self.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: null == userId
-          ? _self.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
       petIds: null == petIds
           ? _self._petIds
           : petIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      assigneeIds: null == assigneeIds
+          ? _self._assigneeIds
+          : assigneeIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      type: null == type
+          ? _self.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ReminderType,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
