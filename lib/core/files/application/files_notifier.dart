@@ -33,8 +33,17 @@ class FilesNotifier extends _$FilesNotifier {
   final pauseStream = BehaviorSubject<bool>.seeded(false);
 
   /// Saves the provider "family" to reuse it later.
+  late String _family;
+
+  /// Saves the provider "family" to reuse it later.
   @override
-  late String family;
+  String get family => _family;
+
+  /// Saves the provider "family" to reuse it later.
+  @override
+  set family(String value) {
+    _family = value;
+  }
 
   /// Getter to check if there are any files pending to be deleted or uploaded.
   bool get hasFilesPending => state.files
