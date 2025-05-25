@@ -76,46 +76,21 @@ class _UserAvatar extends StatelessWidget {
     final double radius = AppThemeSpacing.extraLargeH;
     final double avatarSize = radius * 2;
 
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
       width: avatarSize,
       height: avatarSize,
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-            width: avatarSize,
-            height: avatarSize,
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              shape: BoxShape.circle,
-              boxShadow: [AppThemeShadow.small],
-            ),
-            child: Center(
-              child: Icon(
-                Icons.person,
-                size: AppThemeSpacing.doubleXLH,
-                color: colorScheme.primary,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-              decoration: BoxDecoration(
-                color: colorScheme.primary,
-                shape: BoxShape.circle,
-                boxShadow: [AppThemeShadow.small],
-              ),
-              child: Icon(
-                Icons.camera_alt,
-                size: AppThemeSpacing.smallH,
-                color: colorScheme.onPrimary,
-              ),
-            ),
-          ),
-        ],
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        shape: BoxShape.circle,
+        boxShadow: [AppThemeShadow.small],
+      ),
+      child: Center(
+        child: Icon(
+          Icons.person,
+          size: AppThemeSpacing.doubleXLH,
+          color: colorScheme.primary,
+        ),
       ),
     );
   }
