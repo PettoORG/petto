@@ -6,6 +6,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/shared/constant.dart';
+import 'package:petto/core/domain/failure.dart';
 import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
 import 'package:petto/core/form/application/form_state_interface.dart';
@@ -55,6 +56,7 @@ class _UserFormState extends ConsumerState<UserForm> implements FormStateInterfa
               alreadyValidated = false;
             }
           });
+          return;
         } else if (next is FailureState<User>) {
           setState(() => loading = false);
           showCustomFlash(
@@ -88,12 +90,7 @@ class _UserFormState extends ConsumerState<UserForm> implements FormStateInterfa
             decoration: InputDecoration(labelText: 'email'.tr()),
           ),
           ElevatedButton(
-            onPressed: (loading || isTouched)
-                ? () async {
-                    if (loading) return;
-                    await save();
-                  }
-                : null,
+            onPressed: (loading || !isTouched) ? null : save,
             child: Text('save'.tr()),
           )
         ],
@@ -124,8 +121,8 @@ class _UserFormState extends ConsumerState<UserForm> implements FormStateInterfa
 
   @override
   Future<void> save({bool validateForm = true}) async {
-    final state = ref.read(userNotifierProvider);
-    final original = state is Data<User> ? state.entity : User.empty();
+    final entity = ref.read(userNotifierProvider).entity;
+    if (entity == null) return;
 
     if (validateForm) {
       if (!validate(markAsLoading: true)) return;
@@ -133,7 +130,7 @@ class _UserFormState extends ConsumerState<UserForm> implements FormStateInterfa
     FocusScope.of(context).unfocus();
 
     final formData = extract();
-    final upsertData = formData.toEntity(original);
+    final upsertData = formData.toEntity(entity);
 
     if (widget.beforeSave != null) {
       await widget.beforeSave!(upsertData);
@@ -170,8 +167,23 @@ class _UserFormState extends ConsumerState<UserForm> implements FormStateInterfa
 
   @override
   bool validate({bool markAsLoading = false}) {
-    alreadyValidated = true;
-    return fk.currentState?.saveAndValidate() ?? false;
+    final isValid = fk.currentState!.validate();
+
+    if (!isValid) {
+      ref.read(userNotifierProvider.notifier).fail(
+            Failure.validation(
+              message: fk.currentState!.errors.values.first.toString(),
+            ),
+            recordError: false,
+          );
+    }
+
+    setState(() {
+      if (markAsLoading && isValid) loading = true;
+      if (!alreadyValidated) alreadyValidated = true;
+    });
+
+    return isValid;
   }
 
   @override
