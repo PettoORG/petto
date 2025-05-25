@@ -8,6 +8,7 @@ import 'package:petto/auth/router.dart' as auth_router;
 import 'package:petto/onboarding/router.dart' as onboarding_router;
 import 'package:petto/home/router.dart' as home_router;
 import 'package:petto/pets/router.dart' as pets_router;
+import 'package:petto/users/router.dart' as users_router;
 
 /// Application-level router that aggregates all feature routes.
 class AppRouter {
@@ -26,8 +27,8 @@ class AppRouter {
         ...onboarding_router.$appRoutes,
         ...home_router.$appRoutes,
         ...pets_router.$appRoutes,
+        ...users_router.$appRoutes,
       ],
-      // You can add errorBuilder or redirect here if needed
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/users/router.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -11,7 +12,7 @@ class ProfileView extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     final options = [
-      _ProfileOption(title: 'Editar perfil', icon: Icons.edit, onTap: () {}),
+      _ProfileOption(title: 'Editar perfil', icon: Icons.edit, onTap: () => UserDetailsRoute().push(context)),
       _ProfileOption(title: 'Seguridad', icon: Icons.security, onTap: () {}),
       _ProfileOption(title: 'Volverme Premium', icon: Icons.star, onTap: () {}),
       _ProfileOption(title: 'Ajustes', icon: Icons.settings, onTap: () {}),

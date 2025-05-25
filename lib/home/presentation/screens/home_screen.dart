@@ -44,8 +44,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               case 1:
                 return 'Recordatorios';
               case 2:
-                return 'Calendario';
-              case 3:
                 return 'Perfil';
               default:
                 return '';
@@ -70,7 +68,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ref.read(authNotifierProvider.notifier).signOut();
                   },
                   child: Text(''))),
-          SizedBox.shrink(),
           CalendarView(),
           ProfileView(),
         ],
@@ -103,7 +100,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             tabBorderRadius: 30.r,
             tabs: const [
               GButton(icon: Icons.home_rounded),
-              GButton(icon: Icons.alarm_rounded),
               GButton(icon: Icons.calendar_month_rounded),
               GButton(icon: Icons.person_rounded),
             ],
