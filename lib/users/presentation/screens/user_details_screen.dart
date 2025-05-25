@@ -111,7 +111,17 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
                 SizedBox(height: AppThemeSpacing.extraSmallH),
                 _UserAvatar(),
                 SizedBox(height: AppThemeSpacing.smallH),
-                UserForm(),
+                UserForm(
+                  setTouchedState: (touched) {
+                    // For "touched" state is calculated taking into account files
+                    // pending to be uploaded/deleted.
+                    _setTouchedState(touched || hasFilePending);
+                  },
+                  beforeSave: (entity) async {
+                    // DO NOT MODIFY STATE HERE. That could break the "files" list.
+                    ref.read(FilesNotifierProvider(family).notifier).processFiles(hold: true);
+                  },
+                ),
               ],
             ),
           ),

@@ -22,7 +22,14 @@ class UserForm extends StatefulHookConsumerWidget {
     this.beforeSave,
   });
 
+  /// Callback to set "touched" state. It allows Parent Widget to run additional
+  /// checks before setting "touched" state. If set, it will be used by
+  /// "_setTouchedState" method.
   final void Function(bool touched)? setTouchedState;
+
+  /// Callback to run additional logic before saving the form. It allows Parent
+  /// Widget to run additional async processs before saving the form. [entity]
+  /// contains de upsert data to be saved.
   final Future<void> Function(User entity)? beforeSave;
 
   @override
