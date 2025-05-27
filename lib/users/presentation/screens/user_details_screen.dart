@@ -1,4 +1,3 @@
-// lib/users/presentation/user_details_screen.dart
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +9,10 @@ import 'package:petto/auth/shared/providers.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 import 'package:petto/core/files/application/files_notifier.dart';
 import 'package:petto/core/files/application/files_state.dart' as fs;
+import 'package:petto/core/files/application/files_storage_path_provider.dart';
+import 'package:petto/core/files/application/files_firestore_path_provider.dart';
+import 'package:petto/core/files/constant/crop_options_constants.dart';
+import 'package:petto/core/files/presentation/widgets/single_file.dart';
 import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/form/application/touched_provider.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
@@ -18,7 +21,7 @@ import 'package:petto/users/domain/user.dart';
 import 'package:petto/users/presentation/widgets/user_form.dart';
 import 'package:petto/users/shared/providers.dart';
 
-class UserDetailsScreen extends StatefulHookConsumerWidget {
+class UserDetailsScreen extends ConsumerStatefulWidget {
   const UserDetailsScreen({
     super.key,
     this.files = const [],
@@ -51,31 +54,45 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Listen to user load/save events
+    // User notifier listener
     ref.listen<BaseEntityState<User>>(
       userNotifierProvider,
-      (previous, next) {
+      (previous, next) async {
         if (next is FailureState<User>) {
-          final msg = next.failure.message ?? 'error.unexpectedError'.tr();
-          showCustomFlash(context, msg);
+          showCustomFlash(context, next.failure.message ?? 'error.unexpectedError'.tr());
+        }
+
+        if (next is Data<User>) {
+          // Process initial files if provided
+          if (widget.files.isNotEmpty) {
+            ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
+          }
+
+          // If there are pending files, set paths and resume processing
+          if (hasFilePending) {
+            final newStorage = _buildStoragePath();
+            final newFs = _buildFirestorePath();
+            ref.read(filesStoragePathProvider(family).notifier).set(newStorage);
+            ref.read(filesFirestorePathProvider(family).notifier).set(newFs);
+
+            await ref.read(filesNotifierProvider(family).notifier).processFiles();
+          }
         }
       },
     );
 
-    // Listen for changes in the file uploading state.
+    // Listen to file upload state changes
     ref.listen<fs.FilesState>(
       filesNotifierProvider(family),
       (previous, next) {
         switch (next) {
-          // Loading branch: no action
           case fs.Loading():
             break;
-
-          // Loaded branch: aplicamos la lógica que antes estaba en `loaded: (…)`
           case fs.Loaded(files: final files, status: final status):
             if (status == fs.LoadedStatus.fromDatabase && files.isEmpty && widget.files.isNotEmpty) {
               ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
             }
-
             if (status == fs.LoadedStatus.afterProcessing) {
               if (hasFilePending) {
                 showCustomFlash(context, 'error.filesNotProcessed'.tr());
@@ -109,17 +126,29 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: AppThemeSpacing.extraSmallH),
-                _UserAvatar(),
+                SingleFile(
+                  family: family,
+                  storagePath: storagePath,
+                  firestorePath: firestorePath,
+                  cropOptions: circle300x300,
+                  onFileChanged: (file) => _setTouchedState(hasFilePending),
+                  showCancelAction: false,
+                  showDeleteAction: false,
+                  showRetryAction: false,
+                  isLoading: loading,
+                  unselectedFileWidget: (onImageTap) => _SelectAvatar(onImageTap),
+                  borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
+                  thumbnailHeight: AppThemeSpacing.ultraH,
+                  thumbnailWidth: AppThemeSpacing.ultraH,
+                ),
                 SizedBox(height: AppThemeSpacing.smallH),
                 UserForm(
                   setTouchedState: (touched) {
-                    // For "touched" state is calculated taking into account files
-                    // pending to be uploaded/deleted.
                     _setTouchedState(touched || hasFilePending);
                   },
                   beforeSave: (entity) async {
-                    // DO NOT MODIFY STATE HERE. That could break the "files" list.
-                    ref.read(FilesNotifierProvider(family).notifier).processFiles(hold: true);
+                    // Prevent breaking file list
+                    ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
                   },
                 ),
               ],
@@ -137,7 +166,6 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
     );
   }
 
-  /// Updates the "touched" state of the form depending on whether there are pending file changes.
   void _setTouchedState(bool touched) {
     if (touched) {
       ref.read(touchedProvider(usersModule).notifier).touched();
@@ -146,71 +174,75 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
     }
   }
 
-  /// Builds the storage path for files, using the user ID.
   String _buildStoragePath() {
     final id = ref.read(userProvider).value!.id;
     return '$collectionPath/$id/$filesFolder';
   }
 
-  /// Builds the Firestore path for files, using the user ID.
   String _buildFirestorePath() {
     final id = ref.read(userProvider).value!.id;
     return '$collectionPath/$id/$filesFolder';
   }
 }
 
-class _UserAvatar extends StatelessWidget {
-  const _UserAvatar();
+class _SelectAvatar extends StatelessWidget {
+  const _SelectAvatar(this.onImageTap);
+
+  final VoidCallback onImageTap;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    final double radius = AppThemeSpacing.extraLargeH;
-    final double avatarSize = radius * 2;
-
-    return Center(
-      child: SizedBox(
-        width: avatarSize,
-        height: avatarSize,
-        child: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-              width: avatarSize,
-              height: avatarSize,
-              decoration: BoxDecoration(
-                color: colorScheme.surface,
-                shape: BoxShape.circle,
-                boxShadow: [AppThemeShadow.small],
+    return SizedBox(
+      height: AppThemeSpacing.ultraH,
+      width: AppThemeSpacing.ultraH,
+      child: Stack(
+        children: [
+          Container(
+            height: AppThemeSpacing.ultraH,
+            width: AppThemeSpacing.ultraH,
+            decoration: BoxDecoration(
+              color: colorScheme.surface,
+              shape: BoxShape.circle,
+              boxShadow: [AppThemeShadow.small],
+            ),
+            child: Center(
+              child: Icon(
+                Icons.person,
+                size: AppThemeSpacing.tripleXLH,
+                color: colorScheme.primary,
               ),
-              child: Center(
-                child: Icon(
-                  Icons.person,
-                  size: AppThemeSpacing.doubleXLH,
-                  color: colorScheme.primary,
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                onTap: onImageTap,
+                borderRadius: BorderRadius.circular(AppThemeSpacing.smallH),
+                child: Ink(
+                  height: .065.sh,
+                  width: .065.sh,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                    boxShadow: [AppThemeShadow.small],
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.camera_alt,
+                      size: AppThemeSpacing.smallH,
+                      color: colorScheme.onPrimary,
+                    ),
+                  ),
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  shape: BoxShape.circle,
-                  boxShadow: [AppThemeShadow.small],
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  size: AppThemeSpacing.smallH,
-                  color: colorScheme.onPrimary,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

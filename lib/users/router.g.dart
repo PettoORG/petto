@@ -16,19 +16,22 @@ RouteBase get $userDetailsRoute => GoRouteData.$route(
     );
 
 extension $UserDetailsRouteExtension on UserDetailsRoute {
-  static UserDetailsRoute _fromState(GoRouterState state) =>
-      const UserDetailsRoute();
+  static UserDetailsRoute _fromState(GoRouterState state) => UserDetailsRoute(
+        $extra: state.extra as List<AppFileViewModel>?,
+      );
 
   String get location => GoRouteData.$location(
         '/userDetails',
       );
 
-  void go(BuildContext context) => context.go(location);
+  void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
 
   void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+      context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) => context.replace(location);
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
 }

@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async'; // unawaited()
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -38,30 +38,40 @@ class FilesNotifier extends _$FilesNotifier {
   /// Saves the provider "family" to reuse it later.
   @override
   String get family => _family;
-
-  /// Saves the provider "family" to reuse it later.
   @override
-  set family(String value) {
-    _family = value;
-  }
+  set family(String value) => _family = value;
 
-  /// Getter to check if there are any files pending to be deleted or uploaded.
-  bool get hasFilesPending => state.files
-      .where(
-        (f) =>
-            f.status == AppFileStatus.delete ||
-            f.status == AppFileStatus.upload ||
-            f.status == AppFileStatus.deleteFailed ||
-            f.status == AppFileStatus.uploadFailed,
-      )
-      .isNotEmpty;
+  bool get hasFilesPending => state.files.any(
+        (f) => switch (f.status) {
+          AppFileStatus.upload ||
+          AppFileStatus.delete ||
+          AppFileStatus.uploadFailed ||
+          AppFileStatus.deleteFailed =>
+            true,
+          _ => false,
+        },
+      );
 
   @override
   FilesState build(String family) {
     this.family = family;
     final collectionPath = ref.watch(filesFirestorePathProvider(family));
 
-    // If there's no valid collection path, return an empty array with fromNullPath status.
+    // React when Firestore path becomes available after being null.
+    final pathSubscription = ref.listen<String?>(filesFirestorePathProvider(family), (prev, next) {
+      if (prev == null && next != null) {
+        // Resume processing if we were on hold.
+        switch (state) {
+          case Loading(status: LoadingStatus.onHold):
+            unawaited(processFiles());
+            break;
+          default:
+            break;
+        }
+      }
+    });
+    ref.onDispose(pathSubscription.close);
+
     if (collectionPath == null) {
       return const FilesState.loaded([], LoadedStatus.fromNullPath);
     }
@@ -69,7 +79,6 @@ class FilesNotifier extends _$FilesNotifier {
     final fileFirestoreRepository = ref.read(fileFirestoreRepositoryProvider(family: family));
     final query = ref.watch(appFileQueryProvider(family: family));
 
-    // Listen to the Firestore repository stream.
     sbs.add(
       CombineLatestStream.combine2<Either<Failure, List<AppFile>>, bool, Either<Failure, List<AppFile>>?>(
         fileFirestoreRepository.streamQuery(query),
@@ -77,23 +86,12 @@ class FilesNotifier extends _$FilesNotifier {
         (failureOrFiles, isPaused) => isPaused == false ? failureOrFiles : null,
       ).listen(
         (failureOrFiles) {
-          // If null is received, it's assumed that the stream is paused, so skip the update.
           if (failureOrFiles == null) return;
-
           failureOrFiles.fold(
-            (failure) {
-              fail(failure);
-            },
-            (files) {
-              if (files.isEmpty) {
-                state = FilesState.loaded(
-                  [],
-                  LoadedStatus.fromDatabase,
-                );
-                return;
-              }
-              _patchWholeState(files);
-            },
+            fail,
+            (files) => files.isEmpty
+                ? state = const FilesState.loaded([], LoadedStatus.fromDatabase)
+                : _patchWholeState(files),
           );
         },
       ),
@@ -113,7 +111,6 @@ class FilesNotifier extends _$FilesNotifier {
       pauseStream.close();
     });
 
-    // Initial loading state while waiting for the streams.
     return const FilesState.loading([], LoadingStatus.initial);
   }
 

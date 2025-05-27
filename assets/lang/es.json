@@ -1,4 +1,6 @@
 {
+  "camera": "Cámara",
+  "gallery": "Galería",
   "save": "Guardar",
   "addExistingPet": "Agregar mascota existente",
   "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o alguien más en otro dispositivo.",

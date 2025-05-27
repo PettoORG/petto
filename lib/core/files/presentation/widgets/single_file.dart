@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
@@ -33,7 +34,6 @@ class SingleFile extends ConsumerStatefulWidget {
     this.onFileChanged,
     this.onLoadedChanged,
     this.thumbnailBuilder,
-    this.extraChild,
     this.actionButtonsPosition = Alignment.topRight,
     this.autoplayApiVideo = true,
     this.isFromApiVideo = true,
@@ -107,10 +107,7 @@ class SingleFile extends ConsumerStatefulWidget {
   /// The builder receives:
   ///  - [onImageTap] callback to pick an image
   ///  - [onVideoTap] callback to pick a video
-  final Function(VoidCallback onImageTap, VoidCallback onVideoTap) unselectedFileWidget;
-
-  /// An optional child widget to display on top of the thumbnail.
-  final Function(VoidCallback onImageTap)? extraChild;
+  final Function(VoidCallback onImageTap) unselectedFileWidget;
 
   @override
   SingleFileWidgetState createState() => SingleFileWidgetState();
@@ -171,7 +168,7 @@ class SingleFileWidgetState extends ConsumerState<SingleFile> {
     return Center(
       child: file == null
           // If no file is selected, display the add file button.
-          ? widget.unselectedFileWidget(_pickImage, _pickVideo)
+          ? widget.unselectedFileWidget(_pickImage)
           // If a file is selected, display the file thumbnail with actions.
           : _FileThumbnailWrapper(
               fileViewModel: file,
@@ -190,7 +187,6 @@ class SingleFileWidgetState extends ConsumerState<SingleFile> {
               showRetryAction: widget.showRetryAction,
               isLoading: widget.isLoading,
               pickImage: _pickImage,
-              extraChild: widget.extraChild,
             ),
     );
   }
@@ -199,6 +195,7 @@ class SingleFileWidgetState extends ConsumerState<SingleFile> {
   void _pickImage() {
     showModalBottomSheet(
       context: context,
+      useSafeArea: true,
       builder: (context) => _AddFileOptionsSheet(
         onCameraPressed: () {
           Navigator.of(context).pop();
@@ -213,23 +210,6 @@ class SingleFileWidgetState extends ConsumerState<SingleFile> {
                 allowedMimes: widget.allowedMimes,
                 cropOptions: widget.cropOptions,
               );
-        },
-      ),
-    );
-  }
-
-  /// Handles the video selection process.
-  void _pickVideo() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => _AddFileOptionsSheet(
-        onCameraPressed: () {
-          Navigator.of(context).pop();
-          ref.read(filesNotifierProvider(family).notifier).pickVideoFromCamera();
-        },
-        onGalleryPressed: () {
-          Navigator.of(context).pop();
-          ref.read(filesNotifierProvider(family).notifier).pickVideoFromGallery();
         },
       ),
     );
@@ -269,7 +249,6 @@ class _FileThumbnailWrapper extends StatelessWidget {
     required this.thumbnailHeight,
     required this.thumbnailWidth,
     required this.borderRadius,
-    required this.extraChild,
     required this.pickImage,
   });
 
@@ -318,35 +297,27 @@ class _FileThumbnailWrapper extends StatelessWidget {
   /// The border radius of the thumbnail.
   final BorderRadius borderRadius;
 
-  /// An optional child widget to display on top of the thumbnail.
-  final Function(VoidCallback onImageTap)? extraChild;
-
   /// Callback executed when the extra child is tapped.
   final VoidCallback pickImage;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        FileThumbnail(
-          fileViewModel: fileViewModel,
-          thumbnailHeight: thumbnailHeight,
-          thumbnailWidth: thumbnailWidth,
-          borderRadius: borderRadius,
-          thumbnailBuilder: thumbnailBuilder,
-          onDelete: onDelete,
-          onCancel: onCancel,
-          onRetry: onRetry,
-          actionButtonsPosition: actionButtonsPosition,
-          autoplayApiVideo: autoplayApiVideo,
-          isFromApiVideo: isFromApiVideo,
-          showCancelAction: showCancelAction,
-          showDeleteAction: showDeleteAction,
-          showRetryAction: showRetryAction,
-          isLoading: isLoading,
-        ),
-        extraChild != null ? extraChild!(pickImage) : const SizedBox.shrink(),
-      ],
+    return FileThumbnail(
+      fileViewModel: fileViewModel,
+      thumbnailHeight: thumbnailHeight,
+      thumbnailWidth: thumbnailWidth,
+      borderRadius: borderRadius,
+      thumbnailBuilder: thumbnailBuilder,
+      onDelete: onDelete,
+      onCancel: onCancel,
+      onRetry: onRetry,
+      actionButtonsPosition: actionButtonsPosition,
+      autoplayApiVideo: autoplayApiVideo,
+      isFromApiVideo: isFromApiVideo,
+      showCancelAction: showCancelAction,
+      showDeleteAction: showDeleteAction,
+      showRetryAction: showRetryAction,
+      isLoading: isLoading,
     );
   }
 }
@@ -367,24 +338,19 @@ class _AddFileOptionsSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
-      // TODO: ELIMINAR PADDING
-      padding: EdgeInsets.symmetric(horizontal: size.height * AppThemeSpacing.smallW),
-      height: size.height * 0.16,
-      width: double.infinity,
+      height: .165.sh,
+      padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.smallW),
       child: Column(
         children: [
-          // Decorative handle at the top of the modal
           Container(
-            margin: EdgeInsets.all(size.height * 0.02),
-            height: size.height * 0.01,
-            width: size.height * 0.08,
+            margin: EdgeInsets.all(AppThemeSpacing.extraSmallH),
+            height: .01.sh,
+            width: .08.sh,
             decoration: BoxDecoration(
               color: colorScheme.primary,
-              // TODO: ELIMINAR BORDER RADIUS
               borderRadius: BorderRadius.all(AppThemeRadius.small),
             ),
           ),
@@ -431,15 +397,25 @@ class _AddOptionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
     final themeData = Theme.of(context);
     return Column(
       children: [
         IconButton(
-          icon: Icon(icon),
+          icon: Icon(
+            icon,
+            size: .038.sh,
+          ),
           onPressed: onPressed,
           color: themeData.iconTheme.color,
         ),
-        Text(label),
+        Text(
+          label,
+          style: textTheme.titleMedium?.copyWith(
+            color: themeData.colorScheme.primary,
+          ),
+        ),
       ],
     );
   }

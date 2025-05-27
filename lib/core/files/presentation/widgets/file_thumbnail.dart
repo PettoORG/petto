@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 /// Main thumbnail widget, with action buttons aligned via [actionButtonsPosition].
 class FileThumbnail extends StatelessWidget {
@@ -220,7 +221,6 @@ class _ImageThumbnail extends StatelessWidget {
         height: thumbnailHeight,
         width: thumbnailWidth,
         decoration: BoxDecoration(
-          color: Colors.red,
           borderRadius: borderRadius,
           boxShadow: [boxShadow],
         ),
@@ -246,7 +246,19 @@ class _ImageThumbnail extends StatelessWidget {
           child: CachedNetworkImage(
             imageUrl: fileViewModel.file.thumbnail ?? fileViewModel.file.url!,
             fit: BoxFit.cover,
-            placeholder: (context, url) => isLoading ? const SizedBox.shrink() : const _LoadingThumbnail(),
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Theme.of(context).colorScheme.surface,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                height: thumbnailHeight,
+                width: thumbnailWidth,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: borderRadius,
+                  boxShadow: [boxShadow],
+                ),
+              ),
+            ),
             errorWidget: (context, url, error) => const _ErrorThumbnail(),
           ),
         ),
