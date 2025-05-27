@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/users/router.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends HookConsumerWidget {
   const ProfileView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
     final options = [
       _ProfileOption(title: 'Editar perfil', icon: Icons.edit, onTap: () => UserDetailsRoute().push(context)),
-      _ProfileOption(title: 'Seguridad', icon: Icons.security, onTap: () {}),
+      _ProfileOption(title: 'Seguridad', icon: Icons.security, onTap: () => SecuritySettingsRoute().push(context)),
       _ProfileOption(title: 'Volverme Premium', icon: Icons.star, onTap: () {}),
       _ProfileOption(title: 'Ajustes', icon: Icons.settings, onTap: () {}),
       _ProfileOption(
@@ -39,7 +41,7 @@ class ProfileView extends StatelessWidget {
                   onTap: option.onTap,
                   borderRadius: BorderRadius.all(AppThemeRadius.medium),
                   child: Ink(
-                    padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
+                    padding: EdgeInsets.all(AppThemeSpacing.tinyH),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(AppThemeRadius.medium),
                       color: colorScheme.surface,
@@ -50,13 +52,15 @@ class ProfileView extends StatelessWidget {
                       children: [
                         Icon(option.icon),
                         Text(option.title, style: textTheme.titleMedium),
-                        const Icon(Icons.arrow_forward_ios_rounded),
+                        Icon(Icons.arrow_forward_ios_rounded, color: colorScheme.primary),
                       ],
                     ),
                   ),
                 )),
-            ElevatedButton(
-              onPressed: () {},
+            TextButton(
+              onPressed: () {
+                ref.read(authNotifierProvider.notifier).signOut();
+              },
               child: const Text('Cerrar sesión'),
             ),
           ],

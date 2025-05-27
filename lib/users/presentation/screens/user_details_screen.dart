@@ -114,7 +114,7 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
         title: Text('Editar perfil'.tr()),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => context.pop(),
         ),
       ),

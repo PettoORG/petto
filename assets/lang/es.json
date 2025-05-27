@@ -1,7 +1,4 @@
 {
-  "camera": "Cámara",
-  "gallery": "Galería",
-  "save": "Guardar",
   "addExistingPet": "Agregar mascota existente",
   "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o alguien más en otro dispositivo.",
   "alreadyHaveAccount": "¿Ya tienes una cuenta?",
@@ -9,6 +6,7 @@
   "back": "Atrás",
   "birthDate": "Fecha de nacimiento",
   "breed": "Raza",
+  "camera": "Cámara",
   "confirmPassword": "Confirmar contraseña",
   "continue": "Continuar",
   "createNewPet": "Crear mascota nueva",
@@ -57,6 +55,7 @@
   },
   "female": "Hembra",
   "forgotPassword": "¿Olvidaste tu contraseña?",
+  "gallery": "Galería",
   "male": "Macho",
   "name": "Nombre",
   "next": "Siguiente",
@@ -173,8 +172,16 @@
     "other": "Reenviar en {} segundos."
   },
   "resendVerificationEmail": "Reenviar correo de verificación",
+  "save": "Guardar",
   "send": "Enviar",
   "signIn": "Iniciar sesión",
+  "signUpTerms": {
+    "agreementClosure": " de datos.",
+    "agreementIntro": "Al registrarte, aceptas nuestros ",
+    "and": " y la ",
+    "privacyPolicy": "política de privacidad",
+    "termsAndConditions": "términos y condiciones"
+  },
   "skip": "Saltar",
   "specie": "Especie",
   "start": "Comenzar",

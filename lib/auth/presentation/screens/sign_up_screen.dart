@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
-import 'package:petto/auth/domain/auth_failure.dart';
 import 'package:petto/auth/presentation/widgets/sign_up_form.dart';
 import 'package:petto/auth/router.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
@@ -18,50 +18,13 @@ class SignUpScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     // Full usable height inside SafeArea
-    final double minHeight = 1.sh - ScreenUtil().statusBarHeight - ScreenUtil().bottomBarHeight;
+    final double minHeight = 1.sh - ScreenUtil().statusBarHeight;
     // 20% of screen height
     final double placeholderSize = 0.2.sh;
 
     ref.listen<AuthState>(authNotifierProvider, (previous, next) async {
-      switch (next) {
-        case FailureState(failure: final failure):
-          // Handle each failure case via nested switch
-          switch (failure) {
-            case Unexpected(message: final msg):
-              // Show unexpected error
-              showCustomFlash(context, msg ?? 'error.unexpectedError'.tr());
-              break;
-            case Network(message: final msg):
-              // Show no internet connection error
-              showCustomFlash(context, msg ?? 'error.noInternetConnection'.tr());
-              break;
-            case TooManyRequests(message: final msg):
-              // Show too many attempts error
-              showCustomFlash(context, msg ?? 'error.tooManyAttempts'.tr());
-              break;
-            case UserDisabled(message: final msg):
-              // Show user disabled error
-              showCustomFlash(context, msg ?? 'error.userDisabled'.tr());
-              break;
-            case InvalidEmailAndPasswordCombination(message: final msg):
-              // Show incorrect email/password error
-              showCustomFlash(context, msg ?? 'error.incorrectEmailOrPassword'.tr());
-              break;
-            case InvalidRole(message: final msg):
-              // Show invalid role error
-              showCustomFlash(context, msg ?? 'error.invalidRole'.tr());
-              break;
-            case EmailInUse(message: final msg):
-              showCustomFlash(context, msg ?? 'error.emailInUse'.tr());
-              break;
-            default:
-              // No action for other AuthFailure cases
-              break;
-          }
-          break;
-        default:
-          // No action on initial, loading, authenticated, or unauthenticated
-          break;
+      if (next is FailureState) {
+        showCustomFlash(context, next.failure.message ?? 'error.unexpectedError'.tr());
       }
     });
 
@@ -69,7 +32,6 @@ class SignUpScreen extends HookConsumerWidget {
     final loading = ref.watch(authNotifierProvider) is Loading || ref.watch(authNotifierProvider) is Authenticated;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -136,6 +98,10 @@ class SignUpScreen extends HookConsumerWidget {
                           ),
                         ],
                       ),
+                      TermsAndPrivacyText(
+                        onTermsTap: () {},
+                        onPrivacyTap: () {},
+                      ),
                     ],
                   ),
                 ),
@@ -152,6 +118,45 @@ class SignUpScreen extends HookConsumerWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class TermsAndPrivacyText extends StatelessWidget {
+  final VoidCallback onTermsTap;
+  final VoidCallback onPrivacyTap;
+
+  const TermsAndPrivacyText({
+    super.key,
+    required this.onTermsTap,
+    required this.onPrivacyTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final primaryColor = Theme.of(context).colorScheme.primary;
+
+    return Text.rich(
+      TextSpan(
+        style: textTheme.bodySmall?.copyWith(height: 1.5),
+        children: [
+          TextSpan(text: 'signUpTerms.agreementIntro'.tr()),
+          TextSpan(
+            text: 'signUpTerms.termsAndConditions'.tr(),
+            style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+            recognizer: TapGestureRecognizer()..onTap = onTermsTap,
+          ),
+          TextSpan(text: 'signUpTerms.and'.tr()),
+          TextSpan(
+            text: 'signUpTerms.privacyPolicy'.tr(),
+            style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+            recognizer: TapGestureRecognizer()..onTap = onPrivacyTap,
+          ),
+          TextSpan(text: 'signUpTerms.agreementClosure'.tr()),
+        ],
+      ),
+      textAlign: TextAlign.center,
     );
   }
 }

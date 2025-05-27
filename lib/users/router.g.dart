@@ -8,6 +8,7 @@ part of 'router.dart';
 
 List<RouteBase> get $appRoutes => [
       $userDetailsRoute,
+      $securitySettingsRoute,
     ];
 
 RouteBase get $userDetailsRoute => GoRouteData.$route(
@@ -34,4 +35,27 @@ extension $UserDetailsRouteExtension on UserDetailsRoute {
 
   void replace(BuildContext context) =>
       context.replace(location, extra: $extra);
+}
+
+RouteBase get $securitySettingsRoute => GoRouteData.$route(
+      path: '/securitySettings',
+      factory: $SecuritySettingsRouteExtension._fromState,
+    );
+
+extension $SecuritySettingsRouteExtension on SecuritySettingsRoute {
+  static SecuritySettingsRoute _fromState(GoRouterState state) =>
+      const SecuritySettingsRoute();
+
+  String get location => GoRouteData.$location(
+        '/securitySettings',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
