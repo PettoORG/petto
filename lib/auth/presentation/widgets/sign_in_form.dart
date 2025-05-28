@@ -84,6 +84,7 @@ class _SignInFormState extends ConsumerState<SignInForm> {
   }
 
   void _signInWithEmailAndPassword() {
+    FocusScope.of(context).unfocus();
     if (validate()) {
       ref.read(authNotifierProvider.notifier).signInWithEmailAndPassword(
             getField('email'),

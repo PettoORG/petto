@@ -7,9 +7,12 @@ import 'package:petto/app/theme/app_theme_notifier.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
 import 'package:petto/auth/application/auth_state.dart';
 import 'package:petto/auth/router.dart';
+import 'package:petto/core/list/application/firestore_query_helper.dart';
 import 'package:petto/core/shared/providers.dart';
 import 'package:petto/home/router.dart';
 import 'package:petto/onboarding/router.dart';
+import 'package:petto/pets/router.dart';
+import 'package:petto/pets/shared/providers.dart';
 import 'package:petto/preferences/shared/providers.dart';
 import 'package:petto/users/domain/user.dart';
 
@@ -30,7 +33,7 @@ class _AppWidgetState extends ConsumerState<AppWidget> {
     ref.watch(internetConnectionProvider);
 
     ref.listen<AuthState>(authNotifierProvider, (previous, next) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         final router = AppWidget.appRouter.router;
 
         final currentLocation = router.routeInformationProvider.value.uri.toString();
@@ -50,6 +53,24 @@ class _AppWidgetState extends ConsumerState<AppWidget> {
             router.go(EmailVerificationRoute().location);
             return;
           }
+
+          final family = 'petsByUser';
+
+          final query = ref.read(petsQueryProvider(
+            family: family,
+            clauses: [
+              Where('createdBy', isEqualTo: user.uid),
+              Limit(1),
+            ],
+          ));
+
+          query.get().then((snapshot) {
+            if (snapshot.docs.isEmpty) {
+              // If the user has no pets, redirect to the onboarding route.
+              router.go(CreateOrImportPetRoute().location);
+              return;
+            }
+          });
 
           final homeAllowedRoutes = [
             SignInRoute().location,

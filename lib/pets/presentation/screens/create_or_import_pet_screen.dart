@@ -30,7 +30,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
                 ),
                 SizedBox(height: AppThemeSpacing.mediumH),
                 _PetCard(
-                  onTap: () => PetRegisterRoute().push(context),
+                  onTap: () => PetRegisterRoute(id: '0').push(context),
                   titleKey: 'createNewPet',
                   descriptionKey: 'createNewPetDescription',
                   colorScheme: colorScheme,

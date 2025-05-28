@@ -43,7 +43,7 @@ final petFirestoreRepositoryProvider =
 // ignore: unused_element
 typedef PetFirestoreRepositoryRef
     = AutoDisposeProviderRef<BaseFirestoreRepository<Pet>>;
-String _$paymentsQueryHash() => r'9f8cbfafe774c4f0905def8cdbf524f6566a10d3';
+String _$petsQueryHash() => r'b2853b6543c9e21c7d7cb8115ef90b034e0446cf';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -66,29 +66,29 @@ class _SystemHash {
   }
 }
 
-/// See also [paymentsQuery].
-@ProviderFor(paymentsQuery)
-const paymentsQueryProvider = PaymentsQueryFamily();
+/// See also [petsQuery].
+@ProviderFor(petsQuery)
+const petsQueryProvider = PetsQueryFamily();
 
-/// See also [paymentsQuery].
-class PaymentsQueryFamily extends Family<Query<Pet>> {
-  /// See also [paymentsQuery].
-  const PaymentsQueryFamily();
+/// See also [petsQuery].
+class PetsQueryFamily extends Family<Query<Pet>> {
+  /// See also [petsQuery].
+  const PetsQueryFamily();
 
-  /// See also [paymentsQuery].
-  PaymentsQueryProvider call({
+  /// See also [petsQuery].
+  PetsQueryProvider call({
     String? family,
     List<QueryClause> clauses = const [],
   }) {
-    return PaymentsQueryProvider(
+    return PetsQueryProvider(
       family: family,
       clauses: clauses,
     );
   }
 
   @override
-  PaymentsQueryProvider getProviderOverride(
-    covariant PaymentsQueryProvider provider,
+  PetsQueryProvider getProviderOverride(
+    covariant PetsQueryProvider provider,
   ) {
     return call(
       family: provider.family,
@@ -108,35 +108,34 @@ class PaymentsQueryFamily extends Family<Query<Pet>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'paymentsQueryProvider';
+  String? get name => r'petsQueryProvider';
 }
 
-/// See also [paymentsQuery].
-class PaymentsQueryProvider extends AutoDisposeProvider<Query<Pet>> {
-  /// See also [paymentsQuery].
-  PaymentsQueryProvider({
+/// See also [petsQuery].
+class PetsQueryProvider extends AutoDisposeProvider<Query<Pet>> {
+  /// See also [petsQuery].
+  PetsQueryProvider({
     String? family,
     List<QueryClause> clauses = const [],
   }) : this._internal(
-          (ref) => paymentsQuery(
-            ref as PaymentsQueryRef,
+          (ref) => petsQuery(
+            ref as PetsQueryRef,
             family: family,
             clauses: clauses,
           ),
-          from: paymentsQueryProvider,
-          name: r'paymentsQueryProvider',
+          from: petsQueryProvider,
+          name: r'petsQueryProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$paymentsQueryHash,
-          dependencies: PaymentsQueryFamily._dependencies,
-          allTransitiveDependencies:
-              PaymentsQueryFamily._allTransitiveDependencies,
+                  : _$petsQueryHash,
+          dependencies: PetsQueryFamily._dependencies,
+          allTransitiveDependencies: PetsQueryFamily._allTransitiveDependencies,
           family: family,
           clauses: clauses,
         );
 
-  PaymentsQueryProvider._internal(
+  PetsQueryProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -152,12 +151,12 @@ class PaymentsQueryProvider extends AutoDisposeProvider<Query<Pet>> {
 
   @override
   Override overrideWith(
-    Query<Pet> Function(PaymentsQueryRef provider) create,
+    Query<Pet> Function(PetsQueryRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: PaymentsQueryProvider._internal(
-        (ref) => create(ref as PaymentsQueryRef),
+      override: PetsQueryProvider._internal(
+        (ref) => create(ref as PetsQueryRef),
         from: from,
         name: null,
         dependencies: null,
@@ -171,12 +170,12 @@ class PaymentsQueryProvider extends AutoDisposeProvider<Query<Pet>> {
 
   @override
   AutoDisposeProviderElement<Query<Pet>> createElement() {
-    return _PaymentsQueryProviderElement(this);
+    return _PetsQueryProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is PaymentsQueryProvider &&
+    return other is PetsQueryProvider &&
         other.family == family &&
         other.clauses == clauses;
   }
@@ -193,7 +192,7 @@ class PaymentsQueryProvider extends AutoDisposeProvider<Query<Pet>> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin PaymentsQueryRef on AutoDisposeProviderRef<Query<Pet>> {
+mixin PetsQueryRef on AutoDisposeProviderRef<Query<Pet>> {
   /// The parameter `family` of this provider.
   String? get family;
 
@@ -201,14 +200,14 @@ mixin PaymentsQueryRef on AutoDisposeProviderRef<Query<Pet>> {
   List<QueryClause> get clauses;
 }
 
-class _PaymentsQueryProviderElement
-    extends AutoDisposeProviderElement<Query<Pet>> with PaymentsQueryRef {
-  _PaymentsQueryProviderElement(super.provider);
+class _PetsQueryProviderElement extends AutoDisposeProviderElement<Query<Pet>>
+    with PetsQueryRef {
+  _PetsQueryProviderElement(super.provider);
 
   @override
-  String? get family => (origin as PaymentsQueryProvider).family;
+  String? get family => (origin as PetsQueryProvider).family;
   @override
-  List<QueryClause> get clauses => (origin as PaymentsQueryProvider).clauses;
+  List<QueryClause> get clauses => (origin as PetsQueryProvider).clauses;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

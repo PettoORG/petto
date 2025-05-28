@@ -32,7 +32,7 @@ BaseFirestoreRepository<Pet> petFirestoreRepository(
 
 // Constructs a Firestore query for pets with optional filtering by family and clauses
 @riverpod
-Query<Pet> paymentsQuery(
+Query<Pet> petsQuery(
   Ref ref, {
   String? family,
   List<QueryClause> clauses = const [],

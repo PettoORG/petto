@@ -75,6 +75,7 @@ class _SignInFormState extends ConsumerState<SignUpForm> {
   }
 
   Future<void> _registerWithEmailAndPassword() async {
+    FocusScope.of(context).unfocus();
     if (validate()) {
       await ref.read(authNotifierProvider.notifier).registerWithEmailAndPassword(
             getField('email'),
