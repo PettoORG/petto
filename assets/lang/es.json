@@ -187,7 +187,8 @@
   "start": "Comenzar",
   "validators": {
     "fieldRequired": "Este campo es obligatorio.",
-    "invalidEmail": "Ingresa un correo electrónico válido."
+    "invalidEmail": "Ingresa un correo electrónico válido.",
+    "invalidDate": "Ingresa una fecha válida."
   },
   "verifyEmailHeading": "Verifica tu correo electrónico",
   "verifyEmailMessage": "Te hemos enviado un enlace para confirmar tu dirección de correo. Por favor, revisa tu bandeja de entrada y verifica tu cuenta para continuar."

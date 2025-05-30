@@ -87,14 +87,22 @@ class _UserFormState extends ConsumerState<UserForm> implements FormStateInterfa
           FormBuilderTextField(
             name: 'displayName',
             autovalidateMode: autovalidateMode,
+            keyboardType: TextInputType.name,
             decoration: InputDecoration(labelText: 'name'.tr()),
-            validator: FormBuilderValidators.compose([]),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            ]),
           ),
           FormBuilderTextField(
             name: 'email',
             autovalidateMode: autovalidateMode,
             readOnly: true,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(labelText: 'email'.tr()),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              FormBuilderValidators.email(errorText: 'validators.invalidEmail'.tr()),
+            ]),
           ),
           ElevatedButton(
             onPressed: (loading || !isTouched) ? null : save,

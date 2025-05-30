@@ -2,11 +2,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/core/domain/failure.dart';
+import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/form/application/form_state_interface.dart';
+import 'package:petto/core/form/application/id_provider.dart';
 import 'package:petto/core/form/application/touched_provider.dart';
-import 'package:petto/home/router.dart';
+import 'package:petto/core/presentation/widgets/flash.dart';
+import 'package:petto/pets/app/pet_notifier.dart';
 import 'package:petto/pets/domain/pet.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
 import 'package:petto/pets/domain/pet_sex.dart';
@@ -22,8 +27,17 @@ class PetRegisterForm extends StatefulHookConsumerWidget {
     this.beforeSave,
   });
 
+  /// Unique identifier for the Pet. It is used to identify the Pet in the
   final String id;
+
+  /// Callback to set "touched" state. It allows Parent Widget to run additional
+  /// checks before setting "touched" state. If set, it will be used by
+  /// "_setTouchedState" method.
   final void Function(bool touched)? setTouchedState;
+
+  /// Callback to run additional logic before saving the form. It allows Parent
+  /// Widget to run additional async processs before saving the form. [entity]
+  /// contains the upsert data to be saved.
   final Future<void> Function(Pet entity)? beforeSave;
 
   @override
@@ -47,9 +61,43 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
   PetSpecie? _selectedSpecie;
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => ref.read(idProvider(petsModule).notifier).id = widget.id,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final autovalidateMode = alreadyValidated ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled;
+
+    ref.listen<BaseEntityState<Pet>>(
+      petNotifierProvider,
+      (previous, next) {
+        if (next is Data<Pet>) {
+          final entity = next.entity;
+          setState(() {
+            values = populate(entity);
+            if (loading) {
+              setTouchedState(false);
+              loading = false;
+              alreadyValidated = false;
+            }
+          });
+          return;
+        } else if (next is FailureState<Pet>) {
+          setState(() => loading = false);
+          showCustomFlash(
+            context,
+            next.failure.message ?? 'error.unexpectedError'.tr(),
+          );
+        }
+      },
+    );
+
+    final isTouched = ref.watch(touchedProvider(petsModule));
 
     return FormBuilder(
       key: fk,
@@ -65,7 +113,12 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
             SizedBox(height: AppThemeSpacing.extraSmallH),
             FormBuilderTextField(
               name: 'name',
+              keyboardType: TextInputType.name,
               decoration: InputDecoration(labelText: 'name'.tr()),
+              autovalidateMode: autovalidateMode,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ]),
             ),
             Row(
               children: [
@@ -86,6 +139,9 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                         fk.currentState?.fields['breed']?.didChange(null);
                       });
                     },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                    ]),
                   ),
                 ),
                 SizedBox(width: AppThemeSpacing.smallW),
@@ -102,6 +158,9 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                               child: Text(breed.displayName),
                             ))
                         .toList(),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                    ]),
                   ),
                 ),
               ],
@@ -164,14 +223,19 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
             FormBuilderDateTimePicker(
               name: 'birthDate',
               locale: context.locale,
+              keyboardType: TextInputType.datetime,
               format: DateFormat.yMd(context.locale.languageCode),
               inputType: InputType.date,
               firstDate: DateTime(1900),
               lastDate: DateTime.now(),
               decoration: InputDecoration(labelText: 'birthDate'.tr()),
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                FormBuilderValidators.dateTime(errorText: 'validators.invalidDate')
+              ]),
             ),
             ElevatedButton(
-              onPressed: () => HomeRoute().go(context),
+              onPressed: (loading || !isTouched) ? null : save,
               child: Text('continue'.tr()),
             ),
           ],
@@ -182,17 +246,86 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
 
   @override
   PetVM extract() {
-    return PetVM.empty();
+    return PetVM(
+      id: values.id,
+      name: getField('name') ?? values.name,
+      specie: getField('specie') ?? values.specie,
+      breed: getField('breed') ?? values.breed,
+      sex: getField('sex') ?? values.sex,
+      birthDate: getField('birthDate') ?? values.birthDate,
+      color: getField('color') ?? values.color,
+      weight: getField('weight') ?? values.weight,
+      foodType: getField('foodType') ?? values.foodType,
+      microchipNumber: getField('microchipNumber') ?? values.microchipNumber,
+      size: getField('size') ?? values.size,
+    );
   }
 
   @override
   PetVM populate(Pet entity) {
-    return PetVM.empty();
+    final vm = PetVM.fromEntity(entity);
+    final isNewEntity = values.id == '0';
+
+    if (loading || vm.name == getField('name')) {
+      setField('name', vm.name);
+    }
+
+    if (!isNewEntity && (loading || vm.specie == getField('specie'))) {
+      setField('specie', vm.specie);
+    }
+
+    if (!isNewEntity && (loading || vm.breed == getField('breed'))) {
+      setField('breed', vm.breed);
+    }
+
+    if (loading || vm.sex == getField('sex')) {
+      setField('sex', vm.sex);
+    }
+
+    if (loading || vm.birthDate == getField('birthDate')) {
+      setField('birthDate', vm.birthDate);
+    }
+
+    if (loading || vm.color == getField('color')) {
+      setField('color', vm.color);
+    }
+
+    if (loading || vm.weight == getField('weight')) {
+      setField('weight', vm.weight);
+    }
+
+    if (loading || vm.foodType == getField('foodType')) {
+      setField('foodType', vm.foodType);
+    }
+
+    if (loading || vm.microchipNumber == getField('microchipNumber')) {
+      setField('microchipNumber', vm.microchipNumber);
+    }
+
+    if (loading || vm.size == getField('size')) {
+      setField('size', vm.size);
+    }
+
+    return vm;
   }
 
   @override
-  Future<void> save({bool validateForm = true}) {
-    throw UnimplementedError();
+  Future<void> save({bool validateForm = true}) async {
+    final entity = ref.read(petNotifierProvider).entity;
+    if (entity == null) return;
+
+    if (validateForm) {
+      if (!validate(markAsLoading: true)) return;
+    }
+    FocusScope.of(context).unfocus();
+
+    final formData = extract();
+    final upsertData = formData.toEntity(entity);
+
+    if (widget.beforeSave != null) {
+      await widget.beforeSave!(upsertData);
+    }
+    await ref.read(petNotifierProvider.notifier).save(upsertData);
   }
 
   @override
@@ -226,7 +359,23 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
 
   @override
   bool validate({bool markAsLoading = false}) {
-    throw UnimplementedError();
+    final isValid = fk.currentState!.validate();
+
+    if (!isValid) {
+      ref.read(petNotifierProvider.notifier).fail(
+            Failure.validation(
+              message: fk.currentState!.errors.values.first.toString(),
+            ),
+            recordError: false,
+          );
+    }
+
+    setState(() {
+      if (markAsLoading && isValid) loading = true;
+      if (!alreadyValidated) alreadyValidated = true;
+    });
+
+    return isValid;
   }
 
   @override

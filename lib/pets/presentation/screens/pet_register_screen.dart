@@ -1,9 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
+import 'package:petto/core/files/application/files_firestore_path_provider.dart';
 import 'package:petto/core/files/application/files_notifier.dart';
+import 'package:petto/core/files/application/files_state.dart' as fs;
+import 'package:petto/core/files/application/files_storage_path_provider.dart';
+import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/form/application/touched_provider.dart';
+import 'package:petto/core/presentation/widgets/flash.dart';
+import 'package:petto/pets/app/pet_notifier.dart';
+import 'package:petto/pets/domain/pet.dart';
 import 'package:petto/pets/presentation/widgets/pet_register_form.dart';
 import 'package:petto/pets/shared/constant.dart';
 import 'package:petto/pets/shared/providers.dart';
@@ -42,23 +51,101 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
   String? get firestorePath => _buildFirestorePath(widget.id);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
+    ref.listen<BaseEntityState<Pet>>(
+      petNotifierProvider,
+      (previous, next) async {
+        if (next is FailureState<Pet>) {
+          showCustomFlash(
+            context,
+            next.failure.message ?? 'error.unexpectedError'.tr(),
+          );
+        }
+
+        if (next is Data<Pet>) {
+          final pet = next.entity;
+
+          if (widget.files.isNotEmpty) {
+            ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
+          }
+
+          if (hasFilePending) {
+            final newStoragePath = _buildStoragePath(pet.id);
+            final newFirestorePath = _buildFirestorePath(pet.id);
+
+            ref.read(filesStoragePathProvider(family).notifier).set(newStoragePath);
+            ref.read(filesFirestorePathProvider(family).notifier).set(newFirestorePath);
+
+            await ref.read(filesNotifierProvider(family).notifier).processFiles();
+          }
+        }
+        if (next is Deleted<Pet>) {
+          if (context.mounted) {
+            context.pop();
+          }
+        }
+      },
+    );
+
+    // Files notifier listener ― keeps the UI in sync with file processing status.
+    ref.listen<fs.FilesState>(
+      filesNotifierProvider(family),
+      (previous, next) {
+        switch (next) {
+          case fs.Loading():
+            // Nothing to do while processing / picking.
+            break;
+
+          case fs.Loaded(files: final files, status: final status):
+            // Database loaded an empty list but we came with initial files → inject them.
+            if (status == fs.LoadedStatus.fromDatabase && files.isEmpty && widget.files.isNotEmpty) {
+              ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
+            }
+
+            // Processing finished → verify pending work and update “touched” state.
+            if (status == fs.LoadedStatus.afterProcessing) {
+              if (hasFilePending) {
+                showCustomFlash(context, 'error.filesNotProcessed'.tr());
+                return;
+              }
+              _setTouchedState(hasFilePending); // false → marks form as clean
+            }
+            break;
+        }
+      },
+    );
+
+    final formIsLoading = ref.watch(petNotifierProvider.select((state) => state is Loading<Pet>));
+    final filesIsLoading = ref.watch(filesNotifierProvider(family).select((state) => state is fs.Loading));
+    final loading = formIsLoading || filesIsLoading;
+
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () => context.pop(),
+              icon: Icon(Icons.arrow_back_ios_new_rounded),
+            ),
+          ),
+          body: PetRegisterForm(
+            id: widget.id,
+            setTouchedState: (touched) {
+              _setTouchedState(touched || hasFilePending);
+            },
+            beforeSave: (entity) async {
+              // Prevent breaking file list
+              ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
+            },
+          ),
         ),
-      ),
-      body: PetRegisterForm(
-        id: widget.id,
-        setTouchedState: (touched) {
-          _setTouchedState(touched || hasFilePending);
-        },
-        beforeSave: (entity) async {
-          // Prevent breaking file list
-          ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
-        },
-      ),
+        if (loading)
+          Container(
+            height: 1.sh,
+            width: 1.sw,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+      ],
     );
   }
 
