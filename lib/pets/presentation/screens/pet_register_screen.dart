@@ -15,6 +15,7 @@ import 'package:petto/core/files/presentation/widgets/single_file.dart';
 import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/form/application/touched_provider.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
+import 'package:petto/home/router.dart';
 import 'package:petto/pets/app/pet_notifier.dart';
 import 'package:petto/pets/domain/pet.dart';
 import 'package:petto/pets/domain/pet_specie.dart';
@@ -55,61 +56,71 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
   /// Builds the Firestore path for files.
   String? get firestorePath => _buildFirestorePath(widget.id);
 
+  /// Flag to ignore the very first Data emitted when the screen opens.
+  bool _initialEntityLoaded = false;
+
   PetSpecie? _selectedSpecie;
 
   @override
   Widget build(BuildContext context) {
-    // Form state listener
+    // Navigation helper
+    void goHome(BuildContext context) {
+      if (!mounted) return;
+      context.go(HomeRoute().location);
+    }
+
+    // Pet state listener
     ref.listen<BaseEntityState<Pet>>(
       petNotifierProvider,
-      (previous, next) async {
+      (prev, next) async {
+        // Show any failure.
         if (next is FailureState<Pet>) {
           showCustomFlash(
             context,
             next.failure.message ?? 'error.unexpectedError'.tr(),
           );
+          return;
         }
 
-        if (next is Data<Pet>) {
+        // Skip the first Data event that belongs to the initial load.
+        if (next is Data<Pet> && !_initialEntityLoaded) {
+          _initialEntityLoaded = true;
+          return;
+        }
+
+        // Detect the transition produced by save/create → loading → data.
+        final saveCompleted = prev is Loading<Pet> && next is Data<Pet>;
+
+        if (saveCompleted) {
           final pet = next.entity;
 
+          // Queue files that arrived before pressing “Continuar”.
           if (widget.files.isNotEmpty) {
             ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
           }
 
+          // If there are pending files, configure paths and process them.
+          // Otherwise, go directly to Home.
           if (hasFilePending) {
-            final newStoragePath = _buildStoragePath(pet.id);
-            final newFirestorePath = _buildFirestorePath(pet.id);
-
-            ref.read(filesStoragePathProvider(family).notifier).set(newStoragePath);
-            ref.read(filesFirestorePathProvider(family).notifier).set(newFirestorePath);
-
+            ref.read(filesStoragePathProvider(family).notifier).set(_buildStoragePath(pet.id));
+            ref.read(filesFirestorePathProvider(family).notifier).set(_buildFirestorePath(pet.id));
             await ref.read(filesNotifierProvider(family).notifier).processFiles();
+          } else {
+            goHome(context);
           }
         }
       },
     );
 
-    // Files state listener
     ref.listen<fs.FilesState>(
       filesNotifierProvider(family),
-      (previous, next) {
-        switch (next) {
-          case fs.Loading():
-            break;
-          case fs.Loaded(files: final files, status: final status):
-            if (status == fs.LoadedStatus.fromDatabase && files.isEmpty && widget.files.isNotEmpty) {
-              ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
-            }
+      (prev, next) {
+        final finishedProcessing =
+            next is fs.Loaded && next.status == fs.LoadedStatus.afterProcessing && !hasFilePending;
 
-            if (status == fs.LoadedStatus.afterProcessing) {
-              if (hasFilePending) {
-                showCustomFlash(context, 'error.filesNotProcessed'.tr());
-                return;
-              }
-              _setTouchedState(hasFilePending); // false → form limpio
-            }
-            break;
+        if (finishedProcessing) {
+          _setTouchedState(false);
+          goHome(context);
         }
       },
     );
@@ -121,48 +132,57 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            ),
-          ),
-          body: Column(
-            spacing: AppThemeSpacing.extraSmallH,
-            children: [
-              Center(
-                child: SingleFile(
-                  family: family,
-                  storagePath: storagePath,
-                  firestorePath: firestorePath,
-                  cropOptions: circle300x300,
-                  onFileChanged: (_) => _setTouchedState(hasFilePending),
-                  showCancelAction: false,
-                  showDeleteAction: false,
-                  showRetryAction: false,
-                  isLoading: loading,
-                  unselectedFileWidget: (onImageTap) => _PetAvatar(
-                    specie: _selectedSpecie,
-                    onImageTap: onImageTap,
-                  ),
-                  borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
-                  thumbnailHeight: AppThemeSpacing.ultraH,
-                  thumbnailWidth: AppThemeSpacing.ultraH,
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: Text('Registra tu mascota'.tr()),
+                centerTitle: true,
+                leading: IconButton(
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 ),
               ),
-              PetRegisterForm(
-                id: widget.id,
-                setTouchedState: (touched) {
-                  _setTouchedState(touched || hasFilePending);
-                },
-                beforeSave: (_) async {
-                  // Prevent breaking file list
-                  ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
-                },
-                onSpecieChanged: (specie) {
-                  setState(() => _selectedSpecie = specie);
-                },
-              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  spacing: AppThemeSpacing.extraSmallH,
+                  children: [
+                    Center(
+                      child: SingleFile(
+                        family: family,
+                        storagePath: storagePath,
+                        firestorePath: firestorePath,
+                        cropOptions: circle300x300,
+                        onFileChanged: (_) => _setTouchedState(hasFilePending),
+                        showCancelAction: false,
+                        showDeleteAction: false,
+                        showRetryAction: false,
+                        isLoading: loading,
+                        unselectedFileWidget: (onImageTap) => _PetAvatar(
+                          specie: _selectedSpecie,
+                          onImageTap: onImageTap,
+                        ),
+                        borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
+                        thumbnailHeight: AppThemeSpacing.ultraH,
+                        thumbnailWidth: AppThemeSpacing.ultraH,
+                      ),
+                    ),
+                    PetRegisterForm(
+                      id: widget.id,
+                      setTouchedState: (touched) {
+                        _setTouchedState(touched || hasFilePending);
+                      },
+                      beforeSave: (_) async {
+                        // Prevent breaking file list
+                        ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
+                      },
+                      onSpecieChanged: (specie) {
+                        setState(() => _selectedSpecie = specie);
+                      },
+                    ),
+                    SizedBox.shrink()
+                  ],
+                ),
+              )
             ],
           ),
         ),

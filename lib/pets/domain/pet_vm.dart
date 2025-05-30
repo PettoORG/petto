@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/pets/domain/pet.dart';
+import 'package:petto/pets/domain/pet_sex.dart';
 import 'package:petto/pets/domain/pet_specie.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
 import 'package:petto/pets/domain/food_type.dart';
@@ -19,7 +20,7 @@ sealed class PetVM with _$PetVM {
     required String name,
     required PetSpecie specie,
     required PetBreed breed,
-    required String sex,
+    required PetSex sex,
     required DateTime birthDate,
     required String color,
     required double weight,
@@ -49,7 +50,7 @@ sealed class PetVM with _$PetVM {
         name: '',
         specie: PetSpecie.other,
         breed: PetBreed.other,
-        sex: '',
+        sex: PetSex.male,
         birthDate: DateTime.now(),
         color: '',
         weight: 0.0,

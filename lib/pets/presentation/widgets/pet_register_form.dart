@@ -60,7 +60,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
   @override
   PetVM values = PetVM.empty();
 
-  PetSex? _selectedGender;
+  PetSex? _selectedPetSex;
   PetSpecie? _selectedSpecie;
 
   @override
@@ -112,6 +112,15 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: AppThemeSpacing.extraSmallH,
           children: [
+            // Hidden field to store the selected gender so it can be validated
+            FormBuilderField<PetSex>(
+              name: 'sex',
+              initialValue: _selectedPetSex,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ]),
+              builder: (field) => const SizedBox.shrink(),
+            ),
             FormBuilderTextField(
               name: 'name',
               keyboardType: TextInputType.name,
@@ -173,12 +182,16 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
               children: [
                 Expanded(
                   child: InkWell(
-                    onTap: () => setState(() => _selectedGender = PetSex.male),
+                    onTap: () {
+                      setState(() => _selectedPetSex = PetSex.male);
+                      fk.currentState?.fields['sex']?.didChange(PetSex.male);
+                      onChanged();
+                    },
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
                     child: Ink(
                       padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
                       decoration: BoxDecoration(
-                        color: _selectedGender == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
+                        color: _selectedPetSex == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
                         borderRadius: BorderRadius.all(AppThemeRadius.medium),
                         boxShadow: [AppThemeShadow.small],
                       ),
@@ -199,12 +212,16 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                 SizedBox(width: AppThemeSpacing.smallW),
                 Expanded(
                   child: InkWell(
-                    onTap: () => setState(() => _selectedGender = PetSex.female),
+                    onTap: () {
+                      setState(() => _selectedPetSex = PetSex.female);
+                      fk.currentState?.fields['sex']?.didChange(PetSex.female);
+                      onChanged();
+                    },
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
                     child: Ink(
                       padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
                       decoration: BoxDecoration(
-                        color: _selectedGender == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
+                        color: _selectedPetSex == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
                         borderRadius: BorderRadius.all(AppThemeRadius.medium),
                         boxShadow: [AppThemeShadow.small],
                       ),
@@ -235,7 +252,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
               decoration: InputDecoration(labelText: 'birthDate'.tr()),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                FormBuilderValidators.dateTime(errorText: 'validators.invalidDate')
+                FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
               ]),
             ),
             ElevatedButton(
@@ -286,7 +303,12 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
       setField('sex', vm.sex);
     }
 
-    if (loading || vm.birthDate == getField('birthDate')) {
+    // Update local gender selection so UI reflects the value (only for existing entities)
+    if (!isNewEntity) {
+      _selectedPetSex = vm.sex;
+    }
+
+    if (!isNewEntity && (loading || vm.birthDate == getField('birthDate'))) {
       setField('birthDate', vm.birthDate);
     }
 

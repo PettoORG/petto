@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/core/domain/base_entity.dart';
 import 'package:petto/pets/domain/food_type.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
+import 'package:petto/pets/domain/pet_sex.dart';
 import 'package:petto/pets/domain/pet_size.dart';
 import 'package:petto/pets/domain/pet_specie.dart';
 
@@ -31,7 +32,7 @@ sealed class Pet with _$Pet implements BaseEntity {
     required PetBreed breed,
 
     /// Pet sex (e.g. male, female).
-    required String sex,
+    required PetSex sex,
 
     /// Pet birth date.
     required DateTime birthDate,
@@ -76,7 +77,7 @@ sealed class Pet with _$Pet implements BaseEntity {
         name: '',
         specie: PetSpecie.other,
         breed: PetBreed.other,
-        sex: '',
+        sex: PetSex.male,
         birthDate: DateTime.now(),
         color: '',
         photoUrl: null,

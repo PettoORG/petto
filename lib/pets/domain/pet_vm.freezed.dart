@@ -19,7 +19,7 @@ mixin _$PetVM {
   String get name;
   PetSpecie get specie;
   PetBreed get breed;
-  String get sex;
+  PetSex get sex;
   DateTime get birthDate;
   String get color;
   double get weight;
@@ -75,7 +75,7 @@ abstract mixin class $PetVMCopyWith<$Res> {
       String name,
       PetSpecie specie,
       PetBreed breed,
-      String sex,
+      PetSex sex,
       DateTime birthDate,
       String color,
       double weight,
@@ -128,7 +128,7 @@ class _$PetVMCopyWithImpl<$Res> implements $PetVMCopyWith<$Res> {
       sex: null == sex
           ? _self.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PetSex,
       birthDate: null == birthDate
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
@@ -183,7 +183,7 @@ class _PetVM extends PetVM {
   @override
   final PetBreed breed;
   @override
-  final String sex;
+  final PetSex sex;
   @override
   final DateTime birthDate;
   @override
@@ -247,7 +247,7 @@ abstract mixin class _$PetVMCopyWith<$Res> implements $PetVMCopyWith<$Res> {
       String name,
       PetSpecie specie,
       PetBreed breed,
-      String sex,
+      PetSex sex,
       DateTime birthDate,
       String color,
       double weight,
@@ -300,7 +300,7 @@ class __$PetVMCopyWithImpl<$Res> implements _$PetVMCopyWith<$Res> {
       sex: null == sex
           ? _self.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PetSex,
       birthDate: null == birthDate
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable

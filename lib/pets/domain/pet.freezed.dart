@@ -31,7 +31,7 @@ mixin _$Pet {
   PetBreed get breed;
 
   /// Pet sex (e.g. male, female).
-  String get sex;
+  PetSex get sex;
 
   /// Pet birth date.
   DateTime get birthDate;
@@ -147,7 +147,7 @@ abstract mixin class $PetCopyWith<$Res> {
       String name,
       PetSpecie specie,
       PetBreed breed,
-      String sex,
+      PetSex sex,
       DateTime birthDate,
       String color,
       String? photoUrl,
@@ -217,7 +217,7 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
       sex: null == sex
           ? _self.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PetSex,
       birthDate: null == birthDate
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
@@ -316,7 +316,7 @@ class _Pet extends Pet {
 
   /// Pet sex (e.g. male, female).
   @override
-  final String sex;
+  final PetSex sex;
 
   /// Pet birth date.
   @override
@@ -447,7 +447,7 @@ abstract mixin class _$PetCopyWith<$Res> implements $PetCopyWith<$Res> {
       String name,
       PetSpecie specie,
       PetBreed breed,
-      String sex,
+      PetSex sex,
       DateTime birthDate,
       String color,
       String? photoUrl,
@@ -517,7 +517,7 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
       sex: null == sex
           ? _self.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PetSex,
       birthDate: null == birthDate
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable

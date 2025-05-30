@@ -5,6 +5,7 @@ import 'package:petto/core/domain/json_converter/timestamp_converter.dart';
 import 'package:petto/pets/domain/food_type.dart';
 import 'package:petto/pets/domain/pet.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
+import 'package:petto/pets/domain/pet_sex.dart';
 import 'package:petto/pets/domain/pet_size.dart';
 import 'package:petto/pets/domain/pet_specie.dart';
 import 'package:petto/users/domain/user.dart';
@@ -22,7 +23,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
     required String name,
     required PetSpecie species,
     required PetBreed breed,
-    required String sex,
+    required PetSex sex,
     @TimestampConverter() required DateTime birthDate,
     required String color,
     required String? photoUrl,
@@ -77,6 +78,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
   Map<String, dynamic> toCreateDocument(User user) {
     final now = DateTime.now();
     return copyWith(
+      ownerId: user.uid,
       createdAt: now,
       createdBy: user.uid,
       modifiedAt: now,

@@ -12,7 +12,7 @@ _PetDTO _$PetDTOFromJson(Map<String, dynamic> json) => _PetDTO(
       name: json['name'] as String,
       species: $enumDecode(_$PetSpecieEnumMap, json['species']),
       breed: $enumDecode(_$PetBreedEnumMap, json['breed']),
-      sex: json['sex'] as String,
+      sex: $enumDecode(_$PetSexEnumMap, json['sex']),
       birthDate:
           const TimestampConverter().fromJson(json['birthDate'] as Timestamp),
       color: json['color'] as String,
@@ -36,7 +36,7 @@ Map<String, dynamic> _$PetDTOToJson(_PetDTO instance) => <String, dynamic>{
       'name': instance.name,
       'species': _$PetSpecieEnumMap[instance.species]!,
       'breed': _$PetBreedEnumMap[instance.breed]!,
-      'sex': instance.sex,
+      'sex': _$PetSexEnumMap[instance.sex]!,
       'birthDate': const TimestampConverter().toJson(instance.birthDate),
       'color': instance.color,
       'photoUrl': instance.photoUrl,
@@ -81,6 +81,11 @@ const _$PetBreedEnumMap = {
   PetBreed.scottishFold: 'scottishFold',
   PetBreed.russianBlue: 'russianBlue',
   PetBreed.other: 'other',
+};
+
+const _$PetSexEnumMap = {
+  PetSex.male: 'male',
+  PetSex.female: 'female',
 };
 
 const _$PetSizeEnumMap = {

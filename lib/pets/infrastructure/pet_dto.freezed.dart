@@ -20,7 +20,7 @@ mixin _$PetDTO {
   String get name;
   PetSpecie get species;
   PetBreed get breed;
-  String get sex;
+  PetSex get sex;
   @TimestampConverter()
   DateTime get birthDate;
   String get color;
@@ -120,7 +120,7 @@ abstract mixin class $PetDTOCopyWith<$Res> {
       String name,
       PetSpecie species,
       PetBreed breed,
-      String sex,
+      PetSex sex,
       @TimestampConverter() DateTime birthDate,
       String color,
       String? photoUrl,
@@ -190,7 +190,7 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
       sex: null == sex
           ? _self.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PetSex,
       birthDate: null == birthDate
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
@@ -280,7 +280,7 @@ class _PetDTO extends PetDTO {
   @override
   final PetBreed breed;
   @override
-  final String sex;
+  final PetSex sex;
   @override
   @TimestampConverter()
   final DateTime birthDate;
@@ -398,7 +398,7 @@ abstract mixin class _$PetDTOCopyWith<$Res> implements $PetDTOCopyWith<$Res> {
       String name,
       PetSpecie species,
       PetBreed breed,
-      String sex,
+      PetSex sex,
       @TimestampConverter() DateTime birthDate,
       String color,
       String? photoUrl,
@@ -468,7 +468,7 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
       sex: null == sex
           ? _self.sex
           : sex // ignore: cast_nullable_to_non_nullable
-              as String,
+              as PetSex,
       birthDate: null == birthDate
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
