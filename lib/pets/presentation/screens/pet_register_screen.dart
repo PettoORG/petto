@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 import 'package:petto/core/files/application/files_firestore_path_provider.dart';
 import 'package:petto/core/files/application/files_notifier.dart';
@@ -13,6 +15,7 @@ import 'package:petto/core/form/application/touched_provider.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
 import 'package:petto/pets/app/pet_notifier.dart';
 import 'package:petto/pets/domain/pet.dart';
+import 'package:petto/pets/domain/pet_specie.dart';
 import 'package:petto/pets/presentation/widgets/pet_register_form.dart';
 import 'package:petto/pets/shared/constant.dart';
 import 'package:petto/pets/shared/providers.dart';
@@ -49,6 +52,8 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
 
   /// Builds the Firestore path for files.
   String? get firestorePath => _buildFirestorePath(widget.id);
+
+  PetSpecie? _selectedSpecie;
   @override
   Widget build(BuildContext context) {
     ref.listen<BaseEntityState<Pet>>(
@@ -127,15 +132,26 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
               icon: Icon(Icons.arrow_back_ios_new_rounded),
             ),
           ),
-          body: PetRegisterForm(
-            id: widget.id,
-            setTouchedState: (touched) {
-              _setTouchedState(touched || hasFilePending);
-            },
-            beforeSave: (entity) async {
-              // Prevent breaking file list
-              ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
-            },
+          body: Column(
+            spacing: AppThemeSpacing.extraSmallH,
+            children: [
+              Center(child: _PetAvatar(specie: _selectedSpecie)),
+              PetRegisterForm(
+                id: widget.id,
+                setTouchedState: (touched) {
+                  _setTouchedState(touched || hasFilePending);
+                },
+                beforeSave: (entity) async {
+                  // Prevent breaking file list
+                  ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
+                },
+                onSpecieChanged: (specie) {
+                  setState(() {
+                    _selectedSpecie = specie;
+                  });
+                },
+              ),
+            ],
           ),
         ),
         if (loading)
@@ -163,5 +179,69 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
 
   String _buildFirestorePath(String? id) {
     return '$collectionPath/$id/$filesFolder';
+  }
+}
+
+class _PetAvatar extends StatelessWidget {
+  const _PetAvatar({required this.specie});
+
+  final PetSpecie? specie;
+
+  @override
+  Widget build(BuildContext context) {
+    final double radius = AppThemeSpacing.extraLargeH;
+    final double avatarSize = radius * 2;
+    final String assetPath = specie == PetSpecie.cat ? 'assets/images/cat.png' : 'assets/images/dog.png';
+
+    final Widget imageWidget = assetPath.endsWith('.svg')
+        ? SvgPicture.asset(
+            assetPath,
+            fit: BoxFit.cover,
+            width: avatarSize,
+            height: avatarSize,
+          )
+        : Image.asset(
+            assetPath,
+            fit: BoxFit.cover,
+            width: avatarSize,
+            height: avatarSize,
+          );
+
+    return SizedBox(
+      width: avatarSize,
+      height: avatarSize,
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
+            width: avatarSize,
+            height: avatarSize,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              shape: BoxShape.circle,
+              boxShadow: [AppThemeShadow.small],
+            ),
+            child: ClipOval(child: imageWidget),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                shape: BoxShape.circle,
+                boxShadow: [AppThemeShadow.small],
+              ),
+              child: Icon(
+                Icons.camera_alt,
+                size: AppThemeSpacing.smallH,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

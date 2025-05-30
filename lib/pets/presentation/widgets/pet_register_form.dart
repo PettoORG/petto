@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
@@ -25,6 +24,7 @@ class PetRegisterForm extends StatefulHookConsumerWidget {
     required this.id,
     this.setTouchedState,
     this.beforeSave,
+    this.onSpecieChanged,
   });
 
   /// Unique identifier for the Pet. It is used to identify the Pet in the
@@ -39,6 +39,9 @@ class PetRegisterForm extends StatefulHookConsumerWidget {
   /// Widget to run additional async processs before saving the form. [entity]
   /// contains the upsert data to be saved.
   final Future<void> Function(Pet entity)? beforeSave;
+
+  /// Callback to run additional logic when specie is changed. It allows Parent
+  final Function(PetSpecie specie)? onSpecieChanged;
 
   @override
   ConsumerState<PetRegisterForm> createState() => _PetRegisterFormState();
@@ -109,8 +112,6 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: AppThemeSpacing.extraSmallH,
           children: [
-            Center(child: _PetAvatar(specie: _selectedSpecie)),
-            SizedBox(height: AppThemeSpacing.extraSmallH),
             FormBuilderTextField(
               name: 'name',
               keyboardType: TextInputType.name,
@@ -137,6 +138,9 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                       setState(() {
                         _selectedSpecie = value;
                         fk.currentState?.fields['breed']?.didChange(null);
+                        if (widget.onSpecieChanged != null) {
+                          widget.onSpecieChanged!(value!);
+                        }
                       });
                     },
                     validator: FormBuilderValidators.compose([
@@ -388,69 +392,5 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
   @override
   void setField(String fieldName, dynamic value) {
     fieldRef(fieldName)?.didChange(value);
-  }
-}
-
-class _PetAvatar extends StatelessWidget {
-  const _PetAvatar({required this.specie});
-
-  final PetSpecie? specie;
-
-  @override
-  Widget build(BuildContext context) {
-    final double radius = AppThemeSpacing.extraLargeH;
-    final double avatarSize = radius * 2;
-    final String assetPath = specie == PetSpecie.cat ? 'assets/images/cat.png' : 'assets/images/dog.png';
-
-    final Widget imageWidget = assetPath.endsWith('.svg')
-        ? SvgPicture.asset(
-            assetPath,
-            fit: BoxFit.cover,
-            width: avatarSize,
-            height: avatarSize,
-          )
-        : Image.asset(
-            assetPath,
-            fit: BoxFit.cover,
-            width: avatarSize,
-            height: avatarSize,
-          );
-
-    return SizedBox(
-      width: avatarSize,
-      height: avatarSize,
-      child: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-            width: avatarSize,
-            height: avatarSize,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              shape: BoxShape.circle,
-              boxShadow: [AppThemeShadow.small],
-            ),
-            child: ClipOval(child: imageWidget),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                shape: BoxShape.circle,
-                boxShadow: [AppThemeShadow.small],
-              ),
-              child: Icon(
-                Icons.camera_alt,
-                size: AppThemeSpacing.smallH,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
