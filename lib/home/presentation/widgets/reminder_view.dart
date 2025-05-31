@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:petto/reminders/router.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalendarView extends StatefulWidget {
-  const CalendarView({super.key});
+class ReminderView extends StatefulWidget {
+  const ReminderView({super.key});
 
   @override
-  State<CalendarView> createState() => _CalendarViewState();
+  State<ReminderView> createState() => _ReminderViewState();
 }
 
-class _CalendarViewState extends State<CalendarView> {
+class _ReminderViewState extends State<ReminderView> {
   // Current month/week in view
   late DateTime _focusedDay;
   // Last tapped day (nullable)
@@ -86,8 +87,11 @@ class _CalendarViewState extends State<CalendarView> {
           ),
         ),
         // Placeholder content
-        const Expanded(
-          child: Center(child: Text('Lista de recordatorios')),
+        Center(
+          child: ElevatedButton(
+            onPressed: () => ReminderDetailRoute(reminderId: '0').push(context),
+            child: Text('Añadir Recordatorio'),
+          ),
         ),
       ],
     );

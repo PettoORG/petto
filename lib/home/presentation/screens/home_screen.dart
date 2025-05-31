@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
-import 'package:petto/home/presentation/widgets/calendar_view.dart';
+import 'package:petto/home/presentation/widgets/reminder_view.dart';
 import 'package:petto/home/presentation/widgets/profile_view.dart';
 
 class HomeScreen extends StatefulHookConsumerWidget {
@@ -68,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ref.read(authNotifierProvider.notifier).signOut();
                   },
                   child: Text(''))),
-          CalendarView(),
+          ReminderView(),
           ProfileView(),
         ],
       ),
