@@ -5,6 +5,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/domain/failure.dart';
+import 'package:petto/core/files/application/app_file_view_model.dart';
+import 'package:petto/core/files/application/files_notifier.dart';
 import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/form/application/form_state_interface.dart';
 import 'package:petto/core/form/application/id_provider.dart';
@@ -24,24 +26,20 @@ class PetRegisterForm extends StatefulHookConsumerWidget {
     required this.id,
     this.setTouchedState,
     this.beforeSave,
-    this.onSpecieChanged,
+    this.onBreedChanged,
   });
 
-  /// Unique identifier for the Pet. It is used to identify the Pet in the
+  /// Unique identifier for the Pet.
   final String id;
 
-  /// Callback to set "touched" state. It allows Parent Widget to run additional
-  /// checks before setting "touched" state. If set, it will be used by
-  /// "_setTouchedState" method.
+  /// Sets the touched state from parent.
   final void Function(bool touched)? setTouchedState;
 
-  /// Callback to run additional logic before saving the form. It allows Parent
-  /// Widget to run additional async processs before saving the form. [entity]
-  /// contains the upsert data to be saved.
+  /// Runs before saving.
   final Future<void> Function(Pet entity)? beforeSave;
 
-  /// Callback to run additional logic when specie is changed. It allows Parent
-  final Function(PetSpecie specie)? onSpecieChanged;
+  /// Notifies whenever the breed changes (including resets to null).
+  final Function(PetBreed? breed)? onBreedChanged;
 
   @override
   ConsumerState<PetRegisterForm> createState() => _PetRegisterFormState();
@@ -146,10 +144,9 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                     onChanged: (value) {
                       setState(() {
                         _selectedSpecie = value;
+                        // Reset breed whenever specie changes
                         fk.currentState?.fields['breed']?.didChange(null);
-                        if (widget.onSpecieChanged != null) {
-                          widget.onSpecieChanged!(value!);
-                        }
+                        widget.onBreedChanged?.call(null);
                       });
                     },
                     validator: FormBuilderValidators.compose([
@@ -171,6 +168,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                               child: Text(breed.displayName),
                             ))
                         .toList(),
+                    onChanged: widget.onBreedChanged,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
                     ]),
@@ -267,11 +265,39 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
 
   @override
   PetVM extract() {
+    // Current breed value
+    final breed = getField<PetBreed>('breed') ?? values.breed;
+
+    // Files handled by the picker/uploader for this form
+    final files = ref.read(filesNotifierProvider(petsModule)).files;
+
+    // Helper booleans
+    final bool hasUploads = files.any((f) => f.status == AppFileStatus.upload);
+    final bool hasActiveFiles = files.any((f) => f.status != AppFileStatus.delete && f.status != AppFileStatus.deleted);
+    final bool allDeleted = files.isNotEmpty && !hasActiveFiles; // user removed every image
+
+    String? photoUrl;
+
+    if (values.id == '0') {
+      photoUrl = hasUploads ? null : breed.defaultImageUrl;
+    } else {
+      if (hasUploads) {
+        // User picked a new image → let backend keep uploaded file.
+        photoUrl = null;
+      } else if (allDeleted) {
+        // Deleted previous photo and did not upload a new one → fallback.
+        photoUrl = breed.defaultImageUrl;
+      } else {
+        // No changes on files → keep existing url.
+        photoUrl = values.photoUrl;
+      }
+    }
+
     return PetVM(
       id: values.id,
       name: getField('name') ?? values.name,
       specie: getField('specie') ?? values.specie,
-      breed: getField('breed') ?? values.breed,
+      breed: breed,
       sex: getField('sex') ?? values.sex,
       birthDate: getField('birthDate') ?? values.birthDate,
       color: getField('color') ?? values.color,
@@ -279,6 +305,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
       foodType: getField('foodType') ?? values.foodType,
       microchipNumber: getField('microchipNumber') ?? values.microchipNumber,
       size: getField('size') ?? values.size,
+      photoUrl: photoUrl,
     );
   }
 
@@ -297,13 +324,13 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
 
     if (!isNewEntity && (loading || vm.breed == getField('breed'))) {
       setField('breed', vm.breed);
+      widget.onBreedChanged?.call(vm.breed);
     }
 
     if (loading || vm.sex == getField('sex')) {
       setField('sex', vm.sex);
     }
 
-    // Update local gender selection so UI reflects the value (only for existing entities)
     if (!isNewEntity) {
       _selectedPetSex = vm.sex;
     }

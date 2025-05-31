@@ -25,6 +25,7 @@ sealed class PetVM with _$PetVM {
     required String color,
     required double weight,
     required PetSize size,
+    String? photoUrl,
     required FoodType foodType,
     required String microchipNumber,
   }) = _PetVM;
@@ -40,6 +41,7 @@ sealed class PetVM with _$PetVM {
         color: entity.color,
         weight: entity.weight,
         size: entity.size,
+        photoUrl: entity.photoUrl,
         foodType: entity.foodType,
         microchipNumber: entity.microchipNumber,
       );
@@ -55,6 +57,7 @@ sealed class PetVM with _$PetVM {
         color: '',
         weight: 0.0,
         size: PetSize.small,
+        photoUrl: '',
         foodType: FoodType.dry,
         microchipNumber: '',
       );
@@ -71,6 +74,7 @@ sealed class PetVM with _$PetVM {
         color: color,
         weight: weight,
         size: size,
+        photoUrl: photoUrl,
         foodType: foodType,
         microchipNumber: microchipNumber,
       );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 import 'package:petto/reminders/presentation/widgets/reminder_form.dart';
 
@@ -14,7 +15,7 @@ class ReminderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -23,7 +24,10 @@ class ReminderDetailsScreen extends StatelessWidget {
             floating: true,
           ),
           SliverToBoxAdapter(
-            child: ReminderForm(),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+              child: ReminderForm(),
+            ),
           )
         ],
       ),

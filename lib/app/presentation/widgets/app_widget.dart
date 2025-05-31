@@ -54,7 +54,7 @@ class _AppWidgetState extends ConsumerState<AppWidget> {
             return;
           }
 
-          final family = 'petsByUser';
+          final family = 'petsByUserUid';
 
           final query = ref.read(petsQueryProvider(
             family: family,

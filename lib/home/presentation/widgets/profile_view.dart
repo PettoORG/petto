@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
+import 'package:petto/auth/shared/providers.dart';
+import 'package:petto/core/list/application/firestore_query_helper.dart';
+import 'package:petto/core/list/presentation/widgets/firestore_paginated_list_view.dart';
+import 'package:petto/pets/shared/providers.dart';
+import 'package:petto/users/domain/user.dart';
 import 'package:petto/users/router.dart';
 
 class ProfileView extends HookConsumerWidget {
@@ -25,6 +29,13 @@ class ProfileView extends HookConsumerWidget {
       ),
     ];
 
+    User user = ref.watch(userProvider).value!;
+
+    final petsQuery = ref.watch(petsQueryProvider(family: 'petsByUserUid', clauses: [
+      Where('createdBy', isEqualTo: user.uid),
+      OrderBy('createdAt', descending: true),
+    ]));
+
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
@@ -33,9 +44,11 @@ class ProfileView extends HookConsumerWidget {
           spacing: AppThemeSpacing.extraSmallH,
           children: [
             const Center(child: _UserAvatar()),
-            Container(
-              height: 0.1.sh,
-              color: colorScheme.surface,
+            FirestorePaginatedListView(
+              query: petsQuery,
+              loadingWidget: const CircularProgressIndicator(),
+              errorWidget: const CircularProgressIndicator(),
+              noResultsWidget: const CircularProgressIndicator(),
             ),
             ...options.map((option) => InkWell(
                   onTap: option.onTap,

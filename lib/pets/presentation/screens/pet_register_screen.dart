@@ -1,9 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 import 'package:petto/core/files/application/files_firestore_path_provider.dart';
@@ -18,7 +19,7 @@ import 'package:petto/core/presentation/widgets/flash.dart';
 import 'package:petto/home/router.dart';
 import 'package:petto/pets/app/pet_notifier.dart';
 import 'package:petto/pets/domain/pet.dart';
-import 'package:petto/pets/domain/pet_specie.dart';
+import 'package:petto/pets/domain/pet_breed.dart';
 import 'package:petto/pets/presentation/widgets/pet_register_form.dart';
 import 'package:petto/pets/shared/constant.dart';
 import 'package:petto/pets/shared/providers.dart';
@@ -39,7 +40,7 @@ class PetRegisterScreen extends StatefulHookConsumerWidget {
 
 class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
   /// Folder for files (nested in document).
-  String filesFolder = 'files';
+  final String filesFolder = 'files';
 
   /// Getter for "form" and "files" family.
   String get family => petsModule;
@@ -59,7 +60,7 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
   /// Flag to ignore the very first Data emitted when the screen opens.
   bool _initialEntityLoaded = false;
 
-  PetSpecie? _selectedSpecie;
+  PetBreed? _selectedBreed;
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +159,7 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
                         showRetryAction: false,
                         isLoading: loading,
                         unselectedFileWidget: (onImageTap) => _PetAvatar(
-                          specie: _selectedSpecie,
+                          breed: _selectedBreed,
                           onImageTap: onImageTap,
                         ),
                         borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
@@ -175,11 +176,11 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
                         // Prevent breaking file list
                         ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
                       },
-                      onSpecieChanged: (specie) {
-                        setState(() => _selectedSpecie = specie);
+                      onBreedChanged: (breed) {
+                        setState(() => _selectedBreed = breed);
                       },
                     ),
-                    SizedBox.shrink()
+                    const SizedBox.shrink()
                   ],
                 ),
               )
@@ -208,22 +209,43 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
 
 class _PetAvatar extends StatelessWidget {
   const _PetAvatar({
-    required this.specie,
+    required this.breed,
     required this.onImageTap,
   });
 
-  final PetSpecie? specie;
+  final PetBreed? breed;
   final VoidCallback onImageTap;
 
   @override
   Widget build(BuildContext context) {
     final double radius = AppThemeSpacing.extraLargeH;
     final double avatarSize = radius * 2;
-    final String assetPath = specie == PetSpecie.cat ? 'assets/images/cat.png' : 'assets/images/dog.png';
 
-    final Widget imageWidget = assetPath.endsWith('.svg')
-        ? SvgPicture.asset(assetPath, fit: BoxFit.cover, width: avatarSize, height: avatarSize)
-        : Image.asset(assetPath, fit: BoxFit.cover, width: avatarSize, height: avatarSize);
+    final String? networkUrl = breed?.defaultImageUrl;
+
+    // Displays: shimmer placeholder while loading, icon when no breed.
+    final Widget imageWidget = networkUrl != null
+        ? CachedNetworkImage(
+            imageUrl: networkUrl,
+            fit: BoxFit.cover,
+            width: avatarSize,
+            height: avatarSize,
+            placeholder: (context, url) => Shimmer.fromColors(
+              baseColor: Theme.of(context).colorScheme.surface,
+              highlightColor: Colors.grey[100]!,
+              child: Container(
+                height: avatarSize,
+                width: avatarSize,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  shape: BoxShape.circle,
+                  boxShadow: [AppThemeShadow.small],
+                ),
+              ),
+            ),
+            errorWidget: (_, __, ___) => Icon(Icons.image_not_supported, size: avatarSize * .5),
+          )
+        : Icon(Icons.pets_rounded, size: avatarSize * .5, color: Theme.of(context).colorScheme.primaryContainer);
 
     return SizedBox(
       width: avatarSize,
@@ -231,7 +253,6 @@ class _PetAvatar extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
             width: avatarSize,
             height: avatarSize,
             decoration: BoxDecoration(
