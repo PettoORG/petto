@@ -62,7 +62,7 @@ sealed class Reminder with _$Reminder {
         id: '0',
         petIds: [],
         assigneeIds: [],
-        type: ReminderType.custom,
+        type: ReminderType.other,
         title: '',
         description: '',
         scheduledAt: DateTime.now(),

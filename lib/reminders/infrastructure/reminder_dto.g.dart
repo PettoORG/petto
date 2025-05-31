@@ -65,7 +65,7 @@ const _$ReminderTypeEnumMap = {
   ReminderType.deworming: 'deworming',
   ReminderType.weightCheck: 'weightCheck',
   ReminderType.anniversary: 'anniversary',
-  ReminderType.custom: 'custom',
+  ReminderType.other: 'other',
 };
 
 const _$ReminderFrequencyEnumMap = {

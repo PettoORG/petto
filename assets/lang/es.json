@@ -155,7 +155,7 @@
   "reminderTypeEnum": {
     "anniversary": "Cumpleaños / aniversario de adopción",
     "bath": "Baño",
-    "custom": "Recordatorio personalizado",
+    "other": "Otro",
     "deworming": "Desparasitación",
     "feeding": "Alimentación",
     "grooming": "Aseo y cuidado de pelaje",

@@ -12,7 +12,7 @@ enum ReminderType {
   deworming,
   weightCheck,
   anniversary,
-  custom;
+  other;
 
   String get displayName => 'reminderTypeEnum.$name'.tr();
 }
