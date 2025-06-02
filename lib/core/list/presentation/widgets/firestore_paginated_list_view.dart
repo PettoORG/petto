@@ -20,6 +20,7 @@ class FirestorePaginatedListView<T> extends StatelessWidget {
     this.physics,
     this.shrinkWrap = true,
     this.useSlivers = false,
+    this.firstItemBuilder,
   });
 
   /// Query to fetch List data.
@@ -43,7 +44,7 @@ class FirestorePaginatedListView<T> extends StatelessWidget {
   /// Widget that will be displayed if no results are found.
   final Widget noResultsWidget;
 
-  // Page Size for Firestore pagination.
+  /// Page Size for Firestore pagination.
   final int pageSize;
 
   /// Scroll direction.
@@ -61,6 +62,9 @@ class FirestorePaginatedListView<T> extends StatelessWidget {
   /// If true, the widget will use Slivers (SliverList) instead of ListView.
   final bool useSlivers;
 
+  /// If provided, this builder is called to build a widget as the very first item.
+  final WidgetBuilder? firstItemBuilder;
+
   @override
   Widget build(BuildContext context) {
     return FirestoreQueryBuilder(
@@ -69,30 +73,47 @@ class FirestorePaginatedListView<T> extends StatelessWidget {
       builder: (context, snapshot, _) {
         // --- SLIVER MODE ---
         if (useSlivers) {
-          if (snapshot.isFetching) {
+          if (snapshot.isFetching && snapshot.docs.isEmpty) {
             return SliverToBoxAdapter(child: loadingWidget);
           }
 
-          if (snapshot.hasError) {
+          if (snapshot.hasError && snapshot.docs.isEmpty) {
             return SliverToBoxAdapter(child: errorWidget);
           }
 
           if (snapshot.docs.isEmpty) {
+            // Even if no documents, still show firstItem if provided
+            if (firstItemBuilder != null) {
+              return SliverList(
+                delegate: SliverChildListDelegate([
+                  firstItemBuilder!(context),
+                  SliverToBoxAdapter(child: noResultsWidget),
+                ]),
+              );
+            }
             return SliverToBoxAdapter(child: noResultsWidget);
           }
 
           final unfiltered = snapshot.docs.map((e) => e.data()).toList();
           final items = filter != null ? filter!(unfiltered) : unfiltered;
 
-          // Sin separadores
+          // If no separators configured
           if (separatorBuilder == null) {
+            // total count includes firstItem if present
+            final totalCount = items.length + (firstItemBuilder != null ? 1 : 0);
             final sliverList = SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+                  // If index 0 and firstItemBuilder exists, render that
+                  if (firstItemBuilder != null && index == 0) {
+                    return firstItemBuilder!(context);
+                  }
+                  // Otherwise calculate data index
+                  final dataIndex = firstItemBuilder != null ? index - 1 : index;
+                  if (snapshot.hasMore && dataIndex + 1 == snapshot.docs.length) {
                     snapshot.fetchMore();
                   }
-                  final item = items[index];
+                  final item = items[dataIndex];
                   if (itemBuilder == null) {
                     return Container(
                       color: Colors.red[100],
@@ -106,52 +127,84 @@ class FirestorePaginatedListView<T> extends StatelessWidget {
                   }
                   return itemBuilder!(item);
                 },
-                childCount: items.length,
+                childCount: totalCount,
               ),
             );
             return padding != null ? SliverPadding(padding: padding!, sliver: sliverList) : sliverList;
           }
 
-          final totalCount = items.length * 2 - 1;
+          // With separators, we double slots (items + separators) plus firstItem if present
+          final itemCountWithSeparators = items.length * 2 - 1;
+          final totalSlots = itemCountWithSeparators + (firstItemBuilder != null ? 1 : 0);
           final sliverWithSeps = SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                if (index.isEven) {
-                  final itemIndex = index ~/ 2;
+                // If firstItem exists and index is 0
+                if (firstItemBuilder != null && index == 0) {
+                  return firstItemBuilder!(context);
+                }
+                // Adjust index into separator scheme
+                final adjustedIndex = firstItemBuilder != null ? index - 1 : index;
+                if (adjustedIndex.isEven) {
+                  final itemIndex = adjustedIndex ~/ 2;
                   if (snapshot.hasMore && itemIndex + 1 == snapshot.docs.length) {
                     snapshot.fetchMore();
                   }
                   return itemBuilder!(items[itemIndex]);
                 } else {
-                  final sepIndex = index ~/ 2;
+                  final sepIndex = adjustedIndex ~/ 2;
                   return separatorBuilder!(context, sepIndex);
                 }
               },
-              childCount: totalCount,
+              childCount: totalSlots,
             ),
           );
           return padding != null ? SliverPadding(padding: padding!, sliver: sliverWithSeps) : sliverWithSeps;
         }
 
         // --- LISTVIEW MODE ---
-        if (snapshot.isFetching) return loadingWidget;
-        if (snapshot.hasError) return errorWidget;
-        if (snapshot.docs.isEmpty) return noResultsWidget;
+        if (snapshot.isFetching && snapshot.docs.isEmpty) return loadingWidget;
+        if (snapshot.hasError && snapshot.docs.isEmpty) return errorWidget;
+        if (snapshot.docs.isEmpty) {
+          // Even if no documents, still show firstItem if provided
+          if (firstItemBuilder != null) {
+            return ListView(
+              physics: physics,
+              shrinkWrap: shrinkWrap,
+              scrollDirection: scrollDirection,
+              padding: padding,
+              children: [
+                firstItemBuilder!(context),
+                noResultsWidget,
+              ],
+            );
+          }
+          return noResultsWidget;
+        }
 
         final unfiltered = snapshot.docs.map((e) => e.data()).toList();
         final items = filter != null ? filter!(unfiltered) : unfiltered;
+
+        // Total count includes firstItem if provided
+        final totalCount = items.length + (firstItemBuilder != null ? 1 : 0);
 
         return ListView.separated(
           physics: physics,
           shrinkWrap: shrinkWrap,
           scrollDirection: scrollDirection,
           padding: padding,
-          itemCount: items.length,
+          itemCount: totalCount,
           itemBuilder: (context, index) {
-            if (snapshot.hasMore && index + 1 == snapshot.docs.length) {
+            // If firstItem exists and index == 0
+            if (firstItemBuilder != null && index == 0) {
+              return firstItemBuilder!(context);
+            }
+            // Map index to data index
+            final dataIndex = firstItemBuilder != null ? index - 1 : index;
+            if (snapshot.hasMore && dataIndex + 1 == snapshot.docs.length) {
               snapshot.fetchMore();
             }
-            final item = items[index];
+            final item = items[dataIndex];
             if (itemBuilder == null) {
               return Container(
                 color: Colors.red[100],
@@ -165,7 +218,15 @@ class FirestorePaginatedListView<T> extends StatelessWidget {
             }
             return itemBuilder!(item);
           },
-          separatorBuilder: separatorBuilder ?? (context, index) => const SizedBox.shrink(),
+          separatorBuilder: (context, index) {
+            // No separator before firstItem; adjust index for separators
+            if (firstItemBuilder != null) {
+              if (index == 0) return const SizedBox.shrink();
+              final sepIndex = index - 1;
+              return separatorBuilder != null ? separatorBuilder!(context, sepIndex) : const SizedBox.shrink();
+            }
+            return separatorBuilder != null ? separatorBuilder!(context, index) : const SizedBox.shrink();
+          },
         );
       },
     );
