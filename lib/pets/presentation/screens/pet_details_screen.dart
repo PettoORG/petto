@@ -23,7 +23,11 @@ import 'package:petto/pets/presentation/widgets/pet_form.dart';
 import 'package:petto/pets/shared/constant.dart';
 import 'package:petto/pets/shared/providers.dart';
 
-class PetDetailsScreen extends ConsumerStatefulWidget {
+/// Screen used to edit a Pet entity.
+///
+/// Mirrors the behaviour from [PetRegisterScreen] but renders the full
+/// [PetForm] instead of the reduced [PetRegisterForm].
+class PetDetailsScreen extends StatefulHookConsumerWidget {
   const PetDetailsScreen({
     super.key,
     required this.id,
