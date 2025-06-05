@@ -30,47 +30,56 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
+  /// Returns the app-bar title according to the current page index.
+  String _titleForIndex(int index) {
+    switch (index) {
+      case 0:
+        return 'Inicio';
+      case 1:
+        return 'Recordatorios';
+      case 2:
+        return 'Perfil';
+      default:
+        return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          () {
-            switch (_index) {
-              case 0:
-                return 'Inicio';
-              case 1:
-                return 'Recordatorios';
-              case 2:
-                return 'Perfil';
-              default:
-                return '';
-            }
-          }(),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none_rounded),
-          ),
-        ],
-      ),
-      body: PageView(
-        controller: _pageController,
-        physics: const BouncingScrollPhysics(),
-        onPageChanged: (i) => setState(() => _index = i),
-        children: [
-          Center(
+      // The SliverAppBar is now declared inside NestedScrollView.
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              title: Text(_titleForIndex(_index)),
+              floating: true,
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.notifications_none_rounded),
+                ),
+              ],
+            ),
+          ];
+        },
+        body: PageView(
+          controller: _pageController,
+          physics: const BouncingScrollPhysics(),
+          onPageChanged: (i) => setState(() => _index = i),
+          children: [
+            Center(
               child: ElevatedButton(
-                  onPressed: () {
-                    ref.read(authNotifierProvider.notifier).signOut();
-                  },
-                  child: Text(''))),
-          ReminderView(),
-          ProfileView(),
-        ],
+                onPressed: () => ref.read(authNotifierProvider.notifier).signOut(),
+                child: const Text(''),
+              ),
+            ),
+            const ReminderView(),
+            const ProfileView(),
+          ],
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
