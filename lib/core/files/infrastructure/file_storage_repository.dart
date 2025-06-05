@@ -63,7 +63,7 @@ class FileStorageRepository {
           return left(
             Failure.storage(
               message: 'formValidator.fileTypeNotAllowed'.tr(namedArgs: {
-                'extencions': allowedMimes.join(', '),
+                'extensions': allowedMimes.join(', '),
               }),
             ),
           );
@@ -126,7 +126,7 @@ class FileStorageRepository {
             return left(
               Failure.storage(
                 message: 'formValidator.fileTypeNotAllowed'.tr(namedArgs: {
-                  'extencions': allowedMimes.join(', '),
+                  'extensions': allowedMimes.join(', '),
                 }),
               ),
             );
@@ -194,7 +194,7 @@ class FileStorageRepository {
           return left(
             Failure.storage(
               message: 'formValidator.fileTypeNotAllowed'.tr(namedArgs: {
-                'extencions': allowedMimes.join(', '),
+                'extensions': allowedMimes.join(', '),
               }),
             ),
           );
