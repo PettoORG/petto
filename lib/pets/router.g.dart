@@ -7,21 +7,33 @@ part of 'router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $createOrImportPetRoute,
-      $petRegisterRoute,
+      $petsRoute,
     ];
 
-RouteBase get $createOrImportPetRoute => GoRouteData.$route(
-      path: '/createorimportpet',
-      factory: $CreateOrImportPetRouteExtension._fromState,
+RouteBase get $petsRoute => GoRouteData.$route(
+      path: '/pets',
+      factory: $PetsRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: 'create-or-import',
+          factory: $CreateOrImportPetRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: ':petId/register',
+          factory: $PetRegisterRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: ':petId',
+          factory: $PetDetailsRouteExtension._fromState,
+        ),
+      ],
     );
 
-extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
-  static CreateOrImportPetRoute _fromState(GoRouterState state) =>
-      const CreateOrImportPetRoute();
+extension $PetsRouteExtension on PetsRoute {
+  static PetsRoute _fromState(GoRouterState state) => const PetsRoute();
 
   String get location => GoRouteData.$location(
-        '/createorimportpet',
+        '/pets',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -34,19 +46,54 @@ extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $petRegisterRoute => GoRouteData.$route(
-      path: '/petregister/:id',
-      factory: $PetRegisterRouteExtension._fromState,
-    );
+extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
+  static CreateOrImportPetRoute _fromState(GoRouterState state) =>
+      const CreateOrImportPetRoute();
+
+  String get location => GoRouteData.$location(
+        '/pets/create-or-import',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
 
 extension $PetRegisterRouteExtension on PetRegisterRoute {
   static PetRegisterRoute _fromState(GoRouterState state) => PetRegisterRoute(
-        id: state.pathParameters['id']!,
+        petId: state.pathParameters['petId']!,
         $extra: state.extra as List<AppFileViewModel>?,
       );
 
   String get location => GoRouteData.$location(
-        '/petregister/${Uri.encodeComponent(id)}',
+        '/pets/${Uri.encodeComponent(petId)}/register',
+      );
+
+  void go(BuildContext context) => context.go(location, extra: $extra);
+
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: $extra);
+
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
+}
+
+extension $PetDetailsRouteExtension on PetDetailsRoute {
+  static PetDetailsRoute _fromState(GoRouterState state) => PetDetailsRoute(
+        petId: state.pathParameters['petId']!,
+        $extra: state.extra as List<AppFileViewModel>?,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pets/${Uri.encodeComponent(petId)}',
       );
 
   void go(BuildContext context) => context.go(location, extra: $extra);

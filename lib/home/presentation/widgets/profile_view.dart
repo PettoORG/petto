@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:petto/pets/router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:petto/app/theme/app_theme_sizes.dart';
@@ -43,6 +44,7 @@ class ProfileView extends HookConsumerWidget {
     final double listHeight = avatarDiameter + .025.sh + textLineHeight;
 
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
         child: Column(
@@ -132,12 +134,10 @@ class _PetsCarousel extends HookConsumerWidget {
       scrollDirection: Axis.horizontal,
       firstItemBuilder: (_) => _AddPetCard(
         avatarDiameter: avatarDiameter,
-        onTap: () {},
+        onTap: () => PetDetailsRoute(petId: '0').push(context),
       ),
       itemBuilder: (pet) => _PetAvatarCard(
-        pet: pet,
-        avatarDiameter: avatarDiameter,
-      ),
+          pet: pet, avatarDiameter: avatarDiameter, onTap: () => PetDetailsRoute(petId: pet.id).push(context)),
     );
   }
 }
@@ -201,10 +201,12 @@ class _PetAvatarCard extends StatelessWidget {
   const _PetAvatarCard({
     required this.pet,
     required this.avatarDiameter,
+    this.onTap,
   });
 
-  final dynamic pet; // Replace with actual Pet type when available.
+  final dynamic pet;
   final double avatarDiameter;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +220,7 @@ class _PetAvatarCard extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () {},
+            onTap: onTap,
             borderRadius: BorderRadius.circular(avatarDiameter),
             child: Ink(
               width: avatarDiameter,
