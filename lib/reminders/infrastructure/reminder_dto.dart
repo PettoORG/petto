@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/core/infrastructure/base_dto.dart';
 import 'package:petto/core/domain/json_converter/timestamp_converter.dart';
 import 'package:petto/reminders/domain/reminder.dart';
-import 'package:petto/reminders/domain/reminder_frecuency.dart';
+import 'package:petto/reminders/domain/reminder_frequency.dart';
 import 'package:petto/reminders/domain/reminder_type.dart';
 import 'package:petto/users/domain/user.dart';
 

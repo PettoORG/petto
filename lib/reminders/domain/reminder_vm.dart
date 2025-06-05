@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/reminders/domain/reminder.dart';
-import 'package:petto/reminders/domain/reminder_frecuency.dart';
+import 'package:petto/reminders/domain/reminder_frequency.dart';
 import 'package:petto/reminders/domain/reminder_type.dart';
 
 part 'reminder_vm.freezed.dart';
