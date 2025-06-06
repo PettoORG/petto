@@ -69,7 +69,18 @@ Every feature follows this folder layout:
 └── router.dart     # Typed routes
 ```
 
-Modules such as `auth`, `onboarding`, `home`, `pets`, `reminders`, `users` and `preferences` work independently and are combined in the global router.
+The app is split into independent modules which are combined in the global router:
+
+- **auth** – sign in, sign up and account recovery
+- **onboarding** – first time introduction screens
+- **home** – bottom navigation and entry point after auth
+- **pets** – pet list, details and CRUD forms
+- **reminders** – manage reminders linked to pets
+- **users** – user profile information
+- **preferences** – local configuration like theme or language
+- **pet_share** – share pet info across accounts
+
+All modules follow the DDD folder layout above and expose typed routes that are aggregated in `AppRouter`.
 
 ## Localization
 
