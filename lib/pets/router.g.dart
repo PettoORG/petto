@@ -19,10 +19,6 @@ RouteBase get $petsRoute => GoRouteData.$route(
           factory: $CreateOrImportPetRouteExtension._fromState,
         ),
         GoRouteData.$route(
-          path: ':petId/register',
-          factory: $PetRegisterRouteExtension._fromState,
-        ),
-        GoRouteData.$route(
           path: ':petId',
           factory: $PetDetailsRouteExtension._fromState,
         ),
@@ -64,36 +60,15 @@ extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
   void replace(BuildContext context) => context.replace(location);
 }
 
-extension $PetRegisterRouteExtension on PetRegisterRoute {
-  static PetRegisterRoute _fromState(GoRouterState state) => PetRegisterRoute(
-        petId: state.pathParameters['petId']!,
-        $extra: state.extra as List<AppFileViewModel>?,
-      );
-
-  String get location => GoRouteData.$location(
-        '/pets/${Uri.encodeComponent(petId)}/register',
-      );
-
-  void go(BuildContext context) => context.go(location, extra: $extra);
-
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
-
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
-}
-
 extension $PetDetailsRouteExtension on PetDetailsRoute {
   static PetDetailsRoute _fromState(GoRouterState state) => PetDetailsRoute(
         petId: state.pathParameters['petId']!,
+        basic: state.queryParameters['basic'] == 'true',
         $extra: state.extra as List<AppFileViewModel>?,
       );
-
   String get location => GoRouteData.$location(
         '/pets/${Uri.encodeComponent(petId)}',
+        queryParams: basic ? {'basic': 'true'} : null,
       );
 
   void go(BuildContext context) => context.go(location, extra: $extra);

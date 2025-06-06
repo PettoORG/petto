@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 
 // Screens for the pets feature (replace with real imports).
 import 'package:petto/pets/presentation/screens/create_or_import_pet_screen.dart';
-import 'package:petto/pets/presentation/screens/pet_register_screen.dart';
 import 'package:petto/pets/presentation/screens/pet_details_screen.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 
@@ -15,9 +14,8 @@ part 'router.g.dart';
   routes: <TypedGoRoute<GoRouteData>>[
     // Step 1: choose how to add the pet
     TypedGoRoute<CreateOrImportPetRoute>(path: 'create-or-import'),
-    // Step 2: register data for a specific pet (petId is preserved)
-    TypedGoRoute<PetRegisterRoute>(path: ':petId/register'),
-    // Detail view for any given pet
+    // Detail or registration view for a specific pet
+    
     TypedGoRoute<PetDetailsRoute>(path: ':petId'),
   ],
 )
@@ -36,28 +34,11 @@ class CreateOrImportPetRoute extends GoRouteData {
   Widget build(BuildContext context, GoRouterState state) => const CreateOrImportPetScreen();
 }
 
-/// Route for the pet registration flow – keeps `petId` as path parameter to
-/// maintain context throughout the flow (mirrors the Reminder example).
-class PetRegisterRoute extends GoRouteData {
-  const PetRegisterRoute({
-    required this.petId,
-    List<AppFileViewModel>? $extra,
-  }) : $extra = $extra ?? const [];
-
-  /// Path parameter.
-  final String petId;
-
-  /// Optional files sent via `extra` (e.g. pet images, PDFs).
-  final List<AppFileViewModel> $extra;
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) => PetRegisterScreen(id: petId, files: $extra);
-}
-
 /// Detail screen – shows one pet by id and optionally attached files.
 class PetDetailsRoute extends GoRouteData {
   const PetDetailsRoute({
     required this.petId,
+    this.basic = false,
     List<AppFileViewModel>? $extra,
   }) : $extra = $extra ?? const [];
 
@@ -66,7 +47,9 @@ class PetDetailsRoute extends GoRouteData {
 
   /// Files sent via `extra`.
   final List<AppFileViewModel> $extra;
+  /// When `true` shows the basic registration form.
+  final bool basic;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => PetDetailsScreen(id: petId, files: $extra);
+  Widget build(BuildContext context, GoRouterState state) => PetDetailsScreen(id: petId, files: $extra, basic: basic);
 }
