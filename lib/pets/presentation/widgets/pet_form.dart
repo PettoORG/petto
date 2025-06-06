@@ -105,228 +105,203 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
     return FormBuilder(
       key: fk,
       onChanged: onChanged,
-      autovalidateMode: autovalidateMode,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppThemeSpacing.extraSmallH,
-          children: [
-            // Hidden field to store the selected gender so it can be validated
-            FormBuilderField<PetSex>(
-              name: 'sex',
-              initialValue: _selectedPetSex,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              ]),
-              builder: (field) => const SizedBox.shrink(),
-            ),
-            FormBuilderTextField(
-              name: 'name',
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(labelText: 'name'.tr()),
-              autovalidateMode: autovalidateMode,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              ]),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: FormBuilderDropdown<PetSpecie>(
-                    name: 'specie',
-                    autovalidateMode: autovalidateMode,
-                    decoration: InputDecoration(labelText: 'specie'.tr()),
-                    items: PetSpecie.values
-                        .map((specie) => DropdownMenuItem(
-                              value: specie,
-                              child: Text(specie.displayName),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedSpecie = value;
-                        // Reset breed whenever specie changes
-                        fk.currentState?.fields['breed']?.didChange(null);
-                        widget.onBreedChanged?.call(null);
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                    ]),
-                  ),
+      autovalidateMode: AutovalidateMode.disabled,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: AppThemeSpacing.extraSmallH,
+        children: [
+          FormBuilderTextField(
+            name: 'name',
+            keyboardType: TextInputType.name,
+            decoration: InputDecoration(labelText: 'name'.tr()),
+            autovalidateMode: autovalidateMode,
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            ]),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: FormBuilderDropdown<PetSpecie>(
+                  name: 'specie',
+                  autovalidateMode: autovalidateMode,
+                  decoration: InputDecoration(labelText: 'specie'.tr()),
+                  items: PetSpecie.values
+                      .map(
+                        (specie) => DropdownMenuItem(
+                          value: specie,
+                          child: Text(specie.displayName),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedSpecie = value;
+                      fk.currentState?.fields['breed']?.didChange(null);
+                      widget.onBreedChanged?.call(null);
+                    });
+                  },
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                  ]),
                 ),
-                SizedBox(width: AppThemeSpacing.smallW),
-                Expanded(
-                  child: FormBuilderDropdown<PetBreed>(
-                    name: 'breed',
-                    autovalidateMode: autovalidateMode,
-                    decoration: InputDecoration(labelText: 'breed'.tr()),
-                    items: (_selectedSpecie == null
-                            ? <PetBreed>[]
-                            : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList())
-                        .map((breed) => DropdownMenuItem(
-                              value: breed,
-                              child: Text(breed.displayName),
-                            ))
-                        .toList(),
-                    onChanged: widget.onBreedChanged,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                    ]),
-                  ),
+              ),
+              SizedBox(width: AppThemeSpacing.smallW),
+              Expanded(
+                child: FormBuilderDropdown<PetBreed>(
+                  name: 'breed',
+                  autovalidateMode: autovalidateMode,
+                  decoration: InputDecoration(labelText: 'breed'.tr()),
+                  items: (_selectedSpecie == null
+                          ? <PetBreed>[]
+                          : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList())
+                      .map(
+                        (breed) => DropdownMenuItem(
+                          value: breed,
+                          child: Text(breed.displayName),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: widget.onBreedChanged,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                  ]),
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() => _selectedPetSex = PetSex.male);
-                      fk.currentState?.fields['sex']?.didChange(PetSex.male);
-                      onChanged();
-                    },
-                    borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                    child: Ink(
-                      padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-                      decoration: BoxDecoration(
-                        color: _selectedPetSex == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
-                        borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                        boxShadow: [AppThemeShadow.small],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(PetSex.male.displayName),
-                          SizedBox(width: AppThemeSpacing.smallW),
-                          Icon(
-                            Icons.male,
-                            size: AppThemeSpacing.smallH,
-                          ),
-                        ],
-                      ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() => _selectedPetSex = PetSex.male);
+                    onChanged();
+                  },
+                  borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                  child: Ink(
+                    padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
+                    decoration: BoxDecoration(
+                      color: _selectedPetSex == PetSex.male ? colorScheme.primaryContainer : colorScheme.surface,
+                      borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                      boxShadow: [AppThemeShadow.small],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(PetSex.male.displayName),
+                        SizedBox(width: AppThemeSpacing.smallW),
+                        Icon(Icons.male, size: AppThemeSpacing.smallH),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(width: AppThemeSpacing.smallW),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() => _selectedPetSex = PetSex.female);
-                      fk.currentState?.fields['sex']?.didChange(PetSex.female);
-                      onChanged();
-                    },
-                    borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                    child: Ink(
-                      padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
-                      decoration: BoxDecoration(
-                        color: _selectedPetSex == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
-                        borderRadius: BorderRadius.all(AppThemeRadius.medium),
-                        boxShadow: [AppThemeShadow.small],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(PetSex.female.displayName),
-                          SizedBox(width: AppThemeSpacing.smallW),
-                          Icon(
-                            Icons.female,
-                            size: AppThemeSpacing.smallH,
-                          ),
-                        ],
-                      ),
+              ),
+              SizedBox(width: AppThemeSpacing.smallW),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() => _selectedPetSex = PetSex.female);
+                    onChanged();
+                  },
+                  borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                  child: Ink(
+                    padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
+                    decoration: BoxDecoration(
+                      color: _selectedPetSex == PetSex.female ? colorScheme.primaryContainer : colorScheme.surface,
+                      borderRadius: BorderRadius.all(AppThemeRadius.medium),
+                      boxShadow: [AppThemeShadow.small],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(PetSex.female.displayName),
+                        SizedBox(width: AppThemeSpacing.smallW),
+                        Icon(Icons.female, size: AppThemeSpacing.smallH),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
-            FormBuilderDateTimePicker(
-              name: 'birthDate',
-              locale: context.locale,
-              keyboardType: TextInputType.datetime,
-              format: DateFormat.yMd(context.locale.languageCode),
-              inputType: InputType.date,
-              firstDate: DateTime(1900),
-              lastDate: DateTime.now(),
-              decoration: InputDecoration(labelText: 'birthDate'.tr()),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
-              ]),
-            ),
-            FormBuilderTextField(
-              name: "color",
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(labelText: "color".tr()),
-              autovalidateMode: autovalidateMode,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "validators.fieldRequired".tr()),
-              ]),
-            ),
-            FormBuilderTextField(
-              name: "weight",
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: "weight".tr()),
-              autovalidateMode: autovalidateMode,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "validators.fieldRequired".tr()),
-                FormBuilderValidators.numeric(),
-              ]),
-            ),
-            FormBuilderDropdown<PetSize>(
-              name: "size",
-              autovalidateMode: autovalidateMode,
-              decoration: InputDecoration(labelText: "size".tr()),
-              items: PetSize.values
-                  .map((s) => DropdownMenuItem(value: s, child: Text(s.name)))
-                  .toList(),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "validators.fieldRequired".tr()),
-              ]),
-            ),
-            FormBuilderDropdown<FoodType>(
-              name: "foodType",
-              autovalidateMode: autovalidateMode,
-              decoration: InputDecoration(labelText: "foodType".tr()),
-              items: FoodType.values
-                  .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))
-                  .toList(),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "validators.fieldRequired".tr()),
-              ]),
-            ),
-            FormBuilderTextField(
-              name: "microchipNumber",
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(labelText: "microchipNumber".tr()),
-              autovalidateMode: autovalidateMode,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "validators.fieldRequired".tr()),
-              ]),
-            ),
-            ElevatedButton(
-              onPressed: (loading || !isTouched) ? null : save,
-              child: Text('save'.tr()),
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          FormBuilderDateTimePicker(
+            name: 'birthDate',
+            locale: context.locale,
+            keyboardType: TextInputType.datetime,
+            format: DateFormat.yMd(context.locale.languageCode),
+            inputType: InputType.date,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            decoration: InputDecoration(labelText: 'birthDate'.tr()),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
+            ]),
+          ),
+          FormBuilderTextField(
+            name: 'color',
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(labelText: 'color'.tr()),
+            autovalidateMode: autovalidateMode,
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            ]),
+          ),
+          FormBuilderTextField(
+            name: 'weight',
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(labelText: 'weight'.tr()),
+            autovalidateMode: autovalidateMode,
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              FormBuilderValidators.numeric(),
+            ]),
+          ),
+          FormBuilderDropdown<PetSize>(
+            name: 'size',
+            autovalidateMode: autovalidateMode,
+            decoration: InputDecoration(labelText: 'size'.tr()),
+            items: PetSize.values.map((s) => DropdownMenuItem(value: s, child: Text(s.name))).toList(),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            ]),
+          ),
+          FormBuilderDropdown<FoodType>(
+            name: 'foodType',
+            autovalidateMode: autovalidateMode,
+            decoration: InputDecoration(labelText: 'foodType'.tr()),
+            items: FoodType.values.map((f) => DropdownMenuItem(value: f, child: Text(f.displayName))).toList(),
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            ]),
+          ),
+          FormBuilderTextField(
+            name: 'microchipNumber',
+            keyboardType: TextInputType.text,
+            decoration: InputDecoration(labelText: 'microchipNumber'.tr()),
+            autovalidateMode: autovalidateMode,
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            ]),
+          ),
+          ElevatedButton(
+            onPressed: (loading || !isTouched) ? null : save,
+            child: Text('save'.tr()),
+          ),
+        ],
       ),
     );
   }
 
   @override
   PetVM extract() {
-    // Current breed value
     final breed = getField<PetBreed>('breed') ?? values.breed;
-
-    // Files handled by the picker/uploader for this form
     final files = ref.read(filesNotifierProvider(petsModule)).files;
 
-    // Helper booleans
     final bool hasUploads = files.any((f) => f.status == AppFileStatus.upload);
     final bool hasActiveFiles = files.any((f) => f.status != AppFileStatus.delete && f.status != AppFileStatus.deleted);
-    final bool allDeleted = files.isNotEmpty && !hasActiveFiles; // user removed every image
+    final bool allDeleted = files.isNotEmpty && !hasActiveFiles;
 
     String? photoUrl;
 
@@ -334,26 +309,26 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
       photoUrl = hasUploads ? null : breed.defaultImageUrl;
     } else {
       if (hasUploads) {
-        // User picked a new image → let backend keep uploaded file.
         photoUrl = null;
       } else if (allDeleted) {
-        // Deleted previous photo and did not upload a new one → fallback.
         photoUrl = breed.defaultImageUrl;
       } else {
-        // No changes on files → keep existing url.
         photoUrl = values.photoUrl;
       }
     }
+
+    final weightStr = getField<String>('weight');
+    final parsedWeight = double.tryParse(weightStr ?? '') ?? values.weight;
 
     return PetVM(
       id: values.id,
       name: getField('name') ?? values.name,
       specie: getField('specie') ?? values.specie,
       breed: breed,
-      sex: getField('sex') ?? values.sex,
+      sex: _selectedPetSex ?? values.sex,
       birthDate: getField('birthDate') ?? values.birthDate,
       color: getField('color') ?? values.color,
-      weight: getField('weight') ?? values.weight,
+      weight: parsedWeight,
       foodType: getField('foodType') ?? values.foodType,
       microchipNumber: getField('microchipNumber') ?? values.microchipNumber,
       size: getField('size') ?? values.size,
@@ -379,10 +354,6 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
       widget.onBreedChanged?.call(vm.breed);
     }
 
-    if (loading || vm.sex == getField('sex')) {
-      setField('sex', vm.sex);
-    }
-
     if (!isNewEntity) {
       _selectedPetSex = vm.sex;
     }
@@ -395,8 +366,8 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
       setField('color', vm.color);
     }
 
-    if (loading || vm.weight == getField('weight')) {
-      setField('weight', vm.weight);
+    if (loading || vm.weight.toString() == getField('weight')) {
+      setField('weight', vm.weight.toString()); // ← conversión a String
     }
 
     if (loading || vm.foodType == getField('foodType')) {
@@ -468,9 +439,7 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
 
     if (!isValid) {
       ref.read(petNotifierProvider.notifier).fail(
-            Failure.validation(
-              message: fk.currentState!.errors.values.first.toString(),
-            ),
+            Failure.validation(message: fk.currentState!.errors.values.first.toString()),
             recordError: false,
           );
     }

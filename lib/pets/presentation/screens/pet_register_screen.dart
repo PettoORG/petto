@@ -138,6 +138,7 @@ class _PetRegisterScreenState extends ConsumerState<PetRegisterScreen> {
               SliverAppBar(
                 title: Text('Registra tu mascota'.tr()),
                 centerTitle: true,
+                floating: true,
                 leading: IconButton(
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),

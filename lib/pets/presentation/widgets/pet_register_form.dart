@@ -103,22 +103,13 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
     return FormBuilder(
       key: fk,
       onChanged: onChanged,
-      autovalidateMode: autovalidateMode,
+      autovalidateMode: AutovalidateMode.disabled,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: AppThemeSpacing.extraSmallH,
           children: [
-            // Hidden field to store the selected gender so it can be validated
-            FormBuilderField<PetSex>(
-              name: 'sex',
-              initialValue: _selectedPetSex,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              ]),
-              builder: (field) => const SizedBox.shrink(),
-            ),
             FormBuilderTextField(
               name: 'name',
               keyboardType: TextInputType.name,
@@ -182,7 +173,6 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                   child: InkWell(
                     onTap: () {
                       setState(() => _selectedPetSex = PetSex.male);
-                      fk.currentState?.fields['sex']?.didChange(PetSex.male);
                       onChanged();
                     },
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
@@ -212,7 +202,6 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
                   child: InkWell(
                     onTap: () {
                       setState(() => _selectedPetSex = PetSex.female);
-                      fk.currentState?.fields['sex']?.didChange(PetSex.female);
                       onChanged();
                     },
                     borderRadius: BorderRadius.all(AppThemeRadius.medium),
@@ -298,7 +287,7 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
       name: getField('name') ?? values.name,
       specie: getField('specie') ?? values.specie,
       breed: breed,
-      sex: getField('sex') ?? values.sex,
+      sex: _selectedPetSex ?? values.sex,
       birthDate: getField('birthDate') ?? values.birthDate,
       color: getField('color') ?? values.color,
       weight: getField('weight') ?? values.weight,
@@ -325,10 +314,6 @@ class _PetRegisterFormState extends ConsumerState<PetRegisterForm> implements Fo
     if (!isNewEntity && (loading || vm.breed == getField('breed'))) {
       setField('breed', vm.breed);
       widget.onBreedChanged?.call(vm.breed);
-    }
-
-    if (loading || vm.sex == getField('sex')) {
-      setField('sex', vm.sex);
     }
 
     if (!isNewEntity) {

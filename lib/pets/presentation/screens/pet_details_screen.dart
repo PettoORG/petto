@@ -42,23 +42,29 @@ class PetDetailsScreen extends StatefulHookConsumerWidget {
 }
 
 class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
+  /// Folder for files (nested in document).
   final String filesFolder = 'files';
 
+  /// Getter for "form" and "files" family.
   String get family => petsModule;
 
-  bool get hasFilePending =>
-      ref.read(filesNotifierProvider(family).notifier).hasFilesPending;
+  /// Returns true if there are pending files to be uploaded or deleted.
+  bool get hasFilePending => ref.read(filesNotifierProvider(family).notifier).hasFilesPending;
 
+  /// Collection path for pet documents.
   String get collectionPath => ref.read(petCollectionPathProvider);
 
+  /// Builds the storage path for files.
   String? get storagePath => _buildStoragePath(widget.id);
 
+  /// Builds the Firestore path for files.
   String? get firestorePath => _buildFirestorePath(widget.id);
 
   PetBreed? _selectedBreed;
 
   @override
   Widget build(BuildContext context) {
+    // Pet state listener
     ref.listen<BaseEntityState<Pet>>(
       petNotifierProvider,
       (previous, next) async {
@@ -71,21 +77,13 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
 
         if (next is Data<Pet>) {
           if (widget.files.isNotEmpty) {
-            ref
-                .read(filesNotifierProvider(family).notifier)
-                .processFiles(files: widget.files);
+            ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
           }
 
           if (hasFilePending) {
-            ref
-                .read(filesStoragePathProvider(family).notifier)
-                .set(_buildStoragePath(widget.id));
-            ref
-                .read(filesFirestorePathProvider(family).notifier)
-                .set(_buildFirestorePath(widget.id));
-            await ref
-                .read(filesNotifierProvider(family).notifier)
-                .processFiles();
+            ref.read(filesStoragePathProvider(family).notifier).set(_buildStoragePath(widget.id));
+            ref.read(filesFirestorePathProvider(family).notifier).set(_buildFirestorePath(widget.id));
+            await ref.read(filesNotifierProvider(family).notifier).processFiles();
           }
         }
       },
@@ -98,12 +96,8 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
           case fs.Loading():
             break;
           case fs.Loaded(files: final files, status: final status):
-            if (status == fs.LoadedStatus.fromDatabase &&
-                files.isEmpty &&
-                widget.files.isNotEmpty) {
-              ref
-                  .read(filesNotifierProvider(family).notifier)
-                  .processFiles(files: widget.files);
+            if (status == fs.LoadedStatus.fromDatabase && files.isEmpty && widget.files.isNotEmpty) {
+              ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
             }
             if (status == fs.LoadedStatus.afterProcessing) {
               if (hasFilePending) {
@@ -117,75 +111,74 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
       },
     );
 
-    final formIsLoading =
-        ref.watch(petNotifierProvider.select((s) => s is Loading<Pet>));
-    final filesIsLoading =
-        ref.watch(filesNotifierProvider(family).select((s) => s is fs.Loading));
+    final formIsLoading = ref.watch(petNotifierProvider.select((state) => state is Loading<Pet>));
+    final filesIsLoading = ref.watch(filesNotifierProvider(family).select((state) => state is fs.Loading));
     final loading = formIsLoading || filesIsLoading;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit pet'.tr()),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: AppThemeSpacing.extraSmallH),
-                SingleFile(
-                  family: family,
-                  storagePath: storagePath,
-                  firestorePath: firestorePath,
-                  cropOptions: circle300x300,
-                  onFileChanged: (_) => _setTouchedState(hasFilePending),
-                  showCancelAction: false,
-                  showDeleteAction: false,
-                  showRetryAction: false,
-                  isLoading: loading,
-                  unselectedFileWidget: (onImageTap) =>
-                      _PetAvatar(breed: _selectedBreed, onImageTap: onImageTap),
-                  borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
-                  thumbnailHeight: AppThemeSpacing.ultraH,
-                  thumbnailWidth: AppThemeSpacing.ultraH,
+    return Stack(
+      children: [
+        Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                title: Text('Edit pet'.tr()),
+                centerTitle: true,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                  onPressed: () => context.pop(),
                 ),
-                SizedBox(height: AppThemeSpacing.smallH),
-                PetForm(
-                  id: widget.id,
-                  setTouchedState: (touched) {
-                    _setTouchedState(touched || hasFilePending);
-                  },
-                  beforeSave: (entity) async {
-                    ref
-                        .read(filesNotifierProvider(family).notifier)
-                        .processFiles(hold: true);
-                  },
-                  onBreedChanged: (breed) {
-                    setState(() => _selectedBreed = breed);
-                  },
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: AppThemeSpacing.extraSmallH),
+                      SingleFile(
+                        family: family,
+                        storagePath: storagePath,
+                        firestorePath: firestorePath,
+                        cropOptions: circle300x300,
+                        onFileChanged: (_) => _setTouchedState(hasFilePending),
+                        showCancelAction: false,
+                        showDeleteAction: false,
+                        showRetryAction: false,
+                        isLoading: loading,
+                        unselectedFileWidget: (onImageTap) => _PetAvatar(breed: _selectedBreed, onImageTap: onImageTap),
+                        borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
+                        thumbnailHeight: AppThemeSpacing.ultraH,
+                        thumbnailWidth: AppThemeSpacing.ultraH,
+                      ),
+                      SizedBox(height: AppThemeSpacing.smallH),
+                      PetForm(
+                        id: widget.id,
+                        setTouchedState: (touched) {
+                          _setTouchedState(touched || hasFilePending);
+                        },
+                        beforeSave: (entity) async {
+                          ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
+                        },
+                        onBreedChanged: (breed) {
+                          setState(() => _selectedBreed = breed);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
+              )
+            ],
           ),
-          if (loading)
-            Container(
-              height: 1.sh,
-              width: 1.sw,
-              color: Theme.of(context)
-                  .colorScheme
-                  .surfaceContainerHighest
-                  .withAlpha((.5 * 255).toInt()),
-              child: const Center(child: CircularProgressIndicator()),
-            ),
-        ],
-      ),
+        ),
+        if (loading)
+          Container(
+            height: 1.sh,
+            width: 1.sw,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+      ],
     );
   }
 
@@ -233,12 +226,9 @@ class _PetAvatar extends StatelessWidget {
                 ),
               ),
             ),
-            errorWidget: (_, __, ___) =>
-                Icon(Icons.image_not_supported, size: avatarSize * .5),
+            errorWidget: (_, __, ___) => Icon(Icons.image_not_supported, size: avatarSize * .5),
           )
-        : Icon(Icons.pets_rounded,
-            size: avatarSize * .5,
-            color: Theme.of(context).colorScheme.primaryContainer);
+        : Icon(Icons.pets_rounded, size: avatarSize * .5, color: Theme.of(context).colorScheme.primaryContainer);
 
     return SizedBox(
       width: avatarSize,
