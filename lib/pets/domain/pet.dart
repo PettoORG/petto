@@ -37,9 +37,6 @@ sealed class Pet with _$Pet implements BaseEntity {
     /// Pet birth date.
     required DateTime birthDate,
 
-    /// Pet color or markings.
-    required String color,
-
     /// Pet photo URL.
     required String? photoUrl,
 
@@ -79,7 +76,6 @@ sealed class Pet with _$Pet implements BaseEntity {
         breed: PetBreed.other,
         sex: PetSex.male,
         birthDate: DateTime.now(),
-        color: '',
         photoUrl: null,
         weight: 0.0,
         size: PetSize.small,

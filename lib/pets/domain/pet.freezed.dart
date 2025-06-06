@@ -36,9 +36,6 @@ mixin _$Pet {
   /// Pet birth date.
   DateTime get birthDate;
 
-  /// Pet color or markings.
-  String get color;
-
   /// Pet photo URL.
   String? get photoUrl;
 
@@ -89,7 +86,6 @@ mixin _$Pet {
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
             (identical(other.weight, weight) || other.weight == weight) &&
@@ -119,7 +115,6 @@ mixin _$Pet {
       breed,
       sex,
       birthDate,
-      color,
       photoUrl,
       weight,
       size,
@@ -133,7 +128,7 @@ mixin _$Pet {
 
   @override
   String toString() {
-    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -149,7 +144,6 @@ abstract mixin class $PetCopyWith<$Res> {
       PetBreed breed,
       PetSex sex,
       DateTime birthDate,
-      String color,
       String? photoUrl,
       double weight,
       PetSize size,
@@ -181,7 +175,6 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
-    Object? color = null,
     Object? photoUrl = freezed,
     Object? weight = null,
     Object? size = null,
@@ -222,10 +215,6 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      color: null == color
-          ? _self.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
       photoUrl: freezed == photoUrl
           ? _self.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
@@ -281,7 +270,6 @@ class _Pet extends Pet {
       required this.breed,
       required this.sex,
       required this.birthDate,
-      required this.color,
       required this.photoUrl,
       required this.weight,
       required this.size,
@@ -321,10 +309,6 @@ class _Pet extends Pet {
   /// Pet birth date.
   @override
   final DateTime birthDate;
-
-  /// Pet color or markings.
-  @override
-  final String color;
 
   /// Pet photo URL.
   @override
@@ -387,7 +371,6 @@ class _Pet extends Pet {
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
             (identical(other.weight, weight) || other.weight == weight) &&
@@ -417,7 +400,6 @@ class _Pet extends Pet {
       breed,
       sex,
       birthDate,
-      color,
       photoUrl,
       weight,
       size,
@@ -431,7 +413,7 @@ class _Pet extends Pet {
 
   @override
   String toString() {
-    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -449,7 +431,6 @@ abstract mixin class _$PetCopyWith<$Res> implements $PetCopyWith<$Res> {
       PetBreed breed,
       PetSex sex,
       DateTime birthDate,
-      String color,
       String? photoUrl,
       double weight,
       PetSize size,
@@ -481,7 +462,6 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
-    Object? color = null,
     Object? photoUrl = freezed,
     Object? weight = null,
     Object? size = null,
@@ -522,10 +502,6 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      color: null == color
-          ? _self.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
       photoUrl: freezed == photoUrl
           ? _self.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable

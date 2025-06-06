@@ -15,7 +15,6 @@ _PetDTO _$PetDTOFromJson(Map<String, dynamic> json) => _PetDTO(
       sex: $enumDecode(_$PetSexEnumMap, json['sex']),
       birthDate:
           const TimestampConverter().fromJson(json['birthDate'] as Timestamp),
-      color: json['color'] as String,
       photoUrl: json['photoUrl'] as String?,
       weight: (json['weight'] as num).toDouble(),
       size: $enumDecode(_$PetSizeEnumMap, json['size']),
@@ -38,7 +37,6 @@ Map<String, dynamic> _$PetDTOToJson(_PetDTO instance) => <String, dynamic>{
       'breed': _$PetBreedEnumMap[instance.breed]!,
       'sex': _$PetSexEnumMap[instance.sex]!,
       'birthDate': const TimestampConverter().toJson(instance.birthDate),
-      'color': instance.color,
       'photoUrl': instance.photoUrl,
       'weight': instance.weight,
       'size': _$PetSizeEnumMap[instance.size]!,

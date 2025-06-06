@@ -23,7 +23,6 @@ mixin _$PetDTO {
   PetSex get sex;
   @TimestampConverter()
   DateTime get birthDate;
-  String get color;
   String? get photoUrl;
   double get weight;
   PetSize get size;
@@ -60,7 +59,6 @@ mixin _$PetDTO {
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
             (identical(other.weight, weight) || other.weight == weight) &&
@@ -91,7 +89,6 @@ mixin _$PetDTO {
       breed,
       sex,
       birthDate,
-      color,
       photoUrl,
       weight,
       size,
@@ -105,7 +102,7 @@ mixin _$PetDTO {
 
   @override
   String toString() {
-    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -122,7 +119,6 @@ abstract mixin class $PetDTOCopyWith<$Res> {
       PetBreed breed,
       PetSex sex,
       @TimestampConverter() DateTime birthDate,
-      String color,
       String? photoUrl,
       double weight,
       PetSize size,
@@ -154,7 +150,6 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
-    Object? color = null,
     Object? photoUrl = freezed,
     Object? weight = null,
     Object? size = null,
@@ -195,10 +190,6 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      color: null == color
-          ? _self.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
       photoUrl: freezed == photoUrl
           ? _self.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
@@ -254,7 +245,6 @@ class _PetDTO extends PetDTO {
       required this.breed,
       required this.sex,
       @TimestampConverter() required this.birthDate,
-      required this.color,
       required this.photoUrl,
       required this.weight,
       required this.size,
@@ -284,8 +274,6 @@ class _PetDTO extends PetDTO {
   @override
   @TimestampConverter()
   final DateTime birthDate;
-  @override
-  final String color;
   @override
   final String? photoUrl;
   @override
@@ -337,7 +325,6 @@ class _PetDTO extends PetDTO {
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
             (identical(other.weight, weight) || other.weight == weight) &&
@@ -368,7 +355,6 @@ class _PetDTO extends PetDTO {
       breed,
       sex,
       birthDate,
-      color,
       photoUrl,
       weight,
       size,
@@ -382,7 +368,7 @@ class _PetDTO extends PetDTO {
 
   @override
   String toString() {
-    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -400,7 +386,6 @@ abstract mixin class _$PetDTOCopyWith<$Res> implements $PetDTOCopyWith<$Res> {
       PetBreed breed,
       PetSex sex,
       @TimestampConverter() DateTime birthDate,
-      String color,
       String? photoUrl,
       double weight,
       PetSize size,
@@ -432,7 +417,6 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
-    Object? color = null,
     Object? photoUrl = freezed,
     Object? weight = null,
     Object? size = null,
@@ -473,10 +457,6 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      color: null == color
-          ? _self.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
       photoUrl: freezed == photoUrl
           ? _self.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable

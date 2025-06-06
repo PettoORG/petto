@@ -21,7 +21,6 @@ mixin _$PetVM {
   PetBreed get breed;
   PetSex get sex;
   DateTime get birthDate;
-  String get color;
   double get weight;
   PetSize get size;
   String? get photoUrl;
@@ -47,7 +46,6 @@ mixin _$PetVM {
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.photoUrl, photoUrl) ||
@@ -60,11 +58,11 @@ mixin _$PetVM {
 
   @override
   int get hashCode => Object.hash(runtimeType, id, name, specie, breed, sex,
-      birthDate, color, weight, size, photoUrl, foodType, microchipNumber);
+      birthDate, weight, size, photoUrl, foodType, microchipNumber);
 
   @override
   String toString() {
-    return 'PetVM(id: $id, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, weight: $weight, size: $size, photoUrl: $photoUrl, foodType: $foodType, microchipNumber: $microchipNumber)';
+    return 'PetVM(id: $id, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, weight: $weight, size: $size, photoUrl: $photoUrl, foodType: $foodType, microchipNumber: $microchipNumber)';
   }
 }
 
@@ -80,7 +78,6 @@ abstract mixin class $PetVMCopyWith<$Res> {
       PetBreed breed,
       PetSex sex,
       DateTime birthDate,
-      String color,
       double weight,
       PetSize size,
       String? photoUrl,
@@ -106,7 +103,6 @@ class _$PetVMCopyWithImpl<$Res> implements $PetVMCopyWith<$Res> {
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
-    Object? color = null,
     Object? weight = null,
     Object? size = null,
     Object? photoUrl = freezed,
@@ -138,10 +134,6 @@ class _$PetVMCopyWithImpl<$Res> implements $PetVMCopyWith<$Res> {
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      color: null == color
-          ? _self.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
       weight: null == weight
           ? _self.weight
           : weight // ignore: cast_nullable_to_non_nullable
@@ -176,7 +168,6 @@ class _PetVM extends PetVM {
       required this.breed,
       required this.sex,
       required this.birthDate,
-      required this.color,
       required this.weight,
       required this.size,
       this.photoUrl,
@@ -196,8 +187,6 @@ class _PetVM extends PetVM {
   final PetSex sex;
   @override
   final DateTime birthDate;
-  @override
-  final String color;
   @override
   final double weight;
   @override
@@ -229,7 +218,6 @@ class _PetVM extends PetVM {
             (identical(other.sex, sex) || other.sex == sex) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.weight, weight) || other.weight == weight) &&
             (identical(other.size, size) || other.size == size) &&
             (identical(other.photoUrl, photoUrl) ||
@@ -242,11 +230,11 @@ class _PetVM extends PetVM {
 
   @override
   int get hashCode => Object.hash(runtimeType, id, name, specie, breed, sex,
-      birthDate, color, weight, size, photoUrl, foodType, microchipNumber);
+      birthDate, weight, size, photoUrl, foodType, microchipNumber);
 
   @override
   String toString() {
-    return 'PetVM(id: $id, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, color: $color, weight: $weight, size: $size, photoUrl: $photoUrl, foodType: $foodType, microchipNumber: $microchipNumber)';
+    return 'PetVM(id: $id, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, weight: $weight, size: $size, photoUrl: $photoUrl, foodType: $foodType, microchipNumber: $microchipNumber)';
   }
 }
 
@@ -263,7 +251,6 @@ abstract mixin class _$PetVMCopyWith<$Res> implements $PetVMCopyWith<$Res> {
       PetBreed breed,
       PetSex sex,
       DateTime birthDate,
-      String color,
       double weight,
       PetSize size,
       String? photoUrl,
@@ -289,7 +276,6 @@ class __$PetVMCopyWithImpl<$Res> implements _$PetVMCopyWith<$Res> {
     Object? breed = null,
     Object? sex = null,
     Object? birthDate = null,
-    Object? color = null,
     Object? weight = null,
     Object? size = null,
     Object? photoUrl = freezed,
@@ -321,10 +307,6 @@ class __$PetVMCopyWithImpl<$Res> implements _$PetVMCopyWith<$Res> {
           ? _self.birthDate
           : birthDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      color: null == color
-          ? _self.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String,
       weight: null == weight
           ? _self.weight
           : weight // ignore: cast_nullable_to_non_nullable

@@ -229,76 +229,73 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
               ),
             ],
           ),
-        FormBuilderDateTimePicker(
-          name: 'birthDate',
-          locale: context.locale,
-          keyboardType: TextInputType.datetime,
-          format: DateFormat.yMd(context.locale.languageCode),
-          inputType: InputType.date,
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          decoration: InputDecoration(labelText: 'birthDate'.tr()),
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-            FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
-          ]),
-        ),
-        if (!widget.basic) ...[
-          FormBuilderTextField(
-            name: 'color',
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(labelText: 'color'.tr()),
-            autovalidateMode: autovalidateMode,
+          FormBuilderDateTimePicker(
+            name: 'birthDate',
+            locale: context.locale,
+            keyboardType: TextInputType.datetime,
+            format: DateFormat.yMd(context.locale.languageCode),
+            inputType: InputType.date,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            decoration: InputDecoration(labelText: 'birthDate'.tr()),
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
             ]),
           ),
-          FormBuilderTextField(
-            name: 'weight',
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: 'weight'.tr()),
-            autovalidateMode: autovalidateMode,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              FormBuilderValidators.numeric(),
-            ]),
+          if (!widget.basic) ...[
+            FormBuilderTextField(
+              name: 'color',
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(labelText: 'color'.tr()),
+              autovalidateMode: autovalidateMode,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ]),
+            ),
+            FormBuilderTextField(
+              name: 'weight',
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: 'weight'.tr()),
+              autovalidateMode: autovalidateMode,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                FormBuilderValidators.numeric(),
+              ]),
+            ),
+            FormBuilderDropdown<PetSize>(
+              name: 'size',
+              autovalidateMode: autovalidateMode,
+              decoration: InputDecoration(labelText: 'size'.tr()),
+              items: PetSize.values.map((s) => DropdownMenuItem(value: s, child: Text(s.name))).toList(),
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ]),
+            ),
+            FormBuilderDropdown<FoodType>(
+              name: 'foodType',
+              autovalidateMode: autovalidateMode,
+              decoration: InputDecoration(labelText: 'foodType'.tr()),
+              items: FoodType.values.map((f) => DropdownMenuItem(value: f, child: Text(f.displayName))).toList(),
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ]),
+            ),
+            FormBuilderTextField(
+              name: 'microchipNumber',
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(labelText: 'microchipNumber'.tr()),
+              autovalidateMode: autovalidateMode,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ]),
+            ),
+          ],
+          ElevatedButton(
+            onPressed: (loading || !isTouched) ? null : save,
+            child: Text(widget.basic ? 'continue'.tr() : 'save'.tr()),
           ),
-          FormBuilderDropdown<PetSize>(
-            name: 'size',
-            autovalidateMode: autovalidateMode,
-            decoration: InputDecoration(labelText: 'size'.tr()),
-            items: PetSize.values
-                .map((s) => DropdownMenuItem(value: s, child: Text(s.name)))
-                .toList(),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-            ]),
-          ),
-          FormBuilderDropdown<FoodType>(
-            name: 'foodType',
-            autovalidateMode: autovalidateMode,
-            decoration: InputDecoration(labelText: 'foodType'.tr()),
-            items: FoodType.values
-                .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))
-                .toList(),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-            ]),
-          ),
-          FormBuilderTextField(
-            name: 'microchipNumber',
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(labelText: 'microchipNumber'.tr()),
-            autovalidateMode: autovalidateMode,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-            ]),
-          ),
-        ],
-        ElevatedButton(
-          onPressed: (loading || !isTouched) ? null : save,
-          child: Text(widget.basic ? 'continue'.tr() : 'save'.tr()),
-        ),
+          SizedBox.shrink(),
         ],
       ),
     );
@@ -337,7 +334,6 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
       breed: breed,
       sex: _selectedPetSex ?? values.sex,
       birthDate: getField('birthDate') ?? values.birthDate,
-      color: getField('color') ?? values.color,
       weight: parsedWeight,
       foodType: getField('foodType') ?? values.foodType,
       microchipNumber: getField('microchipNumber') ?? values.microchipNumber,
@@ -349,35 +345,36 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
   @override
   PetVM populate(Pet entity) {
     final vm = PetVM.fromEntity(entity);
-    final isNewEntity = values.id == '0';
+    final bool isNewEntity = vm.id == '0'; // Correct new-entity detection
+
+    // Do not populate any field for a new entity
+    if (isNewEntity) {
+      return vm;
+    }
+
+    // Sync internal state with existing entity values
+    _selectedSpecie = vm.specie;
+    _selectedPetSex = vm.sex;
 
     if (loading || vm.name == getField('name')) {
       setField('name', vm.name);
     }
 
-    if (!isNewEntity && (loading || vm.specie == getField('specie'))) {
+    if (loading || vm.specie == getField('specie')) {
       setField('specie', vm.specie);
     }
 
-    if (!isNewEntity && (loading || vm.breed == getField('breed'))) {
+    if (loading || vm.breed == getField('breed')) {
       setField('breed', vm.breed);
       widget.onBreedChanged?.call(vm.breed);
     }
 
-    if (!isNewEntity) {
-      _selectedPetSex = vm.sex;
-    }
-
-    if (!isNewEntity && (loading || vm.birthDate == getField('birthDate'))) {
+    if (loading || vm.birthDate == getField('birthDate')) {
       setField('birthDate', vm.birthDate);
     }
 
-    if (loading || vm.color == getField('color')) {
-      setField('color', vm.color);
-    }
-
     if (loading || vm.weight.toString() == getField('weight')) {
-      setField('weight', vm.weight.toString()); // ← conversión a String
+      setField('weight', vm.weight.toString()); // Conversion to String
     }
 
     if (loading || vm.foodType == getField('foodType')) {
