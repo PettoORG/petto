@@ -63,12 +63,6 @@ extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
 extension $PetDetailsRouteExtension on PetDetailsRoute {
   static PetDetailsRoute _fromState(GoRouterState state) => PetDetailsRoute(
         petId: state.pathParameters['petId']!,
-        basic: state.queryParameters['basic'] == 'true',
-        $extra: state.extra as List<AppFileViewModel>?,
-      );
-  String get location => GoRouteData.$location(
-        '/pets/${Uri.encodeComponent(petId)}',
-        queryParams: basic ? {'basic': 'true'} : null,
       );
 
   void go(BuildContext context) => context.go(location, extra: $extra);
@@ -81,4 +75,24 @@ extension $PetDetailsRouteExtension on PetDetailsRoute {
 
   void replace(BuildContext context) =>
       context.replace(location, extra: $extra);
+}
+
+T? _$convertMapValue<T>(
+  String key,
+  Map<String, String> map,
+  T? Function(String) converter,
+) {
+  final value = map[key];
+  return value == null ? null : converter(value);
+}
+
+bool _$boolConverter(String value) {
+  switch (value) {
+    case 'true':
+      return true;
+    case 'false':
+      return false;
+    default:
+      throw UnsupportedError('Cannot convert "$value" into a bool.');
+  }
 }
