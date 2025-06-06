@@ -63,17 +63,6 @@ extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
 extension $PetDetailsRouteExtension on PetDetailsRoute {
   static PetDetailsRoute _fromState(GoRouterState state) => PetDetailsRoute(
         petId: state.pathParameters['petId']!,
-        basic: _$convertMapValue(
-                'basic', state.uri.queryParameters, _$boolConverter) ??
-            false,
-        $extra: state.extra as List<AppFileViewModel>?,
-      );
-
-  String get location => GoRouteData.$location(
-        '/pets/${Uri.encodeComponent(petId)}',
-        queryParams: {
-          if (basic != false) 'basic': basic.toString(),
-        },
       );
 
   void go(BuildContext context) => context.go(location, extra: $extra);
