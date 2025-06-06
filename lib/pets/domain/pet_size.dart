@@ -4,7 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 enum PetSize {
   small,
   medium,
-  large;
+  large,
+  unselected;
 
   /// Localized label for UI display.
   String get displayName => 'PetSizeEnum.$name'.tr();

@@ -102,6 +102,7 @@ const _$PetSizeEnumMap = {
   PetSize.small: 'small',
   PetSize.medium: 'medium',
   PetSize.large: 'large',
+  PetSize.unselected: 'unselected',
 };
 
 const _$FoodTypeEnumMap = {
@@ -110,6 +111,7 @@ const _$FoodTypeEnumMap = {
   FoodType.raw: 'raw',
   FoodType.mixed: 'mixed',
   FoodType.special: 'special',
+  FoodType.unselected: 'unselected',
 };
 
 Value? _$JsonConverterFromJson<Json, Value>(

@@ -6,7 +6,8 @@ enum FoodType {
   wet,
   raw,
   mixed,
-  special;
+  special,
+  unselected;
 
   /// Localized label for UI display.
   String get displayName => 'petFoodTypeEnum.$name'.tr();

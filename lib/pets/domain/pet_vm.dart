@@ -53,9 +53,9 @@ sealed class PetVM with _$PetVM {
         sex: PetSex.male,
         birthDate: DateTime.now(),
         weight: 0.0,
-        size: PetSize.small,
+        size: PetSize.unselected,
         photoUrl: '',
-        foodType: FoodType.dry,
+        foodType: FoodType.unselected,
         microchipNumber: '',
       );
 

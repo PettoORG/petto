@@ -1,4 +1,9 @@
 {
+    "weight": "Peso",
+    "microchipNumber": "Número de microchip",
+    "size": "Tamaño",
+    "foodType": "Tipo de alimento",
+    "editPet": "Editar mascota",
   "addExistingPet": "Agregar mascota existente",
   "addExistingPetDescription": "Asocia una mascota que ya fue registrada por ti o alguien más en otro dispositivo.",
   "alreadyHaveAccount": "¿Ya tienes una cuenta?",

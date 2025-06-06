@@ -267,7 +267,10 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
                     name: 'size',
                     autovalidateMode: autovalidateMode,
                     decoration: InputDecoration(labelText: 'size'.tr()),
-                    items: PetSize.values.map((s) => DropdownMenuItem(value: s, child: Text(s.displayName))).toList(),
+                    items: PetSize.values
+                        .where((s) => s != PetSize.unselected)
+                        .map((s) => DropdownMenuItem(value: s, child: Text(s.displayName)))
+                        .toList(),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
                     ]),
@@ -279,7 +282,10 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
               name: 'foodType',
               autovalidateMode: autovalidateMode,
               decoration: InputDecoration(labelText: 'foodType'.tr()),
-              items: FoodType.values.map((f) => DropdownMenuItem(value: f, child: Text(f.displayName))).toList(),
+              items: FoodType.values
+                  .where((f) => f != FoodType.unselected)
+                  .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))
+                  .toList(),
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
               ]),
@@ -378,12 +384,18 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
       setField('birthDate', vm.birthDate);
     }
 
-    if (loading || vm.weight.toString() == getField('weight')) {
+    if (vm.weight != 0 && (loading || vm.weight.toString() == getField('weight'))) {
       setField('weight', vm.weight.toString()); // Conversion to String
     }
 
-    if (loading || vm.foodType == getField('foodType')) {
+    // Solo popular si foodType no es unselected
+    if (vm.foodType != FoodType.unselected && (loading || vm.foodType == getField('foodType'))) {
       setField('foodType', vm.foodType);
+    }
+
+    // Only populate size if it's not unselected
+    if (vm.size != PetSize.unselected && (loading || vm.size == getField('size'))) {
+      setField('size', vm.size);
     }
 
     if (loading || vm.microchipNumber == getField('microchipNumber')) {
