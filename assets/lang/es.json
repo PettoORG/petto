@@ -115,6 +115,11 @@
     "female": "Hembra",
     "male": "Macho"
   },
+  "PetSizeEnum": {
+    "large": "Grande",
+    "medium": "Mediano",
+    "small": "Pequeño"
+  },
   "petSpecieEnum": {
     "bird": "Ave",
     "cat": "Gato",

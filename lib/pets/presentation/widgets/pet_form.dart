@@ -79,6 +79,8 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final autovalidateMode = alreadyValidated ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled;
+    final availableBreeds =
+        _selectedSpecie == null ? <PetBreed>[] : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList();
 
     ref.listen<BaseEntityState<Pet>>(
       petNotifierProvider,
@@ -153,20 +155,21 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
               SizedBox(width: AppThemeSpacing.smallW),
               Expanded(
                 child: FormBuilderDropdown<PetBreed>(
+                  key: ValueKey(_selectedSpecie),
                   name: 'breed',
+                  initialValue: availableBreeds.contains(values.breed) ? values.breed : null,
                   autovalidateMode: autovalidateMode,
                   decoration: InputDecoration(labelText: 'breed'.tr()),
-                  items: (_selectedSpecie == null
-                          ? <PetBreed>[]
-                          : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList())
-                      .map(
-                        (breed) => DropdownMenuItem(
-                          value: breed,
-                          child: Text(breed.displayName),
-                        ),
-                      )
+                  items: availableBreeds
+                      .map((breed) => DropdownMenuItem(
+                            value: breed,
+                            child: Text(breed.displayName),
+                          ))
                       .toList(),
-                  onChanged: widget.onBreedChanged,
+                  onChanged: (b) {
+                    widget.onBreedChanged?.call(b);
+                    onChanged();
+                  },
                   validator: FormBuilderValidators.compose([
                     FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
                   ]),
@@ -244,33 +247,33 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
             ]),
           ),
           if (!widget.basic) ...[
-            FormBuilderTextField(
-              name: 'color',
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(labelText: 'color'.tr()),
-              autovalidateMode: autovalidateMode,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              ]),
-            ),
-            FormBuilderTextField(
-              name: 'weight',
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: 'weight'.tr()),
-              autovalidateMode: autovalidateMode,
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                FormBuilderValidators.numeric(),
-              ]),
-            ),
-            FormBuilderDropdown<PetSize>(
-              name: 'size',
-              autovalidateMode: autovalidateMode,
-              decoration: InputDecoration(labelText: 'size'.tr()),
-              items: PetSize.values.map((s) => DropdownMenuItem(value: s, child: Text(s.name))).toList(),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              ]),
+            Row(
+              children: [
+                Expanded(
+                  child: FormBuilderTextField(
+                    name: 'weight',
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(labelText: 'weight'.tr()),
+                    autovalidateMode: autovalidateMode,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                      FormBuilderValidators.numeric(),
+                    ]),
+                  ),
+                ),
+                SizedBox(width: AppThemeSpacing.smallW),
+                Expanded(
+                  child: FormBuilderDropdown<PetSize>(
+                    name: 'size',
+                    autovalidateMode: autovalidateMode,
+                    decoration: InputDecoration(labelText: 'size'.tr()),
+                    items: PetSize.values.map((s) => DropdownMenuItem(value: s, child: Text(s.displayName))).toList(),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                    ]),
+                  ),
+                ),
+              ],
             ),
             FormBuilderDropdown<FoodType>(
               name: 'foodType',
@@ -364,7 +367,9 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
       setField('specie', vm.specie);
     }
 
-    if (loading || vm.breed == getField('breed')) {
+    // Breed: always repopulate when loading, when there's no value yet
+    // or when the stored value doesn't match the entity.
+    if (loading || getField<PetBreed>('breed') == null || vm.breed != getField<PetBreed>('breed')) {
       setField('breed', vm.breed);
       widget.onBreedChanged?.call(vm.breed);
     }
