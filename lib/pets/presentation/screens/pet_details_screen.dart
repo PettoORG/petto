@@ -22,20 +22,23 @@ import 'package:petto/pets/domain/pet_breed.dart';
 import 'package:petto/pets/presentation/widgets/pet_form.dart';
 import 'package:petto/pets/shared/constant.dart';
 import 'package:petto/pets/shared/providers.dart';
+import 'package:petto/home/router.dart';
 
-/// Screen used to edit a Pet entity.
+/// Screen used to edit or register a Pet entity.
 ///
-/// Mirrors the behaviour from [PetRegisterScreen] but renders the full
-/// [PetForm] instead of the reduced [PetRegisterForm].
+/// When [basic] is `true` behaves like the former `PetRegisterScreen`,
+/// rendering only the essential fields.
 class PetDetailsScreen extends StatefulHookConsumerWidget {
   const PetDetailsScreen({
     super.key,
     required this.id,
     this.files = const [],
+    this.basic = false,
   });
 
   final String id;
   final List<AppFileViewModel> files;
+  final bool basic;
 
   @override
   ConsumerState<PetDetailsScreen> createState() => _PetDetailsScreenState();
@@ -61,9 +64,16 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
   String? get firestorePath => _buildFirestorePath(widget.id);
 
   PetBreed? _selectedBreed;
+  bool _initialEntityLoaded = false;
 
   @override
   Widget build(BuildContext context) {
+    // Helper to return to the Home screen
+    void goHome() {
+      if (!mounted) return;
+      context.go(HomeRoute().location);
+    }
+
     // Pet state listener
     ref.listen<BaseEntityState<Pet>>(
       petNotifierProvider,
@@ -73,9 +83,33 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
             context,
             next.failure.message ?? 'error.unexpectedError'.tr(),
           );
+          return;
         }
 
-        if (next is Data<Pet>) {
+        if (widget.basic) {
+          if (next is Data<Pet> && !_initialEntityLoaded) {
+            _initialEntityLoaded = true;
+            return;
+          }
+
+          final saveCompleted = previous is Loading<Pet> && next is Data<Pet>;
+
+          if (saveCompleted) {
+            final pet = next.entity;
+
+            if (widget.files.isNotEmpty) {
+              ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
+            }
+
+            if (hasFilePending) {
+              ref.read(filesStoragePathProvider(family).notifier).set(_buildStoragePath(pet.id));
+              ref.read(filesFirestorePathProvider(family).notifier).set(_buildFirestorePath(pet.id));
+              await ref.read(filesNotifierProvider(family).notifier).processFiles();
+            } else {
+              goHome();
+            }
+          }
+        } else if (next is Data<Pet>) {
           if (widget.files.isNotEmpty) {
             ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
           }
@@ -99,7 +133,14 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
             if (status == fs.LoadedStatus.fromDatabase && files.isEmpty && widget.files.isNotEmpty) {
               ref.read(filesNotifierProvider(family).notifier).processFiles(files: widget.files);
             }
-            if (status == fs.LoadedStatus.afterProcessing) {
+            if (widget.basic) {
+              final finishedProcessing =
+                  status == fs.LoadedStatus.afterProcessing && !hasFilePending;
+              if (finishedProcessing) {
+                _setTouchedState(false);
+                goHome();
+              }
+            } else if (status == fs.LoadedStatus.afterProcessing) {
               if (hasFilePending) {
                 showCustomFlash(context, 'error.filesNotProcessed'.tr());
                 return;
@@ -122,7 +163,7 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
             slivers: [
               SliverAppBar(
                 floating: true,
-                title: Text('Edit pet'.tr()),
+                title: Text(widget.basic ? 'Registra tu mascota'.tr() : 'Edit pet'.tr()),
                 centerTitle: true,
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -154,6 +195,7 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
                       SizedBox(height: AppThemeSpacing.smallH),
                       PetForm(
                         id: widget.id,
+                        basic: widget.basic,
                         setTouchedState: (touched) {
                           _setTouchedState(touched || hasFilePending);
                         },

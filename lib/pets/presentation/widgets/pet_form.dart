@@ -26,6 +26,7 @@ class PetForm extends StatefulHookConsumerWidget {
   const PetForm({
     super.key,
     required this.id,
+    this.basic = false,
     this.setTouchedState,
     this.beforeSave,
     this.onBreedChanged,
@@ -33,6 +34,9 @@ class PetForm extends StatefulHookConsumerWidget {
 
   /// Unique identifier for the Pet.
   final String id;
+
+  /// When `true`, only renders the minimal fields used during registration.
+  final bool basic;
 
   /// Sets the touched state from parent.
   final void Function(bool touched)? setTouchedState;
@@ -225,20 +229,21 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
               ),
             ],
           ),
-          FormBuilderDateTimePicker(
-            name: 'birthDate',
-            locale: context.locale,
-            keyboardType: TextInputType.datetime,
-            format: DateFormat.yMd(context.locale.languageCode),
-            inputType: InputType.date,
-            firstDate: DateTime(1900),
-            lastDate: DateTime.now(),
-            decoration: InputDecoration(labelText: 'birthDate'.tr()),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
-            ]),
-          ),
+        FormBuilderDateTimePicker(
+          name: 'birthDate',
+          locale: context.locale,
+          keyboardType: TextInputType.datetime,
+          format: DateFormat.yMd(context.locale.languageCode),
+          inputType: InputType.date,
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+          decoration: InputDecoration(labelText: 'birthDate'.tr()),
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+            FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
+          ]),
+        ),
+        if (!widget.basic) ...[
           FormBuilderTextField(
             name: 'color',
             keyboardType: TextInputType.text,
@@ -250,7 +255,7 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
           ),
           FormBuilderTextField(
             name: 'weight',
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(labelText: 'weight'.tr()),
             autovalidateMode: autovalidateMode,
             validator: FormBuilderValidators.compose([
@@ -262,7 +267,9 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
             name: 'size',
             autovalidateMode: autovalidateMode,
             decoration: InputDecoration(labelText: 'size'.tr()),
-            items: PetSize.values.map((s) => DropdownMenuItem(value: s, child: Text(s.name))).toList(),
+            items: PetSize.values
+                .map((s) => DropdownMenuItem(value: s, child: Text(s.name)))
+                .toList(),
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
             ]),
@@ -271,7 +278,9 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
             name: 'foodType',
             autovalidateMode: autovalidateMode,
             decoration: InputDecoration(labelText: 'foodType'.tr()),
-            items: FoodType.values.map((f) => DropdownMenuItem(value: f, child: Text(f.displayName))).toList(),
+            items: FoodType.values
+                .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))
+                .toList(),
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
             ]),
@@ -285,10 +294,11 @@ class _PetFormState extends ConsumerState<PetForm> implements FormStateInterface
               FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
             ]),
           ),
-          ElevatedButton(
-            onPressed: (loading || !isTouched) ? null : save,
-            child: Text('save'.tr()),
-          ),
+        ],
+        ElevatedButton(
+          onPressed: (loading || !isTouched) ? null : save,
+          child: Text(widget.basic ? 'continue'.tr() : 'save'.tr()),
+        ),
         ],
       ),
     );
