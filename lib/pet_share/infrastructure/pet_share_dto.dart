@@ -1,40 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:petto/core/domain/json_converter/timestamp_converter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:petto/core/infrastructure/base_dto.dart';
+import 'package:petto/core/domain/json_converter/timestamp_converter.dart';
 import 'package:petto/pet_share/domain/pet_share.dart';
 import 'package:petto/pet_share/domain/pet_share_role.dart';
 import 'package:petto/users/domain/user.dart';
 
-class PetShareDTO implements BaseDTO<PetShare> {
-  PetShareDTO({
-    required this.id,
-    required this.petId,
-    required this.userId,
-    required this.role,
-    required this.expiresAt,
-    required this.createdAt,
-    required this.invitedBy,
-  });
+part 'pet_share_dto.freezed.dart';
+part 'pet_share_dto.g.dart';
 
-  factory PetShareDTO.fromJson(Map<String, dynamic> json, String id) {
-    return PetShareDTO(
-      id: id,
-      petId: json['petId'] as String,
-      userId: json['userId'] as String,
-      role: PetShareRole.values.firstWhere((e) => e.name == json['role']),
-      expiresAt: json['expiresAt'] != null
-          ? const TimestampConverter().fromJson(json['expiresAt'] as Timestamp)
-          : null,
-      createdAt:
-          const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
-      invitedBy: json['invitedBy'] as String,
-    );
-  }
+@freezed
+sealed class PetShareDTO with _$PetShareDTO implements BaseDTO<PetShare> {
+  const PetShareDTO._();
 
+  const factory PetShareDTO({
+    @Default('0') String id,
+    required String petId,
+    required String userId,
+    required PetShareRole role,
+    @TimestampConverter() DateTime? expiresAt,
+    @TimestampConverter() required DateTime createdAt,
+    required String invitedBy,
+  }) = _PetShareDTO;
+
+  @Implements<FromDocumentSnapshotFactory>()
   factory PetShareDTO.fromDocumentSnapshot(DocumentSnapshot doc) {
-    return PetShareDTO.fromJson(doc.data()! as Map<String, dynamic>, doc.id);
+    final data = doc.data()! as Map<String, dynamic>;
+    return PetShareDTO.fromJson(data).copyWith(id: doc.id);
   }
 
+  @Implements<FromDomainFactory>()
   factory PetShareDTO.fromDomain(PetShare share) {
     return PetShareDTO(
       id: share.id,
@@ -47,30 +42,20 @@ class PetShareDTO implements BaseDTO<PetShare> {
     );
   }
 
-  final String id;
-  final String petId;
-  final String userId;
-  final PetShareRole role;
-  final DateTime? expiresAt;
-  final DateTime createdAt;
-  final String invitedBy;
+  @Implements<FromJsonFactory>()
+  factory PetShareDTO.fromJson(Map<String, dynamic> json) => _$PetShareDTOFromJson(json);
 
   @override
-  Map<String, dynamic> toDocument() {
-    return {
-      'petId': petId,
-      'userId': userId,
-      'role': role.name,
-      'expiresAt': expiresAt != null
-          ? const TimestampConverter().toJson(expiresAt!)
-          : null,
-      'createdAt': const TimestampConverter().toJson(createdAt),
-      'invitedBy': invitedBy,
-    }..removeWhere((key, value) => value == null);
+  Map<String, dynamic> toDocument() => toJson()..remove('id');
+
+  @override
+  Map<String, dynamic> toCreateDocument(User user) {
+    final now = DateTime.now();
+    return copyWith(
+      createdAt: now,
+      invitedBy: user.uid,
+    ).toDocument();
   }
-
-  @override
-  Map<String, dynamic> toCreateDocument(User user) => toDocument();
 
   @override
   Map<String, dynamic> toUpdateDocument(User user) => toDocument();
