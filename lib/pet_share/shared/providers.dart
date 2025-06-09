@@ -10,34 +10,33 @@ import 'package:petto/pet_share/domain/pet_share.dart';
 import 'package:petto/pet_share/domain/pet_share_invite.dart';
 import 'package:petto/pet_share/infrastructure/pet_share_dto.dart';
 import 'package:petto/pet_share/infrastructure/pet_share_invite_dto.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'providers.g.dart';
 
 /// Firestore collection path for pet shares.
-final petShareCollectionPathProvider =
-    Provider<String>((ref) => 'petShares');
+@riverpod
+String petShareCollectionPath(Ref ref) => 'petShares';
 
 /// Repository provider for [PetShare].
-final petShareFirestoreRepositoryProvider =
-    Provider<BaseFirestoreRepository<PetShare>>((ref) {
-  return BaseFirestoreRepository<PetShare>(
-    collectionPath: ref.watch(petShareCollectionPathProvider),
-    firestore: ref.watch(firestoreProvider),
-    user: ref.watch(userProvider).value!,
-    emptyEntity: PetShare.empty(),
-    fromDomain: (e) => PetShareDTO.fromDomain(e),
-    fromDocumentSnapshot: (doc) => PetShareDTO.fromDocumentSnapshot(doc),
-  );
-});
-
-/// Parameters for [petSharesQueryProvider].
-class PetSharesQueryParams {
-  const PetSharesQueryParams({this.family, this.clauses = const []});
-  final String? family;
-  final List<QueryClause> clauses;
-}
+@riverpod
+BaseFirestoreRepository<PetShare> petShareFirestoreRepository(Ref ref) =>
+    BaseFirestoreRepository<PetShare>(
+      collectionPath: ref.watch(petShareCollectionPathProvider),
+      firestore: ref.watch(firestoreProvider),
+      user: ref.watch(userProvider).value!,
+      emptyEntity: PetShare.empty(),
+      fromDomain: (e) => PetShareDTO.fromDomain(e),
+      fromDocumentSnapshot: (doc) => PetShareDTO.fromDocumentSnapshot(doc),
+    );
 
 /// Query provider for pet shares.
-final petSharesQueryProvider = AutoDisposeProvider.family<Query<PetShare>,
-    PetSharesQueryParams>((ref, params) {
+@riverpod
+Query<PetShare> petSharesQuery(
+  Ref ref, {
+  String? family,
+  List<QueryClause> clauses = const [],
+}) {
   final firestore = ref.watch(firestoreProvider);
   final collectionPath = ref.watch(petShareCollectionPathProvider);
 
@@ -45,42 +44,39 @@ final petSharesQueryProvider = AutoDisposeProvider.family<Query<PetShare>,
     ref: firestore.collection(collectionPath),
     fromDomain: (e) => PetShareDTO.fromDomain(e),
     fromDocumentSnapshot: (doc) => PetShareDTO.fromDocumentSnapshot(doc),
-    clauses: [...params.clauses, ...ref.watch(queryClausesProvider(params.family))],
+    clauses: [...clauses, ...ref.watch(queryClausesProvider(family))],
     stringAndField:
-        params.family != null ? ref.watch(searchNotifierProvider(params.family)) : null,
+        family != null ? ref.watch(searchNotifierProvider(family)) : null,
   );
 
   return queryHelper.query();
-});
-
-/// Firestore collection path for pet share invites.
-final petShareInviteCollectionPathProvider =
-    Provider<String>((ref) => 'petShareInvites');
-
-/// Repository provider for [PetShareInvite].
-final petShareInviteFirestoreRepositoryProvider =
-    Provider<BaseFirestoreRepository<PetShareInvite>>((ref) {
-  return BaseFirestoreRepository<PetShareInvite>(
-    collectionPath: ref.watch(petShareInviteCollectionPathProvider),
-    firestore: ref.watch(firestoreProvider),
-    user: ref.watch(userProvider).value!,
-    emptyEntity: PetShareInvite.empty(),
-    fromDomain: (e) => PetShareInviteDTO.fromDomain(e),
-    fromDocumentSnapshot: (doc) =>
-        PetShareInviteDTO.fromDocumentSnapshot(doc),
-  );
-});
-
-/// Parameters for [petShareInvitesQueryProvider].
-class PetShareInvitesQueryParams {
-  const PetShareInvitesQueryParams({this.family, this.clauses = const []});
-  final String? family;
-  final List<QueryClause> clauses;
 }
 
+/// Firestore collection path for pet share invites.
+@riverpod
+String petShareInviteCollectionPath(Ref ref) => 'petShareInvites';
+
+/// Repository provider for [PetShareInvite].
+@riverpod
+BaseFirestoreRepository<PetShareInvite> petShareInviteFirestoreRepository(
+        Ref ref) =>
+    BaseFirestoreRepository<PetShareInvite>(
+      collectionPath: ref.watch(petShareInviteCollectionPathProvider),
+      firestore: ref.watch(firestoreProvider),
+      user: ref.watch(userProvider).value!,
+      emptyEntity: PetShareInvite.empty(),
+      fromDomain: (e) => PetShareInviteDTO.fromDomain(e),
+      fromDocumentSnapshot: (doc) =>
+          PetShareInviteDTO.fromDocumentSnapshot(doc),
+    );
+
 /// Query provider for pet share invites.
-final petShareInvitesQueryProvider = AutoDisposeProvider.family<
-    Query<PetShareInvite>, PetShareInvitesQueryParams>((ref, params) {
+@riverpod
+Query<PetShareInvite> petShareInvitesQuery(
+  Ref ref, {
+  String? family,
+  List<QueryClause> clauses = const [],
+}) {
   final firestore = ref.watch(firestoreProvider);
   final collectionPath = ref.watch(petShareInviteCollectionPathProvider);
 
@@ -89,10 +85,10 @@ final petShareInvitesQueryProvider = AutoDisposeProvider.family<
     fromDomain: (e) => PetShareInviteDTO.fromDomain(e),
     fromDocumentSnapshot: (doc) =>
         PetShareInviteDTO.fromDocumentSnapshot(doc),
-    clauses: [...params.clauses, ...ref.watch(queryClausesProvider(params.family))],
+    clauses: [...clauses, ...ref.watch(queryClausesProvider(family))],
     stringAndField:
-        params.family != null ? ref.watch(searchNotifierProvider(params.family)) : null,
+        family != null ? ref.watch(searchNotifierProvider(family)) : null,
   );
 
   return queryHelper.query();
-});
+}
