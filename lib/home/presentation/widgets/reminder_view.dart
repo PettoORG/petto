@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petto/reminders/router.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ReminderView extends StatefulWidget {
   const ReminderView({super.key});
@@ -59,10 +60,10 @@ class _ReminderViewState extends State<ReminderView> {
             setState(() => _calendarFormat = format);
           },
           onPageChanged: (focusedDay) => _focusedDay = focusedDay,
-          availableCalendarFormats: const {
-            CalendarFormat.month: 'Mensual',
-            CalendarFormat.twoWeeks: '2 Semanas',
-            CalendarFormat.week: 'Semanal',
+          availableCalendarFormats: {
+            CalendarFormat.month: 'calendarFormatEnum.month'.tr(),
+            CalendarFormat.twoWeeks: 'calendarFormatEnum.twoWeeks'.tr(),
+            CalendarFormat.week: 'calendarFormatEnum.week'.tr(),
           },
           headerStyle: HeaderStyle(
             titleCentered: true,
@@ -90,7 +91,7 @@ class _ReminderViewState extends State<ReminderView> {
         Center(
           child: ElevatedButton(
             onPressed: () => ReminderDetailRoute(reminderId: '0').push(context),
-            child: Text('Añadir Recordatorio'),
+            child: Text('addReminder'.tr()),
           ),
         ),
       ],

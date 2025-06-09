@@ -163,7 +163,7 @@ class _PetDetailsScreenState extends ConsumerState<PetDetailsScreen> {
             slivers: [
               SliverAppBar(
                 floating: true,
-                title: Text(widget.basic ? 'Registra tu mascota'.tr() : 'Edit pet'.tr()),
+                title: Text(widget.basic ? 'registerPet'.tr() : 'editPet'.tr()),
                 centerTitle: true,
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back_ios_new_rounded),

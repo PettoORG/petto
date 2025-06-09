@@ -181,5 +181,29 @@
     "invalidEmail": "Ingresa un correo electrónico válido."
   },
   "verifyEmailHeading": "Verifica tu correo electrónico",
-  "verifyEmailMessage": "Te hemos enviado un enlace para confirmar tu dirección de correo. Por favor, revisa tu bandeja de entrada y verifica tu cuenta para continuar."
+  "verifyEmailMessage": "Te hemos enviado un enlace para confirmar tu dirección de correo. Por favor, revisa tu bandeja de entrada y verifica tu cuenta para continuar.",
+  "home": "Inicio",
+  "reminders": "Recordatorios",
+  "profile": "Perfil",
+  "addReminder": "Añadir recordatorio",
+  "calendarFormatEnum": {
+    "month": "Mensual",
+    "twoWeeks": "2 Semanas",
+    "week": "Semanal"
+  },
+  "editProfile": "Editar perfil",
+  "security": "Seguridad",
+  "becomePremium": "Volverme Premium",
+  "settings": "Ajustes",
+  "securityCenter": "Centro de seguridad",
+  "myPets": "Tus mascotas",
+  "add": "Agregar",
+  "signOut": "Cerrar sesión",
+  "changeEmail": "Cambiar email",
+  "changePassword": "Cambiar contraseña",
+  "linkedAccounts": "Cuentas vinculadas",
+  "deleteAccount": "Eliminar cuenta",
+  "reminderListTitle": "Lista de recordatorios",
+  "reminderDetails": "Detalles del recordatorio",
+  "registerPet": "Registra tu mascota"
 }

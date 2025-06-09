@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:petto/pets/router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
@@ -25,18 +26,18 @@ class ProfileView extends HookConsumerWidget {
     // Options list.
     final options = [
       _ProfileOption(
-        title: 'Editar perfil',
+        title: 'editProfile',
         icon: Icons.edit,
         onTap: () => UserDetailsRoute().push(context),
       ),
       _ProfileOption(
-        title: 'Seguridad',
+        title: 'security',
         icon: Icons.security,
         onTap: () => SecuritySettingsRoute().push(context),
       ),
-      _ProfileOption(title: 'Volverme Premium', icon: Icons.star, onTap: () {}),
-      _ProfileOption(title: 'Ajustes', icon: Icons.settings, onTap: () {}),
-      _ProfileOption(title: 'Centro de seguridad', icon: Icons.verified_user, onTap: () {}),
+      _ProfileOption(title: 'becomePremium', icon: Icons.star, onTap: () {}),
+      _ProfileOption(title: 'settings', icon: Icons.settings, onTap: () {}),
+      _ProfileOption(title: 'securityCenter', icon: Icons.verified_user, onTap: () {}),
     ];
 
     final double avatarDiameter = 0.1.sh;
@@ -52,7 +53,7 @@ class ProfileView extends HookConsumerWidget {
           children: [
             const _UserAvatar(),
             SizedBox(height: AppThemeSpacing.smallH),
-            Text('Tus mascotas', style: textTheme.titleMedium),
+            Text('myPets'.tr(), style: textTheme.titleMedium),
             SizedBox(height: AppThemeSpacing.extraTinyH),
             SizedBox(
               height: listHeight,
@@ -67,7 +68,7 @@ class ProfileView extends HookConsumerWidget {
             ),
             TextButton(
               onPressed: () => ref.read(authNotifierProvider.notifier).signOut(),
-              child: const Text('Cerrar sesión'),
+              child: Text('signOut'.tr()),
             ),
             SizedBox(height: AppThemeSpacing.extraSmallH),
           ],
@@ -183,7 +184,7 @@ class _AddPetCard extends StatelessWidget {
           SizedBox(
             width: avatarDiameter,
             child: Text(
-              'Agregar',
+              'add'.tr(),
               style: textTheme.bodyMedium,
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -312,7 +313,7 @@ class _OptionTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Icon(option.icon),
-            Text(option.title, style: textTheme.titleMedium),
+            Text(option.title.tr(), style: textTheme.titleMedium),
             Icon(Icons.arrow_forward_ios_rounded, color: colorScheme.primary),
           ],
         ),
