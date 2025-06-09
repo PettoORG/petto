@@ -138,7 +138,9 @@ class _PetsCarousel extends HookConsumerWidget {
         onTap: () => PetDetailsRoute(petId: '0').push(context),
       ),
       itemBuilder: (pet) => _PetAvatarCard(
-          pet: pet, avatarDiameter: avatarDiameter, onTap: () => PetDetailsRoute(petId: pet.id).push(context)),
+          pet: pet,
+          avatarDiameter: avatarDiameter,
+          onTap: () => PetProfileRoute(petId: pet.id).push(context)),
     );
   }
 }

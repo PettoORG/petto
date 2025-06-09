@@ -205,5 +205,7 @@
   "deleteAccount": "Eliminar cuenta",
   "reminderListTitle": "Lista de recordatorios",
   "reminderDetails": "Detalles del recordatorio",
-  "registerPet": "Registra tu mascota"
+  "registerPet": "Registra tu mascota",
+  "petProfile": "Perfil de mascota",
+  "sharePet": "Compartir mascota"
 }

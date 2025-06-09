@@ -19,6 +19,14 @@ RouteBase get $petsRoute => GoRouteData.$route(
           factory: $CreateOrImportPetRouteExtension._fromState,
         ),
         GoRouteData.$route(
+          path: 'profile/:petId',
+          factory: $PetProfileRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: 'share/:petId',
+          factory: $PetShareRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
           path: ':petId',
           factory: $PetDetailsRouteExtension._fromState,
         ),
@@ -48,6 +56,44 @@ extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
 
   String get location => GoRouteData.$location(
         '/pets/create-or-import',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $PetProfileRouteExtension on PetProfileRoute {
+  static PetProfileRoute _fromState(GoRouterState state) => PetProfileRoute(
+        petId: state.pathParameters['petId']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pets/profile/${Uri.encodeComponent(petId)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $PetShareRouteExtension on PetShareRoute {
+  static PetShareRoute _fromState(GoRouterState state) => PetShareRoute(
+        petId: state.pathParameters['petId']!,
+      );
+
+  String get location => GoRouteData.$location(
+        '/pets/share/${Uri.encodeComponent(petId)}',
       );
 
   void go(BuildContext context) => context.go(location);
