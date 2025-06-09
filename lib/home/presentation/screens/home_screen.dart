@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/auth/application/auth_notifier.dart';
@@ -34,11 +35,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _titleForIndex(int index) {
     switch (index) {
       case 0:
-        return 'Inicio';
+        return 'home'.tr();
       case 1:
-        return 'Recordatorios';
+        return 'reminders'.tr();
       case 2:
-        return 'Perfil';
+        return 'profile'.tr();
       default:
         return '';
     }

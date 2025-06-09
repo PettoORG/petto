@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class SecuritySettingsScreen extends StatelessWidget {
   const SecuritySettingsScreen({super.key});
@@ -12,24 +13,24 @@ class SecuritySettingsScreen extends StatelessWidget {
 
     final options = [
       _SecurityOption(
-        title: 'Cambiar email',
+        title: 'changeEmail',
         icon: Icons.email,
         onTap: () {},
       ),
       _SecurityOption(
-        title: 'Cambiar contraseña',
+        title: 'changePassword',
         icon: Icons.lock,
         onTap: () {},
       ),
       _SecurityOption(
-        title: 'Cuentas vinculadas',
+        title: 'linkedAccounts',
         icon: Icons.link,
         onTap: () {},
       ),
     ];
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Seguridad'),
+        title: Text('security'.tr()),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -58,7 +59,7 @@ class SecuritySettingsScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Icon(option.icon),
-                          Text(option.title, style: textTheme.titleMedium),
+                          Text(option.title.tr(), style: textTheme.titleMedium),
                           Icon(Icons.arrow_forward_ios_rounded, color: colorScheme.primary),
                         ],
                       ),
@@ -66,7 +67,7 @@ class SecuritySettingsScreen extends StatelessWidget {
                   )),
               TextButton(
                 onPressed: () {},
-                child: const Text('Eliminar cuenta'),
+                child: Text('deleteAccount'.tr()),
               ),
             ],
           ),

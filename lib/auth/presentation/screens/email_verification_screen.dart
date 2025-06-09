@@ -129,10 +129,15 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
                     ),
                     SizedBox(height: AppThemeSpacing.extraSmallH),
                     _start > 0
-                        ? Text('Reenviar email en $_start...')
+                        ? Text(
+                            'resendInValue'.plural(
+                              _start,
+                              args: [_start.toString()],
+                            ),
+                          )
                         : TextButton(
                             onPressed: _resendEmail,
-                            child: Text('Reenviar'),
+                            child: Text('resendVerificationEmail'.tr()),
                           ),
                   ],
                 ),
@@ -141,7 +146,7 @@ class _EmailVerificationScreenState extends ConsumerState<EmailVerificationScree
                 onPressed: () {
                   ref.read(authNotifierProvider.notifier).signOut();
                 },
-                child: Text('Cerrar sesión'),
+                child: Text('signOut'.tr()),
               ),
             ],
           ),

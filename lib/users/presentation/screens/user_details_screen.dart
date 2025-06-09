@@ -111,7 +111,7 @@ class _UserDetailsScreenState extends ConsumerState<UserDetailsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar perfil'.tr()),
+        title: Text('editProfile'.tr()),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
