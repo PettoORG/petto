@@ -46,8 +46,7 @@ class PetProfileScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: options
                     .map((o) => Padding(
-                          padding: EdgeInsets.only(
-                              bottom: AppThemeSpacing.extraSmallH),
+                          padding: EdgeInsets.only(bottom: AppThemeSpacing.extraSmallH),
                           child: _OptionTile(option: o),
                         ))
                     .toList(),
@@ -72,11 +71,11 @@ class _OptionTile extends StatelessWidget {
 
     return InkWell(
       onTap: option.onTap,
-      borderRadius: const BorderRadius.all(AppThemeRadius.medium),
+      borderRadius: BorderRadius.all(AppThemeRadius.medium),
       child: Ink(
         padding: EdgeInsets.all(AppThemeSpacing.tinyH),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(AppThemeRadius.medium),
+          borderRadius: BorderRadius.all(AppThemeRadius.medium),
           color: colorScheme.surface,
           boxShadow: [AppThemeShadow.small],
         ),
