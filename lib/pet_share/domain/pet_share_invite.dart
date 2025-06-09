@@ -37,4 +37,15 @@ sealed class PetShareInvite with _$PetShareInvite implements BaseEntity {
     /// Useful for analytics or troubleshooting.
     DateTime? redeemedAt,
   }) = _PetShareInvite;
+
+  /// Factory helper for empty placeholders or tests.
+  factory PetShareInvite.empty() => PetShareInvite(
+        id: '',
+        petId: '',
+        defaultRole: PetShareRole.viewer,
+        invitedBy: '',
+        expiresAt: DateTime.now(),
+        redeemedBy: null,
+        redeemedAt: null,
+      );
 }
