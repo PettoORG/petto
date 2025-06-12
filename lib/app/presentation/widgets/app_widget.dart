@@ -54,12 +54,10 @@ class _AppWidgetState extends ConsumerState<AppWidget> {
             return;
           }
 
-          final family = 'petsByUserUid';
-
           final query = ref.read(petsQueryProvider(
-            family: family,
+            family: 'petsAccessibleByUser',
             clauses: [
-              Where('createdBy', isEqualTo: user.uid),
+              Where('accessibleUserIds', arrayContains: user.uid),
               Limit(1),
             ],
           ));

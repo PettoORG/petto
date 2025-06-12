@@ -51,6 +51,9 @@ mixin _$Pet {
   /// Optional microchip number for pet identification.
   String get microchipNumber;
 
+  /// List of user IDs who have access to the pet.
+  List<String> get accessibleUserIds;
+
   /// Whether the pet is currently active (not deceased or given away).
   bool get active;
 
@@ -94,6 +97,8 @@ mixin _$Pet {
                 other.foodType == foodType) &&
             (identical(other.microchipNumber, microchipNumber) ||
                 other.microchipNumber == microchipNumber) &&
+            const DeepCollectionEquality()
+                .equals(other.accessibleUserIds, accessibleUserIds) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -120,6 +125,7 @@ mixin _$Pet {
       size,
       foodType,
       microchipNumber,
+      const DeepCollectionEquality().hash(accessibleUserIds),
       active,
       createdAt,
       modifiedAt,
@@ -128,7 +134,7 @@ mixin _$Pet {
 
   @override
   String toString() {
-    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, accessibleUserIds: $accessibleUserIds, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -149,6 +155,7 @@ abstract mixin class $PetCopyWith<$Res> {
       PetSize size,
       FoodType foodType,
       String microchipNumber,
+      List<String> accessibleUserIds,
       bool active,
       DateTime? createdAt,
       DateTime? modifiedAt,
@@ -180,6 +187,7 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
     Object? size = null,
     Object? foodType = null,
     Object? microchipNumber = null,
+    Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
     Object? modifiedAt = freezed,
@@ -235,6 +243,10 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
               as String,
+      accessibleUserIds: null == accessibleUserIds
+          ? _self.accessibleUserIds
+          : accessibleUserIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       active: null == active
           ? _self.active
           : active // ignore: cast_nullable_to_non_nullable
@@ -275,12 +287,14 @@ class _Pet extends Pet {
       required this.size,
       required this.foodType,
       required this.microchipNumber,
+      required final List<String> accessibleUserIds,
       required this.active,
       required this.createdAt,
       required this.modifiedAt,
       required this.createdBy,
       required this.modifiedBy})
-      : super._();
+      : _accessibleUserIds = accessibleUserIds,
+        super._();
 
   /// Document ID in the database.
   @override
@@ -329,6 +343,18 @@ class _Pet extends Pet {
   /// Optional microchip number for pet identification.
   @override
   final String microchipNumber;
+
+  /// List of user IDs who have access to the pet.
+  final List<String> _accessibleUserIds;
+
+  /// List of user IDs who have access to the pet.
+  @override
+  List<String> get accessibleUserIds {
+    if (_accessibleUserIds is EqualUnmodifiableListView)
+      return _accessibleUserIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_accessibleUserIds);
+  }
 
   /// Whether the pet is currently active (not deceased or given away).
   @override
@@ -379,6 +405,8 @@ class _Pet extends Pet {
                 other.foodType == foodType) &&
             (identical(other.microchipNumber, microchipNumber) ||
                 other.microchipNumber == microchipNumber) &&
+            const DeepCollectionEquality()
+                .equals(other._accessibleUserIds, _accessibleUserIds) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -405,6 +433,7 @@ class _Pet extends Pet {
       size,
       foodType,
       microchipNumber,
+      const DeepCollectionEquality().hash(_accessibleUserIds),
       active,
       createdAt,
       modifiedAt,
@@ -413,7 +442,7 @@ class _Pet extends Pet {
 
   @override
   String toString() {
-    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'Pet(id: $id, ownerId: $ownerId, name: $name, specie: $specie, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, accessibleUserIds: $accessibleUserIds, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -436,6 +465,7 @@ abstract mixin class _$PetCopyWith<$Res> implements $PetCopyWith<$Res> {
       PetSize size,
       FoodType foodType,
       String microchipNumber,
+      List<String> accessibleUserIds,
       bool active,
       DateTime? createdAt,
       DateTime? modifiedAt,
@@ -467,6 +497,7 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
     Object? size = null,
     Object? foodType = null,
     Object? microchipNumber = null,
+    Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
     Object? modifiedAt = freezed,
@@ -522,6 +553,10 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
               as String,
+      accessibleUserIds: null == accessibleUserIds
+          ? _self._accessibleUserIds
+          : accessibleUserIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       active: null == active
           ? _self.active
           : active // ignore: cast_nullable_to_non_nullable

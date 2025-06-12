@@ -52,6 +52,9 @@ sealed class Pet with _$Pet implements BaseEntity {
     /// Optional microchip number for pet identification.
     required String microchipNumber,
 
+    /// List of user IDs who have access to the pet.
+    required List<String> accessibleUserIds,
+
     /// Whether the pet is currently active (not deceased or given away).
     required bool active,
 
@@ -81,6 +84,7 @@ sealed class Pet with _$Pet implements BaseEntity {
         size: PetSize.unselected,
         foodType: FoodType.unselected,
         microchipNumber: '',
+        accessibleUserIds: [],
         active: true,
         createdAt: DateTime.now(),
         modifiedAt: DateTime.now(),

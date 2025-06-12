@@ -28,6 +28,7 @@ mixin _$PetDTO {
   PetSize get size;
   FoodType get foodType;
   String get microchipNumber;
+  List<String> get accessibleUserIds;
   bool get active;
   @TimestampConverter()
   DateTime? get createdAt;
@@ -67,6 +68,8 @@ mixin _$PetDTO {
                 other.foodType == foodType) &&
             (identical(other.microchipNumber, microchipNumber) ||
                 other.microchipNumber == microchipNumber) &&
+            const DeepCollectionEquality()
+                .equals(other.accessibleUserIds, accessibleUserIds) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -94,6 +97,7 @@ mixin _$PetDTO {
       size,
       foodType,
       microchipNumber,
+      const DeepCollectionEquality().hash(accessibleUserIds),
       active,
       createdAt,
       modifiedAt,
@@ -102,7 +106,7 @@ mixin _$PetDTO {
 
   @override
   String toString() {
-    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, accessibleUserIds: $accessibleUserIds, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -124,6 +128,7 @@ abstract mixin class $PetDTOCopyWith<$Res> {
       PetSize size,
       FoodType foodType,
       String microchipNumber,
+      List<String> accessibleUserIds,
       bool active,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? modifiedAt,
@@ -155,6 +160,7 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
     Object? size = null,
     Object? foodType = null,
     Object? microchipNumber = null,
+    Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
     Object? modifiedAt = freezed,
@@ -210,6 +216,10 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
               as String,
+      accessibleUserIds: null == accessibleUserIds
+          ? _self.accessibleUserIds
+          : accessibleUserIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       active: null == active
           ? _self.active
           : active // ignore: cast_nullable_to_non_nullable
@@ -250,12 +260,14 @@ class _PetDTO extends PetDTO {
       required this.size,
       required this.foodType,
       required this.microchipNumber,
+      required final List<String> accessibleUserIds,
       required this.active,
       @TimestampConverter() required this.createdAt,
       @TimestampConverter() required this.modifiedAt,
       required this.createdBy,
       required this.modifiedBy})
-      : super._();
+      : _accessibleUserIds = accessibleUserIds,
+        super._();
   factory _PetDTO.fromJson(Map<String, dynamic> json) => _$PetDTOFromJson(json);
 
   @override
@@ -284,6 +296,15 @@ class _PetDTO extends PetDTO {
   final FoodType foodType;
   @override
   final String microchipNumber;
+  final List<String> _accessibleUserIds;
+  @override
+  List<String> get accessibleUserIds {
+    if (_accessibleUserIds is EqualUnmodifiableListView)
+      return _accessibleUserIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_accessibleUserIds);
+  }
+
   @override
   final bool active;
   @override
@@ -333,6 +354,8 @@ class _PetDTO extends PetDTO {
                 other.foodType == foodType) &&
             (identical(other.microchipNumber, microchipNumber) ||
                 other.microchipNumber == microchipNumber) &&
+            const DeepCollectionEquality()
+                .equals(other._accessibleUserIds, _accessibleUserIds) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
@@ -360,6 +383,7 @@ class _PetDTO extends PetDTO {
       size,
       foodType,
       microchipNumber,
+      const DeepCollectionEquality().hash(_accessibleUserIds),
       active,
       createdAt,
       modifiedAt,
@@ -368,7 +392,7 @@ class _PetDTO extends PetDTO {
 
   @override
   String toString() {
-    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
+    return 'PetDTO(id: $id, ownerId: $ownerId, name: $name, species: $species, breed: $breed, sex: $sex, birthDate: $birthDate, photoUrl: $photoUrl, weight: $weight, size: $size, foodType: $foodType, microchipNumber: $microchipNumber, accessibleUserIds: $accessibleUserIds, active: $active, createdAt: $createdAt, modifiedAt: $modifiedAt, createdBy: $createdBy, modifiedBy: $modifiedBy)';
   }
 }
 
@@ -391,6 +415,7 @@ abstract mixin class _$PetDTOCopyWith<$Res> implements $PetDTOCopyWith<$Res> {
       PetSize size,
       FoodType foodType,
       String microchipNumber,
+      List<String> accessibleUserIds,
       bool active,
       @TimestampConverter() DateTime? createdAt,
       @TimestampConverter() DateTime? modifiedAt,
@@ -422,6 +447,7 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
     Object? size = null,
     Object? foodType = null,
     Object? microchipNumber = null,
+    Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
     Object? modifiedAt = freezed,
@@ -477,6 +503,10 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
               as String,
+      accessibleUserIds: null == accessibleUserIds
+          ? _self._accessibleUserIds
+          : accessibleUserIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       active: null == active
           ? _self.active
           : active // ignore: cast_nullable_to_non_nullable

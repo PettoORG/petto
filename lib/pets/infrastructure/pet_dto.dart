@@ -30,6 +30,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
     required PetSize size,
     required FoodType foodType,
     required String microchipNumber,
+    required List<String> accessibleUserIds,
     required bool active,
     @TimestampConverter() required DateTime? createdAt,
     @TimestampConverter() required DateTime? modifiedAt,
@@ -58,6 +59,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
       size: pet.size,
       foodType: pet.foodType,
       microchipNumber: pet.microchipNumber,
+      accessibleUserIds: pet.accessibleUserIds,
       active: pet.active,
       createdAt: pet.createdAt,
       modifiedAt: pet.modifiedAt,
@@ -77,6 +79,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
     final now = DateTime.now();
     return copyWith(
       ownerId: user.uid,
+      accessibleUserIds: [user.uid],
       createdAt: now,
       createdBy: user.uid,
       modifiedAt: now,
@@ -107,6 +110,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
       size: size,
       foodType: foodType,
       microchipNumber: microchipNumber,
+      accessibleUserIds: accessibleUserIds,
       active: active,
       createdAt: createdAt,
       modifiedAt: modifiedAt,

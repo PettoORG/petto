@@ -20,6 +20,9 @@ _PetDTO _$PetDTOFromJson(Map<String, dynamic> json) => _PetDTO(
       size: $enumDecode(_$PetSizeEnumMap, json['size']),
       foodType: $enumDecode(_$FoodTypeEnumMap, json['foodType']),
       microchipNumber: json['microchipNumber'] as String,
+      accessibleUserIds: (json['accessibleUserIds'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       active: json['active'] as bool,
       createdAt: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['createdAt'], const TimestampConverter().fromJson),
@@ -42,6 +45,7 @@ Map<String, dynamic> _$PetDTOToJson(_PetDTO instance) => <String, dynamic>{
       'size': _$PetSizeEnumMap[instance.size]!,
       'foodType': _$FoodTypeEnumMap[instance.foodType]!,
       'microchipNumber': instance.microchipNumber,
+      'accessibleUserIds': instance.accessibleUserIds,
       'active': instance.active,
       'createdAt': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.createdAt, const TimestampConverter().toJson),
