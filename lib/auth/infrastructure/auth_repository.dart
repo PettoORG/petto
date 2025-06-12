@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:petto/auth/domain/auth_failure.dart';
+import 'package:petto/auth/domain/failure_mapper.dart';
 import 'package:petto/users/domain/user.dart' as app_user;
 import 'package:petto/users/infrastructure/user_firestore_repository.dart';
 import 'package:rxdart/rxdart.dart';
@@ -105,61 +106,69 @@ class AuthRepository {
 
   Future<Either<AuthFailure, Unit>> signInWithGoogle() async {
     try {
-      // Pause the stream during the creation operation.
       pauseStream.add(true);
 
       final signInAccount = await _googleSignIn.signIn();
-
-      if (signInAccount != null) {
-        final authentication = await signInAccount.authentication;
-        final credential = GoogleAuthProvider.credential(
-          idToken: authentication.idToken,
-          accessToken: authentication.accessToken,
-        );
-        final userCredential = await _firebaseAuth.signInWithCredential(credential);
-
-        final firebaseUser = userCredential.user;
-
-        // Handle null user case
-        if (firebaseUser == null) {
-          return left(AuthFailure.unexpected());
-        }
-
-        // Check if user document already exists using the repository
-        final existsResult = await _userRepository.existsById(firebaseUser.uid);
-
-        if (existsResult.isLeft()) {
-          // Resume the stream before returning error
-          pauseStream.add(false);
-          return left(AuthFailure.unexpected());
-        }
-
-        final exists = existsResult.getOrElse(() => false);
-
-        if (!exists) {
-          final newUser = app_user.User.empty().copyWith(
-            email: firebaseUser.email!,
-            id: firebaseUser.uid,
-            uid: firebaseUser.uid,
-          );
-          await _userRepository.create(
-            newUser.copyWith(emailVerified: firebaseUser.emailVerified),
-          );
-        }
-
-        // Resume the stream after the document is created.
+      if (signInAccount == null) {
         pauseStream.add(false);
-
-        return right(unit);
+        return left(const AuthFailure.cancelledByUser());
       }
 
-      return left(const AuthFailure.cancelledByUser());
+      final authentication = await signInAccount.authentication;
+      final credential = GoogleAuthProvider.credential(
+        idToken: authentication.idToken,
+        accessToken: authentication.accessToken,
+      );
+
+      final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      final firebaseUser = userCredential.user;
+
+      if (firebaseUser == null) {
+        pauseStream.add(false);
+        return left(AuthFailure.unexpected());
+      }
+
+      // ── existsById ────────────────────────────────────────────────────────────
+      final existsEither = await _userRepository.existsById(firebaseUser.uid);
+      final existsResult = existsEither.fold<Either<AuthFailure, bool>>(
+        (f) => left(f.toAuthFailure()),
+        right,
+      );
+
+      if (existsResult.isLeft()) {
+        pauseStream.add(false);
+        return left(existsResult.swap().getOrElse(AuthFailure.unexpected));
+      }
+
+      final exists = existsResult.getOrElse(() => false);
+
+      // ── create user doc if needed ────────────────────────────────────────────
+      if (!exists) {
+        final newUser = app_user.User.empty().copyWith(
+          email: firebaseUser.email ?? '',
+          id: firebaseUser.uid,
+          uid: firebaseUser.uid,
+          emailVerified: firebaseUser.emailVerified,
+        );
+
+        final createEither = await _userRepository.create(newUser);
+        final createResult = createEither.fold<Either<AuthFailure, String>>(
+          (f) => left(f.toAuthFailure()),
+          right,
+        );
+
+        if (createResult.isLeft()) {
+          pauseStream.add(false);
+          return left(createResult.swap().getOrElse(AuthFailure.unexpected));
+        }
+      }
+
+      pauseStream.add(false);
+      return right(unit);
     } on FirebaseAuthException catch (e, st) {
-      // Resume the stream after the document is created.
       pauseStream.add(false);
       return left(AuthFailureFactory.fromFirebaseAuthException(e, st));
     } on Exception catch (e, st) {
-      // Resume the stream after the document is created.
       pauseStream.add(false);
       return left(AuthFailureFactory.fromException(e, st));
     }
@@ -306,16 +315,27 @@ class AuthRepository {
     try {
       await _currentUser!.updateDisplayName(displayName);
 
-      // Fetch the user from Firestore
-      final user = await _userRepository.fetch(_currentUser!.uid);
+      final fetchedEither = await _userRepository.fetch(_currentUser!.uid);
+      final userEither = fetchedEither.fold<Either<AuthFailure, app_user.User>>(
+        (f) => left(f.toAuthFailure()),
+        right,
+      );
+      if (userEither.isLeft()) {
+        return left(userEither.swap().getOrElse(AuthFailure.unexpected));
+      }
 
-      // Retrieve the user or throw an unexpected failure if not found
-      final updatedUser = user.getOrElse(() => throw AuthFailure.unexpected());
+      final user = userEither.getOrElse(() => throw AuthFailure.unexpected());
 
-      // Update the user in Firestore with the displayName
-      await _userRepository.update(updatedUser.uid, updatedUser.copyWith(displayName: displayName));
+      final updateEither = await _userRepository.update(
+        user.uid,
+        user.copyWith(displayName: displayName),
+      );
+      final updateResult = updateEither.fold<Either<AuthFailure, Unit>>(
+        (f) => left(f.toAuthFailure()),
+        right,
+      );
 
-      return right(unit);
+      return updateResult;
     } on FirebaseAuthException catch (e, st) {
       return left(AuthFailureFactory.fromFirebaseAuthException(e, st));
     } on Exception catch (e, st) {
@@ -342,17 +362,29 @@ class AuthRepository {
     String newEmail,
   ) async {
     try {
-      // Verify the new email before updating it.
       await _currentUser!.verifyBeforeUpdateEmail(newEmail);
 
-      // get the user from the database.
-      final userResult = await _userRepository.fetch(_currentUser!.uid);
+      final fetchEither = await _userRepository.fetch(_currentUser!.uid);
+      final userEither = fetchEither.fold<Either<AuthFailure, app_user.User>>(
+        (f) => left(f.toAuthFailure()),
+        right,
+      );
+      if (userEither.isLeft()) {
+        return left(userEither.swap().getOrElse(AuthFailure.unexpected));
+      }
 
-      // Update the user's email.
-      final user = userResult.getOrElse(() => throw AuthFailure.unexpected());
-      await _userRepository.update(user.uid, user.copyWith(email: newEmail));
+      final user = userEither.getOrElse(() => throw AuthFailure.unexpected());
 
-      return right(unit);
+      final updateEither = await _userRepository.update(
+        user.uid,
+        user.copyWith(email: newEmail),
+      );
+      final result = updateEither.fold<Either<AuthFailure, Unit>>(
+        (f) => left(f.toAuthFailure()),
+        right,
+      );
+
+      return result;
     } on FirebaseAuthException catch (e, st) {
       return left(AuthFailureFactory.fromFirebaseAuthException(e, st));
     } on Exception catch (e, st) {
@@ -392,18 +424,32 @@ class AuthRepository {
   Future<Either<AuthFailure, bool>> checkEmailVerified() async {
     try {
       await _currentUser!.reload();
-      // Fetch the user from Firestore
-      final userResult = await _userRepository.fetch(_currentUser!.uid);
 
-      // Retrieve the user or throw an unexpected failure if not found
-      final user = userResult.getOrElse(() => throw AuthFailure.unexpected());
-
-      if (user.emailVerified != _currentUser!.emailVerified) {
-        // Update the user in Firestore with the emailVerified flag
-        await _userRepository.update(user.id, user.copyWith(emailVerified: _currentUser!.emailVerified));
+      final fetchEither = await _userRepository.fetch(_currentUser!.uid);
+      final userEither = fetchEither.fold<Either<AuthFailure, app_user.User>>(
+        (f) => left(f.toAuthFailure()),
+        right,
+      );
+      if (userEither.isLeft()) {
+        return left(userEither.swap().getOrElse(AuthFailure.unexpected));
       }
 
-      // Return success
+      final user = userEither.getOrElse(() => throw AuthFailure.unexpected());
+
+      if (user.emailVerified != _currentUser!.emailVerified) {
+        final updateEither = await _userRepository.update(
+          user.id,
+          user.copyWith(emailVerified: _currentUser!.emailVerified),
+        );
+        final updateResult = updateEither.fold<Either<AuthFailure, Unit>>(
+          (f) => left(f.toAuthFailure()),
+          right,
+        );
+        if (updateResult.isLeft()) {
+          return left(updateResult.swap().getOrElse(AuthFailure.unexpected));
+        }
+      }
+
       return right(_currentUser!.emailVerified);
     } on FirebaseAuthException catch (e, st) {
       return left(AuthFailureFactory.fromFirebaseAuthException(e, st));

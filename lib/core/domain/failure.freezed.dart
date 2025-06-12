@@ -98,8 +98,8 @@ class _$FailureCopyWithImpl<$Res> implements $FailureCopyWith<$Res> {
 
 /// @nodoc
 
-class _Firestore extends Failure {
-  const _Firestore({this.message, this.code, this.cause, this.stackTrace})
+class Firestore extends Failure {
+  const Firestore({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -116,14 +116,14 @@ class _Firestore extends Failure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$FirestoreCopyWith<_Firestore> get copyWith =>
-      __$FirestoreCopyWithImpl<_Firestore>(this, _$identity);
+  $FirestoreCopyWith<Firestore> get copyWith =>
+      _$FirestoreCopyWithImpl<Firestore>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Firestore &&
+            other is Firestore &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -142,11 +142,10 @@ class _Firestore extends Failure {
 }
 
 /// @nodoc
-abstract mixin class _$FirestoreCopyWith<$Res>
+abstract mixin class $FirestoreCopyWith<$Res>
     implements $FailureCopyWith<$Res> {
-  factory _$FirestoreCopyWith(
-          _Firestore value, $Res Function(_Firestore) _then) =
-      __$FirestoreCopyWithImpl;
+  factory $FirestoreCopyWith(Firestore value, $Res Function(Firestore) _then) =
+      _$FirestoreCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -154,11 +153,11 @@ abstract mixin class _$FirestoreCopyWith<$Res>
 }
 
 /// @nodoc
-class __$FirestoreCopyWithImpl<$Res> implements _$FirestoreCopyWith<$Res> {
-  __$FirestoreCopyWithImpl(this._self, this._then);
+class _$FirestoreCopyWithImpl<$Res> implements $FirestoreCopyWith<$Res> {
+  _$FirestoreCopyWithImpl(this._self, this._then);
 
-  final _Firestore _self;
-  final $Res Function(_Firestore) _then;
+  final Firestore _self;
+  final $Res Function(Firestore) _then;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -170,7 +169,7 @@ class __$FirestoreCopyWithImpl<$Res> implements _$FirestoreCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_Firestore(
+    return _then(Firestore(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -193,8 +192,8 @@ class __$FirestoreCopyWithImpl<$Res> implements _$FirestoreCopyWith<$Res> {
 
 /// @nodoc
 
-class _Storage extends Failure {
-  const _Storage({this.message, this.code, this.cause, this.stackTrace})
+class Storage extends Failure {
+  const Storage({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -211,14 +210,14 @@ class _Storage extends Failure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$StorageCopyWith<_Storage> get copyWith =>
-      __$StorageCopyWithImpl<_Storage>(this, _$identity);
+  $StorageCopyWith<Storage> get copyWith =>
+      _$StorageCopyWithImpl<Storage>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Storage &&
+            other is Storage &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -237,9 +236,9 @@ class _Storage extends Failure {
 }
 
 /// @nodoc
-abstract mixin class _$StorageCopyWith<$Res> implements $FailureCopyWith<$Res> {
-  factory _$StorageCopyWith(_Storage value, $Res Function(_Storage) _then) =
-      __$StorageCopyWithImpl;
+abstract mixin class $StorageCopyWith<$Res> implements $FailureCopyWith<$Res> {
+  factory $StorageCopyWith(Storage value, $Res Function(Storage) _then) =
+      _$StorageCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -247,11 +246,11 @@ abstract mixin class _$StorageCopyWith<$Res> implements $FailureCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$StorageCopyWithImpl<$Res> implements _$StorageCopyWith<$Res> {
-  __$StorageCopyWithImpl(this._self, this._then);
+class _$StorageCopyWithImpl<$Res> implements $StorageCopyWith<$Res> {
+  _$StorageCopyWithImpl(this._self, this._then);
 
-  final _Storage _self;
-  final $Res Function(_Storage) _then;
+  final Storage _self;
+  final $Res Function(Storage) _then;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -263,7 +262,7 @@ class __$StorageCopyWithImpl<$Res> implements _$StorageCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_Storage(
+    return _then(Storage(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -286,8 +285,8 @@ class __$StorageCopyWithImpl<$Res> implements _$StorageCopyWith<$Res> {
 
 /// @nodoc
 
-class _Unexpected extends Failure {
-  const _Unexpected({this.message, this.code, this.cause, this.stackTrace})
+class Unexpected extends Failure {
+  const Unexpected({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -304,14 +303,14 @@ class _Unexpected extends Failure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$UnexpectedCopyWith<_Unexpected> get copyWith =>
-      __$UnexpectedCopyWithImpl<_Unexpected>(this, _$identity);
+  $UnexpectedCopyWith<Unexpected> get copyWith =>
+      _$UnexpectedCopyWithImpl<Unexpected>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Unexpected &&
+            other is Unexpected &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -330,11 +329,11 @@ class _Unexpected extends Failure {
 }
 
 /// @nodoc
-abstract mixin class _$UnexpectedCopyWith<$Res>
+abstract mixin class $UnexpectedCopyWith<$Res>
     implements $FailureCopyWith<$Res> {
-  factory _$UnexpectedCopyWith(
-          _Unexpected value, $Res Function(_Unexpected) _then) =
-      __$UnexpectedCopyWithImpl;
+  factory $UnexpectedCopyWith(
+          Unexpected value, $Res Function(Unexpected) _then) =
+      _$UnexpectedCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -342,11 +341,11 @@ abstract mixin class _$UnexpectedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$UnexpectedCopyWithImpl<$Res> implements _$UnexpectedCopyWith<$Res> {
-  __$UnexpectedCopyWithImpl(this._self, this._then);
+class _$UnexpectedCopyWithImpl<$Res> implements $UnexpectedCopyWith<$Res> {
+  _$UnexpectedCopyWithImpl(this._self, this._then);
 
-  final _Unexpected _self;
-  final $Res Function(_Unexpected) _then;
+  final Unexpected _self;
+  final $Res Function(Unexpected) _then;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -358,7 +357,7 @@ class __$UnexpectedCopyWithImpl<$Res> implements _$UnexpectedCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_Unexpected(
+    return _then(Unexpected(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -381,8 +380,8 @@ class __$UnexpectedCopyWithImpl<$Res> implements _$UnexpectedCopyWith<$Res> {
 
 /// @nodoc
 
-class _Network extends Failure {
-  const _Network({this.message, this.code, this.cause, this.stackTrace})
+class Network extends Failure {
+  const Network({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -399,14 +398,14 @@ class _Network extends Failure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$NetworkCopyWith<_Network> get copyWith =>
-      __$NetworkCopyWithImpl<_Network>(this, _$identity);
+  $NetworkCopyWith<Network> get copyWith =>
+      _$NetworkCopyWithImpl<Network>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Network &&
+            other is Network &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -425,9 +424,9 @@ class _Network extends Failure {
 }
 
 /// @nodoc
-abstract mixin class _$NetworkCopyWith<$Res> implements $FailureCopyWith<$Res> {
-  factory _$NetworkCopyWith(_Network value, $Res Function(_Network) _then) =
-      __$NetworkCopyWithImpl;
+abstract mixin class $NetworkCopyWith<$Res> implements $FailureCopyWith<$Res> {
+  factory $NetworkCopyWith(Network value, $Res Function(Network) _then) =
+      _$NetworkCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -435,11 +434,11 @@ abstract mixin class _$NetworkCopyWith<$Res> implements $FailureCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$NetworkCopyWithImpl<$Res> implements _$NetworkCopyWith<$Res> {
-  __$NetworkCopyWithImpl(this._self, this._then);
+class _$NetworkCopyWithImpl<$Res> implements $NetworkCopyWith<$Res> {
+  _$NetworkCopyWithImpl(this._self, this._then);
 
-  final _Network _self;
-  final $Res Function(_Network) _then;
+  final Network _self;
+  final $Res Function(Network) _then;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -451,7 +450,7 @@ class __$NetworkCopyWithImpl<$Res> implements _$NetworkCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_Network(
+    return _then(Network(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -474,8 +473,8 @@ class __$NetworkCopyWithImpl<$Res> implements _$NetworkCopyWith<$Res> {
 
 /// @nodoc
 
-class _Validation extends Failure {
-  const _Validation({this.message, this.code, this.cause, this.stackTrace})
+class Validation extends Failure {
+  const Validation({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -492,14 +491,14 @@ class _Validation extends Failure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$ValidationCopyWith<_Validation> get copyWith =>
-      __$ValidationCopyWithImpl<_Validation>(this, _$identity);
+  $ValidationCopyWith<Validation> get copyWith =>
+      _$ValidationCopyWithImpl<Validation>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Validation &&
+            other is Validation &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -518,11 +517,11 @@ class _Validation extends Failure {
 }
 
 /// @nodoc
-abstract mixin class _$ValidationCopyWith<$Res>
+abstract mixin class $ValidationCopyWith<$Res>
     implements $FailureCopyWith<$Res> {
-  factory _$ValidationCopyWith(
-          _Validation value, $Res Function(_Validation) _then) =
-      __$ValidationCopyWithImpl;
+  factory $ValidationCopyWith(
+          Validation value, $Res Function(Validation) _then) =
+      _$ValidationCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -530,11 +529,11 @@ abstract mixin class _$ValidationCopyWith<$Res>
 }
 
 /// @nodoc
-class __$ValidationCopyWithImpl<$Res> implements _$ValidationCopyWith<$Res> {
-  __$ValidationCopyWithImpl(this._self, this._then);
+class _$ValidationCopyWithImpl<$Res> implements $ValidationCopyWith<$Res> {
+  _$ValidationCopyWithImpl(this._self, this._then);
 
-  final _Validation _self;
-  final $Res Function(_Validation) _then;
+  final Validation _self;
+  final $Res Function(Validation) _then;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -546,7 +545,7 @@ class __$ValidationCopyWithImpl<$Res> implements _$ValidationCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(_Validation(
+    return _then(Validation(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable

@@ -22,7 +22,7 @@ sealed class Failure with _$Failure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _Firestore;
+  }) = Firestore;
 
   /// Represents a failure during a file crud operation with Storage.
   const factory Failure.storage({
@@ -30,7 +30,7 @@ sealed class Failure with _$Failure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _Storage;
+  }) = Storage;
 
   /// Represents an unexpected or not identified failure.
   const factory Failure.unexpected({
@@ -38,7 +38,7 @@ sealed class Failure with _$Failure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _Unexpected;
+  }) = Unexpected;
 
   /// Represents a network or internet connectivity failure.
   const factory Failure.network({
@@ -46,7 +46,7 @@ sealed class Failure with _$Failure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _Network;
+  }) = Network;
 
   /// Represents an error comming from the UI/Validations.
   const factory Failure.validation({
@@ -54,7 +54,7 @@ sealed class Failure with _$Failure {
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = _Validation;
+  }) = Validation;
 }
 
 /// Class with static methods to create failures from exceptions.
