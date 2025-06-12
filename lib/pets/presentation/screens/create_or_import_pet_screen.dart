@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
-import 'package:petto/pets/router.dart';
+import 'package:petto/onboarding/router.dart';
 
 class CreateOrImportPetScreen extends StatelessWidget {
   const CreateOrImportPetScreen({super.key});
@@ -30,7 +30,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
                 ),
                 SizedBox(height: AppThemeSpacing.mediumH),
                 _PetCard(
-                  onTap: () => PetDetailsRoute(petId: '0', basic: true).push(context),
+                  onTap: () => PetOnboardingRoute().push(context),
                   titleKey: 'createNewPet',
                   descriptionKey: 'createNewPetDescription',
                   colorScheme: colorScheme,
