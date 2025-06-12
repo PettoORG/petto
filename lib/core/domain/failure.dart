@@ -116,7 +116,7 @@ class FailureFactory {
       'storage/no-default-bucket' => 'error.storageBucketNotFound'.tr(),
       'storage/cannot-slice-blob' => 'error.storageCannotSliceBlob'.tr(),
       'storage/server-file-wrong-size' => 'error.storageServerFileWrongSize'.tr(),
-      _ => 'unexpectedError'.tr(),
+      _ => 'error.unexpectedError'.tr(),
     };
 
     return Failure.storage(

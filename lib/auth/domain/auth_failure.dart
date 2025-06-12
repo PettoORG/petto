@@ -4,27 +4,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'auth_failure.freezed.dart';
 
-/// Union type for all possible failures that can occur during Authentication.
-/// Transforms Errors and Exceptions from the infrastructure layer into Failures
-/// that can be handled in the domain layers and appwards.
-///
-/// Each failure has a [message] with a human readable description of the error,
-/// a [code] with a unique identifier for the error, a [cause] with the original
-/// error, exception or object that originated the failure and a [stackTrace]
-/// with the stack trace of the error.
 @freezed
 sealed class AuthFailure with _$AuthFailure {
   const AuthFailure._();
 
-  /// Represents an unexpected or not identified failure.
-  const factory AuthFailure.unexpected({
-    String? message,
-    String? code,
-    dynamic cause,
-    StackTrace? stackTrace,
-  }) = Unexpected;
-
-  /// Represents a network or internet connectivity failure.
+  /// Connection problems
   const factory AuthFailure.network({
     String? message,
     String? code,
@@ -32,7 +16,7 @@ sealed class AuthFailure with _$AuthFailure {
     StackTrace? stackTrace,
   }) = Network;
 
-  /// Represents too many requests to the server failure.
+  /// Too many attempts (rate-limit)
   const factory AuthFailure.tooManyRequests({
     String? message,
     String? code,
@@ -40,7 +24,7 @@ sealed class AuthFailure with _$AuthFailure {
     StackTrace? stackTrace,
   }) = TooManyRequests;
 
-  /// Represents a disabled user failure.
+  /// Account status
   const factory AuthFailure.userDisabled({
     String? message,
     String? code,
@@ -48,7 +32,14 @@ sealed class AuthFailure with _$AuthFailure {
     StackTrace? stackTrace,
   }) = UserDisabled;
 
-  /// Represents an email that does not exist failure.
+  /// Credentials / input
+  const factory AuthFailure.invalidEmail({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = InvalidEmail;
+
   const factory AuthFailure.emailDoesNotExist({
     String? message,
     String? code,
@@ -56,15 +47,13 @@ sealed class AuthFailure with _$AuthFailure {
     StackTrace? stackTrace,
   }) = EmailDoesNotExist;
 
-  /// Represents a cancelled by user failure.
-  const factory AuthFailure.cancelledByUser({
+  const factory AuthFailure.weakPassword({
     String? message,
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = CancelledByUser;
+  }) = WeakPassword;
 
-  /// Represents an invalid email and password combination failure.
   const factory AuthFailure.invalidEmailAndPasswordCombination({
     String? message,
     String? code,
@@ -72,7 +61,6 @@ sealed class AuthFailure with _$AuthFailure {
     StackTrace? stackTrace,
   }) = InvalidEmailAndPasswordCombination;
 
-  /// Represents an email already in use failure.
   const factory AuthFailure.emailInUse({
     String? message,
     String? code,
@@ -81,7 +69,51 @@ sealed class AuthFailure with _$AuthFailure {
     String? email,
   }) = EmailInUse;
 
-  /// Represents an invalid role failure.
+  const factory AuthFailure.credentialAlreadyInUse({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = CredentialAlreadyInUse;
+
+  const factory AuthFailure.providerAlreadyLinked({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = ProviderAlreadyLinked;
+
+  const factory AuthFailure.userMismatch({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = UserMismatch;
+
+  const factory AuthFailure.invalidPhoneNumber({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = InvalidPhoneNumber;
+
+  /// Security-sensitive ops
+  const factory AuthFailure.requiresRecentLogin({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = RequiresRecentLogin;
+
+  /// User cancelled a popup / provider flow
+  const factory AuthFailure.cancelledByUser({
+    String? message,
+    String? code,
+    dynamic cause,
+    StackTrace? stackTrace,
+  }) = CancelledByUser;
+
+  /// Configuration / project
   const factory AuthFailure.invalidRole({
     String? message,
     String? code,
@@ -89,111 +121,93 @@ sealed class AuthFailure with _$AuthFailure {
     StackTrace? stackTrace,
   }) = InvalidRole;
 
-  /// Represents an invalid phone number failure.
-  const factory AuthFailure.invalidPhoneNumber({
+  /// Fallback
+  const factory AuthFailure.unexpected({
     String? message,
     String? code,
     dynamic cause,
     StackTrace? stackTrace,
-  }) = InvalidPhoneNumber;
+  }) = Unexpected;
 }
 
-/// Class with static methods to create failures from FirebaseAuthException.
 class AuthFailureFactory {
-  /// Returns an [AuthFailure] from a FirebaseAuthException, with appropriate
-  /// message and code.
   static AuthFailure fromFirebaseAuthException(
-    FirebaseAuthException exception,
+    FirebaseAuthException e,
     StackTrace stackTrace, {
     String email = '',
   }) {
-    final code = exception.code;
-    switch (code) {
+    switch (e.code) {
+      // conexión
       case 'network-request-failed':
         return AuthFailure.network(
-          message: 'error.noInternetConnection'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.noInternetConnection'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
       case 'too-many-requests':
         return AuthFailure.tooManyRequests(
-          message: 'error.tooManyAttempts'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.tooManyAttempts'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // cuenta inhabilitada / inexistente
       case 'user-disabled':
         return AuthFailure.userDisabled(
-          message: 'error.userDisabled'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.userDisabled'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
       case 'user-not-found':
         return AuthFailure.emailDoesNotExist(
-          message: 'error.emailDoesNotExist'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.emailDoesNotExist'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // email / password
+      case 'invalid-email':
+        return AuthFailure.invalidEmail(
+            message: 'error.invalidEmail'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+      case 'weak-password':
+        return AuthFailure.weakPassword(
+            message: 'error.weakPassword'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
       case 'wrong-password':
       case 'invalid-credential':
         return AuthFailure.invalidEmailAndPasswordCombination(
-          message: 'error.incorrectEmailOrPassword'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.incorrectEmailOrPassword'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
       case 'email-already-exists':
       case 'email-already-in-use':
       case 'account-exists-with-different-credential':
         return AuthFailure.emailInUse(
-          message: 'error.emailInUse'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-          email: email,
-        );
+            message: 'error.emailInUse'.tr(), code: e.code, cause: e, stackTrace: stackTrace, email: email);
+
+      // linking / credenciales externas
+      case 'credential-already-in-use':
+        return AuthFailure.credentialAlreadyInUse(
+            message: 'error.credentialAlreadyInUse'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+      case 'provider-already-linked':
+        return AuthFailure.providerAlreadyLinked(
+            message: 'error.providerAlreadyLinked'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+      case 'user-mismatch':
+        return AuthFailure.userMismatch(
+            message: 'error.userMismatch'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // teléfono
       case 'invalid-phone-number':
         return AuthFailure.invalidPhoneNumber(
-          message: 'error.invalidPhoneNumber'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.invalidPhoneNumber'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // seguridad
+      case 'requires-recent-login':
+        return AuthFailure.requiresRecentLogin(
+            message: 'error.requiresRecentLogin'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // configuración
       case 'operation-not-allowed':
         return AuthFailure.invalidRole(
-          message: 'error.invalidRole'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.invalidRole'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // usuario cancela
       case 'operation-cancelled':
         return AuthFailure.cancelledByUser(
-          message: 'error.cancelledByUser'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.cancelledByUser'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
+
+      // fallback
       default:
         return AuthFailure.unexpected(
-          message: 'error.unexpectedError'.tr(),
-          code: code,
-          cause: exception,
-          stackTrace: stackTrace,
-        );
+            message: 'error.unexpectedError'.tr(), code: e.code, cause: e, stackTrace: stackTrace);
     }
   }
 
-  /// Returns an [AuthFailure.unexpected] from any Exception, with appropriate
-  /// message and code.
-  static AuthFailure fromException(Exception exception, StackTrace stackTrace) {
-    return AuthFailure.unexpected(
-      message: 'error.unexpectedError'.tr(),
-      code: 'unexpected',
-      cause: exception,
-      stackTrace: stackTrace,
-    );
-  }
+  static AuthFailure fromException(Exception e, StackTrace stackTrace) => AuthFailure.unexpected(
+      message: 'error.unexpectedError'.tr(), code: 'unexpected', cause: e, stackTrace: stackTrace);
 }

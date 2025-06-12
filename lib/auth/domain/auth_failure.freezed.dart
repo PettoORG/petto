@@ -99,101 +99,6 @@ class _$AuthFailureCopyWithImpl<$Res> implements $AuthFailureCopyWith<$Res> {
 
 /// @nodoc
 
-class Unexpected extends AuthFailure {
-  const Unexpected({this.message, this.code, this.cause, this.stackTrace})
-      : super._();
-
-  @override
-  final String? message;
-  @override
-  final String? code;
-  @override
-  final dynamic cause;
-  @override
-  final StackTrace? stackTrace;
-
-  /// Create a copy of AuthFailure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $UnexpectedCopyWith<Unexpected> get copyWith =>
-      _$UnexpectedCopyWithImpl<Unexpected>(this, _$identity);
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is Unexpected &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.code, code) || other.code == code) &&
-            const DeepCollectionEquality().equals(other.cause, cause) &&
-            (identical(other.stackTrace, stackTrace) ||
-                other.stackTrace == stackTrace));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, code,
-      const DeepCollectionEquality().hash(cause), stackTrace);
-
-  @override
-  String toString() {
-    return 'AuthFailure.unexpected(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
-  }
-}
-
-/// @nodoc
-abstract mixin class $UnexpectedCopyWith<$Res>
-    implements $AuthFailureCopyWith<$Res> {
-  factory $UnexpectedCopyWith(
-          Unexpected value, $Res Function(Unexpected) _then) =
-      _$UnexpectedCopyWithImpl;
-  @override
-  @useResult
-  $Res call(
-      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
-}
-
-/// @nodoc
-class _$UnexpectedCopyWithImpl<$Res> implements $UnexpectedCopyWith<$Res> {
-  _$UnexpectedCopyWithImpl(this._self, this._then);
-
-  final Unexpected _self;
-  final $Res Function(Unexpected) _then;
-
-  /// Create a copy of AuthFailure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? message = freezed,
-    Object? code = freezed,
-    Object? cause = freezed,
-    Object? stackTrace = freezed,
-  }) {
-    return _then(Unexpected(
-      message: freezed == message
-          ? _self.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String?,
-      code: freezed == code
-          ? _self.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cause: freezed == cause
-          ? _self.cause
-          : cause // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      stackTrace: freezed == stackTrace
-          ? _self.stackTrace
-          : stackTrace // ignore: cast_nullable_to_non_nullable
-              as StackTrace?,
-    ));
-  }
-}
-
-/// @nodoc
-
 class Network extends AuthFailure {
   const Network({this.message, this.code, this.cause, this.stackTrace})
       : super._();
@@ -479,6 +384,101 @@ class _$UserDisabledCopyWithImpl<$Res> implements $UserDisabledCopyWith<$Res> {
 
 /// @nodoc
 
+class InvalidEmail extends AuthFailure {
+  const InvalidEmail({this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $InvalidEmailCopyWith<InvalidEmail> get copyWith =>
+      _$InvalidEmailCopyWithImpl<InvalidEmail>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is InvalidEmail &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.invalidEmail(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $InvalidEmailCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $InvalidEmailCopyWith(
+          InvalidEmail value, $Res Function(InvalidEmail) _then) =
+      _$InvalidEmailCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$InvalidEmailCopyWithImpl<$Res> implements $InvalidEmailCopyWith<$Res> {
+  _$InvalidEmailCopyWithImpl(this._self, this._then);
+
+  final InvalidEmail _self;
+  final $Res Function(InvalidEmail) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(InvalidEmail(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
 class EmailDoesNotExist extends AuthFailure {
   const EmailDoesNotExist(
       {this.message, this.code, this.cause, this.stackTrace})
@@ -576,8 +576,8 @@ class _$EmailDoesNotExistCopyWithImpl<$Res>
 
 /// @nodoc
 
-class CancelledByUser extends AuthFailure {
-  const CancelledByUser({this.message, this.code, this.cause, this.stackTrace})
+class WeakPassword extends AuthFailure {
+  const WeakPassword({this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -594,14 +594,14 @@ class CancelledByUser extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $CancelledByUserCopyWith<CancelledByUser> get copyWith =>
-      _$CancelledByUserCopyWithImpl<CancelledByUser>(this, _$identity);
+  $WeakPasswordCopyWith<WeakPassword> get copyWith =>
+      _$WeakPasswordCopyWithImpl<WeakPassword>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is CancelledByUser &&
+            other is WeakPassword &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -615,16 +615,16 @@ class CancelledByUser extends AuthFailure {
 
   @override
   String toString() {
-    return 'AuthFailure.cancelledByUser(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+    return 'AuthFailure.weakPassword(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
   }
 }
 
 /// @nodoc
-abstract mixin class $CancelledByUserCopyWith<$Res>
+abstract mixin class $WeakPasswordCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory $CancelledByUserCopyWith(
-          CancelledByUser value, $Res Function(CancelledByUser) _then) =
-      _$CancelledByUserCopyWithImpl;
+  factory $WeakPasswordCopyWith(
+          WeakPassword value, $Res Function(WeakPassword) _then) =
+      _$WeakPasswordCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -632,12 +632,11 @@ abstract mixin class $CancelledByUserCopyWith<$Res>
 }
 
 /// @nodoc
-class _$CancelledByUserCopyWithImpl<$Res>
-    implements $CancelledByUserCopyWith<$Res> {
-  _$CancelledByUserCopyWithImpl(this._self, this._then);
+class _$WeakPasswordCopyWithImpl<$Res> implements $WeakPasswordCopyWith<$Res> {
+  _$WeakPasswordCopyWithImpl(this._self, this._then);
 
-  final CancelledByUser _self;
-  final $Res Function(CancelledByUser) _then;
+  final WeakPassword _self;
+  final $Res Function(WeakPassword) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -649,7 +648,7 @@ class _$CancelledByUserCopyWithImpl<$Res>
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(CancelledByUser(
+    return _then(WeakPassword(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -879,8 +878,9 @@ class _$EmailInUseCopyWithImpl<$Res> implements $EmailInUseCopyWith<$Res> {
 
 /// @nodoc
 
-class InvalidRole extends AuthFailure {
-  const InvalidRole({this.message, this.code, this.cause, this.stackTrace})
+class CredentialAlreadyInUse extends AuthFailure {
+  const CredentialAlreadyInUse(
+      {this.message, this.code, this.cause, this.stackTrace})
       : super._();
 
   @override
@@ -897,14 +897,15 @@ class InvalidRole extends AuthFailure {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $InvalidRoleCopyWith<InvalidRole> get copyWith =>
-      _$InvalidRoleCopyWithImpl<InvalidRole>(this, _$identity);
+  $CredentialAlreadyInUseCopyWith<CredentialAlreadyInUse> get copyWith =>
+      _$CredentialAlreadyInUseCopyWithImpl<CredentialAlreadyInUse>(
+          this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is InvalidRole &&
+            other is CredentialAlreadyInUse &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.cause, cause) &&
@@ -918,16 +919,16 @@ class InvalidRole extends AuthFailure {
 
   @override
   String toString() {
-    return 'AuthFailure.invalidRole(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+    return 'AuthFailure.credentialAlreadyInUse(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
   }
 }
 
 /// @nodoc
-abstract mixin class $InvalidRoleCopyWith<$Res>
+abstract mixin class $CredentialAlreadyInUseCopyWith<$Res>
     implements $AuthFailureCopyWith<$Res> {
-  factory $InvalidRoleCopyWith(
-          InvalidRole value, $Res Function(InvalidRole) _then) =
-      _$InvalidRoleCopyWithImpl;
+  factory $CredentialAlreadyInUseCopyWith(CredentialAlreadyInUse value,
+          $Res Function(CredentialAlreadyInUse) _then) =
+      _$CredentialAlreadyInUseCopyWithImpl;
   @override
   @useResult
   $Res call(
@@ -935,11 +936,12 @@ abstract mixin class $InvalidRoleCopyWith<$Res>
 }
 
 /// @nodoc
-class _$InvalidRoleCopyWithImpl<$Res> implements $InvalidRoleCopyWith<$Res> {
-  _$InvalidRoleCopyWithImpl(this._self, this._then);
+class _$CredentialAlreadyInUseCopyWithImpl<$Res>
+    implements $CredentialAlreadyInUseCopyWith<$Res> {
+  _$CredentialAlreadyInUseCopyWithImpl(this._self, this._then);
 
-  final InvalidRole _self;
-  final $Res Function(InvalidRole) _then;
+  final CredentialAlreadyInUse _self;
+  final $Res Function(CredentialAlreadyInUse) _then;
 
   /// Create a copy of AuthFailure
   /// with the given fields replaced by the non-null parameter values.
@@ -951,7 +953,200 @@ class _$InvalidRoleCopyWithImpl<$Res> implements $InvalidRoleCopyWith<$Res> {
     Object? cause = freezed,
     Object? stackTrace = freezed,
   }) {
-    return _then(InvalidRole(
+    return _then(CredentialAlreadyInUse(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class ProviderAlreadyLinked extends AuthFailure {
+  const ProviderAlreadyLinked(
+      {this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $ProviderAlreadyLinkedCopyWith<ProviderAlreadyLinked> get copyWith =>
+      _$ProviderAlreadyLinkedCopyWithImpl<ProviderAlreadyLinked>(
+          this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ProviderAlreadyLinked &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.providerAlreadyLinked(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $ProviderAlreadyLinkedCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $ProviderAlreadyLinkedCopyWith(ProviderAlreadyLinked value,
+          $Res Function(ProviderAlreadyLinked) _then) =
+      _$ProviderAlreadyLinkedCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$ProviderAlreadyLinkedCopyWithImpl<$Res>
+    implements $ProviderAlreadyLinkedCopyWith<$Res> {
+  _$ProviderAlreadyLinkedCopyWithImpl(this._self, this._then);
+
+  final ProviderAlreadyLinked _self;
+  final $Res Function(ProviderAlreadyLinked) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(ProviderAlreadyLinked(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class UserMismatch extends AuthFailure {
+  const UserMismatch({this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $UserMismatchCopyWith<UserMismatch> get copyWith =>
+      _$UserMismatchCopyWithImpl<UserMismatch>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is UserMismatch &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.userMismatch(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $UserMismatchCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $UserMismatchCopyWith(
+          UserMismatch value, $Res Function(UserMismatch) _then) =
+      _$UserMismatchCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$UserMismatchCopyWithImpl<$Res> implements $UserMismatchCopyWith<$Res> {
+  _$UserMismatchCopyWithImpl(this._self, this._then);
+
+  final UserMismatch _self;
+  final $Res Function(UserMismatch) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(UserMismatch(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -1049,6 +1244,389 @@ class _$InvalidPhoneNumberCopyWithImpl<$Res>
     Object? stackTrace = freezed,
   }) {
     return _then(InvalidPhoneNumber(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class RequiresRecentLogin extends AuthFailure {
+  const RequiresRecentLogin(
+      {this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $RequiresRecentLoginCopyWith<RequiresRecentLogin> get copyWith =>
+      _$RequiresRecentLoginCopyWithImpl<RequiresRecentLogin>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is RequiresRecentLogin &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.requiresRecentLogin(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $RequiresRecentLoginCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $RequiresRecentLoginCopyWith(
+          RequiresRecentLogin value, $Res Function(RequiresRecentLogin) _then) =
+      _$RequiresRecentLoginCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$RequiresRecentLoginCopyWithImpl<$Res>
+    implements $RequiresRecentLoginCopyWith<$Res> {
+  _$RequiresRecentLoginCopyWithImpl(this._self, this._then);
+
+  final RequiresRecentLogin _self;
+  final $Res Function(RequiresRecentLogin) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(RequiresRecentLogin(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class CancelledByUser extends AuthFailure {
+  const CancelledByUser({this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $CancelledByUserCopyWith<CancelledByUser> get copyWith =>
+      _$CancelledByUserCopyWithImpl<CancelledByUser>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CancelledByUser &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.cancelledByUser(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $CancelledByUserCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $CancelledByUserCopyWith(
+          CancelledByUser value, $Res Function(CancelledByUser) _then) =
+      _$CancelledByUserCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$CancelledByUserCopyWithImpl<$Res>
+    implements $CancelledByUserCopyWith<$Res> {
+  _$CancelledByUserCopyWithImpl(this._self, this._then);
+
+  final CancelledByUser _self;
+  final $Res Function(CancelledByUser) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(CancelledByUser(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class InvalidRole extends AuthFailure {
+  const InvalidRole({this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $InvalidRoleCopyWith<InvalidRole> get copyWith =>
+      _$InvalidRoleCopyWithImpl<InvalidRole>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is InvalidRole &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.invalidRole(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $InvalidRoleCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $InvalidRoleCopyWith(
+          InvalidRole value, $Res Function(InvalidRole) _then) =
+      _$InvalidRoleCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$InvalidRoleCopyWithImpl<$Res> implements $InvalidRoleCopyWith<$Res> {
+  _$InvalidRoleCopyWithImpl(this._self, this._then);
+
+  final InvalidRole _self;
+  final $Res Function(InvalidRole) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(InvalidRole(
+      message: freezed == message
+          ? _self.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      cause: freezed == cause
+          ? _self.cause
+          : cause // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      stackTrace: freezed == stackTrace
+          ? _self.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class Unexpected extends AuthFailure {
+  const Unexpected({this.message, this.code, this.cause, this.stackTrace})
+      : super._();
+
+  @override
+  final String? message;
+  @override
+  final String? code;
+  @override
+  final dynamic cause;
+  @override
+  final StackTrace? stackTrace;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  $UnexpectedCopyWith<Unexpected> get copyWith =>
+      _$UnexpectedCopyWithImpl<Unexpected>(this, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is Unexpected &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.cause, cause) &&
+            (identical(other.stackTrace, stackTrace) ||
+                other.stackTrace == stackTrace));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, code,
+      const DeepCollectionEquality().hash(cause), stackTrace);
+
+  @override
+  String toString() {
+    return 'AuthFailure.unexpected(message: $message, code: $code, cause: $cause, stackTrace: $stackTrace)';
+  }
+}
+
+/// @nodoc
+abstract mixin class $UnexpectedCopyWith<$Res>
+    implements $AuthFailureCopyWith<$Res> {
+  factory $UnexpectedCopyWith(
+          Unexpected value, $Res Function(Unexpected) _then) =
+      _$UnexpectedCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String? message, String? code, dynamic cause, StackTrace? stackTrace});
+}
+
+/// @nodoc
+class _$UnexpectedCopyWithImpl<$Res> implements $UnexpectedCopyWith<$Res> {
+  _$UnexpectedCopyWithImpl(this._self, this._then);
+
+  final Unexpected _self;
+  final $Res Function(Unexpected) _then;
+
+  /// Create a copy of AuthFailure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $Res call({
+    Object? message = freezed,
+    Object? code = freezed,
+    Object? cause = freezed,
+    Object? stackTrace = freezed,
+  }) {
+    return _then(Unexpected(
       message: freezed == message
           ? _self.message
           : message // ignore: cast_nullable_to_non_nullable
