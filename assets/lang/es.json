@@ -1,6 +1,8 @@
 {
     "weightInKg": "Peso (kg)",
+    "weight": "Peso",
     "microchipNumber": "Número de microchip",
+    "microchipNumberOptional": "Número de microchip (opcional)",
     "size": "Tamaño",
     "foodType": "Tipo de alimento",
     "editPet": "Editar mascota",
