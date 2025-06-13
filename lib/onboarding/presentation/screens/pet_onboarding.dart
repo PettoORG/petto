@@ -47,8 +47,7 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
   String get family => petsModule;
 
   /// Helper to know if there are files pending
-  bool get hasFilePending =>
-      ref.read(filesNotifierProvider(family).notifier).hasFilesPending;
+  bool get hasFilePending => ref.read(filesNotifierProvider(family).notifier).hasFilesPending;
 
   /// Collection path for pets
   String get collectionPath => ref.read(petCollectionPathProvider);
@@ -121,11 +120,11 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
       if (saveCompleted) {
         final pet = next.entity;
         ref.read(filesStoragePathProvider(family).notifier).set(
-          _buildStoragePath(pet.id),
-        );
+              _buildStoragePath(pet.id),
+            );
         ref.read(filesFirestorePathProvider(family).notifier).set(
-          _buildFirestorePath(pet.id),
-        );
+              _buildFirestorePath(pet.id),
+            );
         await ref.read(filesNotifierProvider(family).notifier).processFiles();
 
         if (!hasFilePending && mounted) {
@@ -140,8 +139,7 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
     ref.listen<fs.FilesState>(filesNotifierProvider(family), (previous, next) {
       switch (next) {
         case fs.Loaded(files: final _, status: final status):
-          final finished =
-              status == fs.LoadedStatus.afterProcessing && !hasFilePending;
+          final finished = status == fs.LoadedStatus.afterProcessing && !hasFilePending;
           if (finished && mounted) {
             _controller.nextPage(
               duration: const Duration(milliseconds: 300),
@@ -157,10 +155,8 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final formIsLoading =
-        ref.watch(petNotifierProvider.select((state) => state is Loading<Pet>));
-    final filesIsLoading = ref.watch(
-        filesNotifierProvider(family).select((state) => state is fs.Loading));
+    final formIsLoading = ref.watch(petNotifierProvider.select((state) => state is Loading<Pet>));
+    final filesIsLoading = ref.watch(filesNotifierProvider(family).select((state) => state is fs.Loading));
     final loading = formIsLoading || filesIsLoading;
     final storagePath = ref.watch(filesStoragePathProvider(family));
     final firestorePath = ref.watch(filesFirestorePathProvider(family));
@@ -188,95 +184,94 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('${_currentPage + 1} de 4'),
-                SizedBox(height: AppThemeSpacing.extraTinyH),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: TweenAnimationBuilder<double>(
-                    tween: Tween<double>(
-                      begin: 0,
-                      end: (_currentPage + 1) / 4,
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${_currentPage + 1} de 4'),
+                  SizedBox(height: AppThemeSpacing.extraTinyH),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween<double>(
+                        begin: 0,
+                        end: (_currentPage + 1) / 4,
+                      ),
+                      duration: const Duration(milliseconds: 300),
+                      builder: (context, value, child) {
+                        return LinearProgressIndicator(
+                          value: value,
+                          minHeight: 10,
+                        );
+                      },
                     ),
-                    duration: const Duration(milliseconds: 300),
-                    builder: (context, value, child) {
-                      return LinearProgressIndicator(
-                        value: value,
-                        minHeight: 10,
-                      );
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: PageView(
-              controller: _controller,
-              physics: _currentPage == 3
-                  ? const NeverScrollableScrollPhysics()
-                  : const BouncingScrollPhysics(),
-              onPageChanged: (i) => setState(() => _currentPage = i),
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-                  child: _PetBasicInfoPage(
-                    selectedPetSex: _selectedPetSex,
-                    onSexChanged: (sex) => setState(() => _selectedPetSex = sex),
-                    onBreedChanged: (b) => setState(() => _selectedBreed = b),
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                physics: _currentPage == 3 ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
+                onPageChanged: (i) => setState(() => _currentPage = i),
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+                    child: _PetBasicInfoPage(
+                      selectedPetSex: _selectedPetSex,
+                      onSexChanged: (sex) => setState(() => _selectedPetSex = sex),
+                      onBreedChanged: (b) => setState(() => _selectedBreed = b),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-                  child: _PetPhotoPage(
-                    breed: _selectedBreed,
-                    storagePath: storagePath,
-                    firestorePath: firestorePath,
-                    family: family,
-                    loading: loading,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+                    child: _PetPhotoPage(
+                      breed: _selectedBreed,
+                      storagePath: storagePath,
+                      firestorePath: firestorePath,
+                      family: family,
+                      loading: loading,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-                  child: const _PetVitalInformation(),
-                ),
-                const _PetSuccessPage(),
-              ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+                    child: const _PetVitalInformation(),
+                  ),
+                  const _PetSuccessPage(),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-            child: ElevatedButton(
-              onPressed: loading
-                  ? null
-                  : () async {
-                      if (_currentPage == 0) {
-                        if (_validateBasicInfo()) {
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+              child: ElevatedButton(
+                onPressed: loading
+                    ? null
+                    : () async {
+                        if (_currentPage == 0) {
+                          if (_validateBasicInfo()) {
+                            _controller.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        } else if (_currentPage == 1) {
                           _controller.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
+                        } else if (_currentPage == 2) {
+                          if (_validateVitalInfo()) {
+                            await _createPet();
+                          }
                         }
-                      } else if (_currentPage == 1) {
-                        _controller.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      } else if (_currentPage == 2) {
-                        if (_validateVitalInfo()) {
-                          await _createPet();
-                        }
-                      }
-                    },
-              child: Text('next'.tr()),
+                      },
+                child: Text('next'.tr()),
+              ),
             ),
-          ),
-          SizedBox(height: AppThemeSpacing.smallH),
-        ],
+            SizedBox(height: AppThemeSpacing.smallH),
+          ],
+        ),
       ),
     );
   }
@@ -384,9 +379,8 @@ class _PetBasicInfoPageState extends State<_PetBasicInfoPage> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
-    final availableBreeds = _selectedSpecie == null
-        ? <PetBreed>[]
-        : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList();
+    final availableBreeds =
+        _selectedSpecie == null ? <PetBreed>[] : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -421,9 +415,7 @@ class _PetBasicInfoPageState extends State<_PetBasicInfoPage> {
                 onChanged: (value) {
                   setState(() {
                     _selectedSpecie = value;
-                    FormBuilder.of(context)
-                        ?.fields['breed']
-                        ?.didChange(null);
+                    FormBuilder.of(context)?.fields['breed']?.didChange(null);
                   });
                 },
               ),
@@ -512,8 +504,7 @@ class _PetPhotoPage extends StatelessWidget {
           showDeleteAction: false,
           showRetryAction: false,
           isLoading: loading,
-          unselectedFileWidget: (onImageTap) =>
-              _PetAvatar(breed: breed, onImageTap: onImageTap),
+          unselectedFileWidget: (onImageTap) => _PetAvatar(breed: breed, onImageTap: onImageTap),
           borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
           thumbnailHeight: AppThemeSpacing.ultraH,
           thumbnailWidth: AppThemeSpacing.ultraH,
