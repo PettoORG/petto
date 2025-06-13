@@ -27,7 +27,7 @@ mixin _$PetDTO {
   double get weight;
   PetSize get size;
   FoodType get foodType;
-  String get microchipNumber;
+  String? get microchipNumber;
   List<String> get accessibleUserIds;
   bool get active;
   @TimestampConverter()
@@ -127,7 +127,7 @@ abstract mixin class $PetDTOCopyWith<$Res> {
       double weight,
       PetSize size,
       FoodType foodType,
-      String microchipNumber,
+      String? microchipNumber,
       List<String> accessibleUserIds,
       bool active,
       @TimestampConverter() DateTime? createdAt,
@@ -159,7 +159,7 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
     Object? weight = null,
     Object? size = null,
     Object? foodType = null,
-    Object? microchipNumber = null,
+    Object? microchipNumber = freezed,
     Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
@@ -212,10 +212,10 @@ class _$PetDTOCopyWithImpl<$Res> implements $PetDTOCopyWith<$Res> {
           ? _self.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
               as FoodType,
-      microchipNumber: null == microchipNumber
+      microchipNumber: freezed == microchipNumber
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       accessibleUserIds: null == accessibleUserIds
           ? _self.accessibleUserIds
           : accessibleUserIds // ignore: cast_nullable_to_non_nullable
@@ -295,7 +295,7 @@ class _PetDTO extends PetDTO {
   @override
   final FoodType foodType;
   @override
-  final String microchipNumber;
+  final String? microchipNumber;
   final List<String> _accessibleUserIds;
   @override
   List<String> get accessibleUserIds {
@@ -414,7 +414,7 @@ abstract mixin class _$PetDTOCopyWith<$Res> implements $PetDTOCopyWith<$Res> {
       double weight,
       PetSize size,
       FoodType foodType,
-      String microchipNumber,
+      String? microchipNumber,
       List<String> accessibleUserIds,
       bool active,
       @TimestampConverter() DateTime? createdAt,
@@ -446,7 +446,7 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
     Object? weight = null,
     Object? size = null,
     Object? foodType = null,
-    Object? microchipNumber = null,
+    Object? microchipNumber = freezed,
     Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
@@ -499,10 +499,10 @@ class __$PetDTOCopyWithImpl<$Res> implements _$PetDTOCopyWith<$Res> {
           ? _self.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
               as FoodType,
-      microchipNumber: null == microchipNumber
+      microchipNumber: freezed == microchipNumber
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       accessibleUserIds: null == accessibleUserIds
           ? _self._accessibleUserIds
           : accessibleUserIds // ignore: cast_nullable_to_non_nullable

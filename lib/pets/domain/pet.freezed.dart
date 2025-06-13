@@ -49,7 +49,7 @@ mixin _$Pet {
   FoodType get foodType;
 
   /// Optional microchip number for pet identification.
-  String get microchipNumber;
+  String? get microchipNumber;
 
   /// List of user IDs who have access to the pet.
   List<String> get accessibleUserIds;
@@ -154,7 +154,7 @@ abstract mixin class $PetCopyWith<$Res> {
       double weight,
       PetSize size,
       FoodType foodType,
-      String microchipNumber,
+      String? microchipNumber,
       List<String> accessibleUserIds,
       bool active,
       DateTime? createdAt,
@@ -186,7 +186,7 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
     Object? weight = null,
     Object? size = null,
     Object? foodType = null,
-    Object? microchipNumber = null,
+    Object? microchipNumber = freezed,
     Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
@@ -239,10 +239,10 @@ class _$PetCopyWithImpl<$Res> implements $PetCopyWith<$Res> {
           ? _self.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
               as FoodType,
-      microchipNumber: null == microchipNumber
+      microchipNumber: freezed == microchipNumber
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       accessibleUserIds: null == accessibleUserIds
           ? _self.accessibleUserIds
           : accessibleUserIds // ignore: cast_nullable_to_non_nullable
@@ -342,7 +342,7 @@ class _Pet extends Pet {
 
   /// Optional microchip number for pet identification.
   @override
-  final String microchipNumber;
+  final String? microchipNumber;
 
   /// List of user IDs who have access to the pet.
   final List<String> _accessibleUserIds;
@@ -464,7 +464,7 @@ abstract mixin class _$PetCopyWith<$Res> implements $PetCopyWith<$Res> {
       double weight,
       PetSize size,
       FoodType foodType,
-      String microchipNumber,
+      String? microchipNumber,
       List<String> accessibleUserIds,
       bool active,
       DateTime? createdAt,
@@ -496,7 +496,7 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
     Object? weight = null,
     Object? size = null,
     Object? foodType = null,
-    Object? microchipNumber = null,
+    Object? microchipNumber = freezed,
     Object? accessibleUserIds = null,
     Object? active = null,
     Object? createdAt = freezed,
@@ -549,10 +549,10 @@ class __$PetCopyWithImpl<$Res> implements _$PetCopyWith<$Res> {
           ? _self.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
               as FoodType,
-      microchipNumber: null == microchipNumber
+      microchipNumber: freezed == microchipNumber
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       accessibleUserIds: null == accessibleUserIds
           ? _self._accessibleUserIds
           : accessibleUserIds // ignore: cast_nullable_to_non_nullable

@@ -26,7 +26,7 @@ sealed class PetVM with _$PetVM {
     required PetSize size,
     String? photoUrl,
     required FoodType foodType,
-    required String microchipNumber,
+    required String? microchipNumber,
   }) = _PetVM;
 
   /// Creates a PetVM from a Pet entity.

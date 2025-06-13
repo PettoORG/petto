@@ -29,7 +29,7 @@ sealed class PetDTO with _$PetDTO implements BaseDTO<Pet> {
     required double weight,
     required PetSize size,
     required FoodType foodType,
-    required String microchipNumber,
+    required String? microchipNumber,
     required List<String> accessibleUserIds,
     required bool active,
     @TimestampConverter() required DateTime? createdAt,

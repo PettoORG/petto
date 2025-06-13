@@ -19,7 +19,7 @@ _PetDTO _$PetDTOFromJson(Map<String, dynamic> json) => _PetDTO(
       weight: (json['weight'] as num).toDouble(),
       size: $enumDecode(_$PetSizeEnumMap, json['size']),
       foodType: $enumDecode(_$FoodTypeEnumMap, json['foodType']),
-      microchipNumber: json['microchipNumber'] as String,
+      microchipNumber: json['microchipNumber'] as String?,
       accessibleUserIds: (json['accessibleUserIds'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),

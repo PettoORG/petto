@@ -25,7 +25,7 @@ mixin _$PetVM {
   PetSize get size;
   String? get photoUrl;
   FoodType get foodType;
-  String get microchipNumber;
+  String? get microchipNumber;
 
   /// Create a copy of PetVM
   /// with the given fields replaced by the non-null parameter values.
@@ -82,7 +82,7 @@ abstract mixin class $PetVMCopyWith<$Res> {
       PetSize size,
       String? photoUrl,
       FoodType foodType,
-      String microchipNumber});
+      String? microchipNumber});
 }
 
 /// @nodoc
@@ -107,7 +107,7 @@ class _$PetVMCopyWithImpl<$Res> implements $PetVMCopyWith<$Res> {
     Object? size = null,
     Object? photoUrl = freezed,
     Object? foodType = null,
-    Object? microchipNumber = null,
+    Object? microchipNumber = freezed,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -150,10 +150,10 @@ class _$PetVMCopyWithImpl<$Res> implements $PetVMCopyWith<$Res> {
           ? _self.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
               as FoodType,
-      microchipNumber: null == microchipNumber
+      microchipNumber: freezed == microchipNumber
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -196,7 +196,7 @@ class _PetVM extends PetVM {
   @override
   final FoodType foodType;
   @override
-  final String microchipNumber;
+  final String? microchipNumber;
 
   /// Create a copy of PetVM
   /// with the given fields replaced by the non-null parameter values.
@@ -255,7 +255,7 @@ abstract mixin class _$PetVMCopyWith<$Res> implements $PetVMCopyWith<$Res> {
       PetSize size,
       String? photoUrl,
       FoodType foodType,
-      String microchipNumber});
+      String? microchipNumber});
 }
 
 /// @nodoc
@@ -280,7 +280,7 @@ class __$PetVMCopyWithImpl<$Res> implements _$PetVMCopyWith<$Res> {
     Object? size = null,
     Object? photoUrl = freezed,
     Object? foodType = null,
-    Object? microchipNumber = null,
+    Object? microchipNumber = freezed,
   }) {
     return _then(_PetVM(
       id: null == id
@@ -323,10 +323,10 @@ class __$PetVMCopyWithImpl<$Res> implements _$PetVMCopyWith<$Res> {
           ? _self.foodType
           : foodType // ignore: cast_nullable_to_non_nullable
               as FoodType,
-      microchipNumber: null == microchipNumber
+      microchipNumber: freezed == microchipNumber
           ? _self.microchipNumber
           : microchipNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
