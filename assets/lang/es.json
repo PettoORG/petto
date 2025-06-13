@@ -1,5 +1,5 @@
 {
-    "weight": "Peso",
+    "weightInKg": "Peso (kg)",
     "microchipNumber": "Número de microchip",
     "size": "Tamaño",
     "foodType": "Tipo de alimento",

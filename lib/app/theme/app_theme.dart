@@ -29,7 +29,10 @@ class AppTheme {
       useMaterial3: true,
       scaffoldBackgroundColor: AppThemeColor.background,
       colorScheme: scheme,
-      appBarTheme: AppBarTheme(backgroundColor: AppThemeColor.background),
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppThemeColor.background,
+        titleTextStyle: TextStyle(fontFamily: 'Comfortaa', fontSize: 18.sp, color: scheme.onSurface),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           textStyle: TextStyle(
