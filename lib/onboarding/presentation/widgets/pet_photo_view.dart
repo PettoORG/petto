@@ -25,9 +25,9 @@ class PetPhotoView extends StatelessWidget {
     return Column(
       children: [
         SizedBox(height: AppThemeSpacing.smallH),
-        Text('uploadPhotoTitle'.tr(), style: Theme.of(context).textTheme.titleLarge),
+        Text('letsSeeThatLittleFace'.tr(), style: Theme.of(context).textTheme.titleLarge),
         SizedBox(height: AppThemeSpacing.extraTinyH),
-        Text('uploadPhotoSubtitle'.tr(), textAlign: TextAlign.center),
+        Text('petProfilePicInfo'.tr(), textAlign: TextAlign.center),
         SizedBox(height: AppThemeSpacing.smallH),
         Center(
           child: SingleFile(

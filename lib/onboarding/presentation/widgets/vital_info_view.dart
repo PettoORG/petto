@@ -90,8 +90,7 @@ class VitalInfoView extends StatelessWidget {
               SizedBox(height: AppThemeSpacing.extraSmallH),
               FormBuilderTextField(
                 name: 'microchipNumber',
-                decoration: InputDecoration(labelText: 'microchipNumber'.tr()),
-                validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                decoration: InputDecoration(labelText: 'microchipNumberOptional'.tr()),
               ),
             ],
           ),

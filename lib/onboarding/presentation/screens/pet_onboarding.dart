@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,6 @@ import 'package:petto/core/files/application/files_firestore_path_provider.dart'
 import 'package:petto/core/form/application/base_entity_state.dart';
 import 'package:petto/core/form/application/id_provider.dart';
 import 'package:petto/core/presentation/widgets/flash.dart';
-import 'package:petto/home/router.dart';
 import 'package:petto/onboarding/presentation/widgets/basic_info_view.dart';
 import 'package:petto/onboarding/presentation/widgets/pet_photo_view.dart';
 import 'package:petto/onboarding/presentation/widgets/tag_sync_view.dart';
@@ -138,34 +138,38 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
   Widget build(BuildContext context) {
     final canPop = _currentPage == 0;
     return PopScope(
-      canPop: true,
+      canPop: _currentPage == 0,
       onPopInvokedWithResult: (didPop, result) async {
-        /* PopScope handles both system back and AppBar back */
-        if (didPop) return; // allowed by framework
-        if (_currentPage == _confirmationPageIndex) return;
+        if (didPop) return;
+        if (_currentPage > 2) {
+          SystemNavigator.pop();
+          return;
+        }
         if (_currentPage == 0) {
           context.pop();
-        } else {
-          _previousPage();
+          return;
         }
+        _previousPage();
       },
       child: Stack(
         children: [
           Scaffold(
-            appBar: AppBar(
-              title: Text('registerPet'.tr()),
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                onPressed: () {
-                  if (canPop) {
-                    context.pop();
-                  } else {
-                    _previousPage();
-                  }
-                },
-              ),
-            ),
+            appBar: (_currentPage > 2)
+                ? null
+                : AppBar(
+                    title: Text('registerPet'.tr()),
+                    centerTitle: true,
+                    leading: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                      onPressed: () {
+                        if (canPop) {
+                          context.pop();
+                        } else {
+                          _previousPage();
+                        }
+                      },
+                    ),
+                  ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -247,17 +251,16 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
   }
 
   Widget _bottomButton() {
-    final label = _currentPage == _formPages - 1
-        ? 'save'.tr()
-        : _currentPage == _confirmationPageIndex
-            ? 'finish'.tr()
-            : 'next'.tr();
+    final label = _currentPage == _formPages - 1 ? 'save'.tr() : 'next'.tr();
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-      child: ElevatedButton(
-        onPressed: _saving ? null : _onButtonPressed,
-        child: Text(label),
+    return Visibility(
+      visible: _currentPage < _formPages,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+        child: ElevatedButton(
+          onPressed: _saving ? null : _onButtonPressed,
+          child: Text(label),
+        ),
       ),
     );
   }
@@ -294,6 +297,7 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
   Future<void> _onButtonPressed() async {
     switch (_currentPage) {
       case 0:
+        FocusScope.of(context).unfocus();
         final bool isBasicValid = _basicKey.currentState?.saveAndValidate(
               focusOnInvalid: false,
               autoScrollWhenFocusOnInvalid: false,
@@ -307,6 +311,7 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
 
         _updateVmFromBasic();
         _nextPage();
+
         break;
 
       case 1:
@@ -314,6 +319,7 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
         break;
 
       case 2:
+        FocusScope.of(context).unfocus();
         final bool isVitalValid = _vitalKey.currentState?.saveAndValidate(
               focusOnInvalid: false,
               autoScrollWhenFocusOnInvalid: false,
@@ -327,10 +333,6 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
 
         _updateVmFromVital();
         await _savePet();
-        break;
-
-      case 3:
-        if (mounted) context.go(HomeRoute().location);
         break;
     }
   }
@@ -355,7 +357,7 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
       weight: weight,
       size: form.value['size'] as PetSize,
       foodType: form.value['foodType'] as FoodType,
-      microchipNumber: form.value['microchipNumber'] as String,
+      microchipNumber: form.value['microchipNumber'],
     );
   }
 

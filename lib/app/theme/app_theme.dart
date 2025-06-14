@@ -72,14 +72,14 @@ class AppTheme {
             displaySmall: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.w400),
 
             // Headline
-            headlineLarge: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w400),
-            headlineMedium: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w400),
-            headlineSmall: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w400),
+            headlineLarge: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w600),
+            headlineMedium: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600),
+            headlineSmall: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w600),
 
             // Title
-            titleLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w400),
-            titleMedium: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-            titleSmall: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
+            titleLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
+            titleMedium: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+            titleSmall: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
 
             // Body
             bodyLarge: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
