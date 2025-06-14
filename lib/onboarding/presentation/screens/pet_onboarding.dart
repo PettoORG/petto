@@ -2,30 +2,38 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/core/domain/failure.dart';
+import 'package:petto/core/files/application/app_file_view_model.dart';
 import 'package:petto/core/files/application/files_notifier.dart';
+import 'package:petto/core/files/application/files_state.dart' as fs;
 import 'package:petto/core/files/application/files_storage_path_provider.dart';
 import 'package:petto/core/files/application/files_firestore_path_provider.dart';
-import 'package:petto/core/files/application/files_state.dart' as fs;
 import 'package:petto/core/files/constant/crop_options_constants.dart';
 import 'package:petto/core/files/presentation/widgets/single_file.dart';
-import 'package:petto/core/presentation/widgets/flash.dart';
 import 'package:petto/core/form/application/base_entity_state.dart';
+import 'package:petto/core/form/application/id_provider.dart';
+import 'package:petto/core/presentation/widgets/flash.dart';
+import 'package:petto/home/router.dart';
 import 'package:petto/pets/app/pet_notifier.dart';
-import 'package:petto/pets/domain/food_type.dart';
 import 'package:petto/pets/domain/pet.dart';
 import 'package:petto/pets/domain/pet_breed.dart';
 import 'package:petto/pets/domain/pet_sex.dart';
-import 'package:petto/pets/domain/pet_size.dart';
 import 'package:petto/pets/domain/pet_specie.dart';
 import 'package:petto/pets/domain/pet_vm.dart';
+import 'package:petto/pets/domain/food_type.dart';
+import 'package:petto/pets/domain/pet_size.dart';
 import 'package:petto/pets/shared/constant.dart';
 import 'package:petto/pets/shared/providers.dart';
 import 'package:shimmer/shimmer.dart';
 
+/// On-boarding flow to create a new [Pet] entity.
+/// It mirrors the behaviour from [PetDetailsScreen] but split
+/// across three interactive pages plus a confirmation step.
 class PetOnboardingScreen extends StatefulHookConsumerWidget {
   const PetOnboardingScreen({super.key});
 
@@ -34,497 +42,609 @@ class PetOnboardingScreen extends StatefulHookConsumerWidget {
 }
 
 class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
-  final PageController _controller = PageController();
+  final PageController _pageController = PageController();
+  static const int _formPages = 3;
+  static const int _confirmationPageIndex = 3;
   int _currentPage = 0;
-  PetSex? _selectedPetSex;
-  final _formKey = GlobalKey<FormBuilderState>();
-  PetBreed? _selectedBreed;
 
-  /// Folder for files (nested in document)
+  late final ProviderSubscription _petCancel;
+  late final ProviderSubscription _filesCancel;
+
+  final String family = petsModule;
   final String filesFolder = 'files';
+  String get _collectionPath => ref.read(petCollectionPathProvider);
 
-  /// Getter for providers family
-  String get family => petsModule;
+  bool _saving = false;
 
-  /// Helper to know if there are files pending
-  bool get hasFilePending => ref.read(filesNotifierProvider(family).notifier).hasFilesPending;
+  PetVM _vm = PetVM.empty();
+  PetBreed? _selectedBreed;
+  PetSex? _selectedSex;
+  PetSpecie? _selectedSpecie;
 
-  /// Collection path for pets
-  String get collectionPath => ref.read(petCollectionPathProvider);
+  List<AppFileViewModel> _stagedFiles = [];
 
-  String _buildStoragePath(String id) => '$collectionPath/$id/$filesFolder';
-  String _buildFirestorePath(String id) => '$collectionPath/$id/$filesFolder';
+  final _basicKey = GlobalKey<FormBuilderState>();
+  final _vitalKey = GlobalKey<FormBuilderState>();
 
-  bool _validateBasicInfo() {
-    final names = ['name', 'specie', 'breed'];
-    bool valid = true;
-    for (final n in names) {
-      final field = _formKey.currentState?.fields[n];
-      field?.validate();
-      if (field?.hasError ?? false) valid = false;
-    }
-    return valid;
-  }
-
-  bool _validateVitalInfo() {
-    final names = ['birthDate', 'weight', 'size', 'foodType'];
-    bool valid = true;
-    for (final n in names) {
-      final field = _formKey.currentState?.fields[n];
-      field?.validate();
-      if (field?.hasError ?? false) valid = false;
-    }
-    return valid;
-  }
-
-  PetVM _extractPet() {
-    final get = <T>(String n) => _formKey.currentState?.fields[n]?.value as T?;
-    final weightStr = get<String>('weight');
-
-    return PetVM(
-      id: '0',
-      name: get('name') ?? '',
-      specie: get('specie') ?? PetSpecie.other,
-      breed: get('breed') ?? PetBreed.other,
-      sex: _selectedPetSex ?? PetSex.male,
-      birthDate: get('birthDate') ?? DateTime.now(),
-      weight: double.tryParse(weightStr ?? '') ?? 0,
-      size: get('size') ?? PetSize.unselected,
-      photoUrl: null,
-      foodType: get('foodType') ?? FoodType.unselected,
-      microchipNumber: get('microchipNumber'),
-    );
-  }
-
-  Future<void> _createPet() async {
-    ref.read(filesNotifierProvider(family).notifier).processFiles(hold: true);
-    final vm = _extractPet();
-    await ref.read(petNotifierProvider.notifier).save(vm.toEntity(Pet.empty()));
-  }
+  bool _basicValidated = false;
+  bool _vitalValidated = false;
 
   @override
   void initState() {
     super.initState();
 
-    ref.listen<BaseEntityState<Pet>>(petNotifierProvider, (previous, next) async {
-      if (next is FailureState<Pet>) {
-        showCustomFlash(
-          context,
-          next.failure.message ?? 'error.unexpectedError'.tr(),
-        );
-        return;
-      }
+    Future.microtask(
+      () => ref.read(idProvider(petsModule).notifier).id = '0',
+    );
 
-      final saveCompleted = previous is Loading<Pet> && next is Data<Pet>;
-
-      if (saveCompleted) {
-        final pet = next.entity;
-        ref.read(filesStoragePathProvider(family).notifier).set(
-              _buildStoragePath(pet.id),
-            );
-        ref.read(filesFirestorePathProvider(family).notifier).set(
-              _buildFirestorePath(pet.id),
-            );
-        await ref.read(filesNotifierProvider(family).notifier).processFiles();
-
-        if (!hasFilePending && mounted) {
-          _controller.nextPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      }
-    });
-
-    ref.listen<fs.FilesState>(filesNotifierProvider(family), (previous, next) {
-      switch (next) {
-        case fs.Loaded(files: final _, status: final status):
-          final finished = status == fs.LoadedStatus.afterProcessing && !hasFilePending;
-          if (finished && mounted) {
-            _controller.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
+    // Pet state listener
+    _petCancel = ref.listenManual<BaseEntityState<Pet>>(
+      petNotifierProvider,
+      (prev, next) async {
+        // Failure
+        if (next is FailureState<Pet>) {
+          if (mounted) {
+            setState(() => _saving = false);
+            showCustomFlash(
+              context,
+              next.failure.message ?? 'error.unexpectedError'.tr(),
             );
           }
-          break;
-        default:
-          break;
-      }
-    });
-  }
+          return;
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    final formIsLoading = ref.watch(petNotifierProvider.select((state) => state is Loading<Pet>));
-    final filesIsLoading = ref.watch(filesNotifierProvider(family).select((state) => state is fs.Loading));
-    final loading = formIsLoading || filesIsLoading;
-    final storagePath = ref.watch(filesStoragePathProvider(family));
-    final firestorePath = ref.watch(filesFirestorePathProvider(family));
+        // Success: react only if we are in a saving flow
+        if (_saving && prev is Loading<Pet> && next is Data<Pet>) {
+          final pet = next.entity;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('registerPet'.tr()),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () {
-            if (_currentPage == 0) {
-              context.pop();
-            } else {
-              _controller.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            }
-          },
-        ),
-      ),
-      body: FormBuilder(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${_currentPage + 1} de 4'),
-                  SizedBox(height: AppThemeSpacing.extraTinyH),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: TweenAnimationBuilder<double>(
-                      tween: Tween<double>(
-                        begin: 0,
-                        end: (_currentPage + 1) / 4,
-                      ),
-                      duration: const Duration(milliseconds: 300),
-                      builder: (context, value, child) {
-                        return LinearProgressIndicator(
-                          value: value,
-                          minHeight: 10,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: PageView(
-                controller: _controller,
-                physics: _currentPage == 3 ? const NeverScrollableScrollPhysics() : const BouncingScrollPhysics(),
-                onPageChanged: (i) => setState(() => _currentPage = i),
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-                    child: _PetBasicInfoPage(
-                      selectedPetSex: _selectedPetSex,
-                      onSexChanged: (sex) => setState(() => _selectedPetSex = sex),
-                      onBreedChanged: (b) => setState(() => _selectedBreed = b),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-                    child: _PetPhotoPage(
-                      breed: _selectedBreed,
-                      storagePath: storagePath,
-                      firestorePath: firestorePath,
-                      family: family,
-                      loading: loading,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-                    child: const _PetVitalInformation(),
-                  ),
-                  const _PetSuccessPage(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
-              child: ElevatedButton(
-                onPressed: loading
-                    ? null
-                    : () async {
-                        if (_currentPage == 0) {
-                          if (_validateBasicInfo()) {
-                            _controller.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        } else if (_currentPage == 1) {
-                          _controller.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        } else if (_currentPage == 2) {
-                          if (_validateVitalInfo()) {
-                            await _createPet();
-                          }
-                        }
-                      },
-                child: Text('next'.tr()),
-              ),
-            ),
-            SizedBox(height: AppThemeSpacing.smallH),
-          ],
-        ),
-      ),
+          // Process staged files
+          if (_stagedFiles.isNotEmpty) {
+            ref.read(filesStoragePathProvider(family).notifier).set(_buildStoragePath(pet.id));
+            ref.read(filesFirestorePathProvider(family).notifier).set(_buildFirestorePath(pet.id));
+            await ref.read(filesNotifierProvider(family).notifier).processFiles(files: _stagedFiles);
+          }
+
+          if (mounted) {
+            setState(() => _saving = false);
+            _goToConfirmationPage();
+          }
+        }
+      },
+    );
+
+    // Files state listener
+    _filesCancel = ref.listenManual<fs.FilesState>(
+      filesNotifierProvider(family),
+      (prev, next) {
+        if (next case fs.Loaded(status: fs.LoadedStatus.afterProcessing)) {
+          final pending = ref.read(filesNotifierProvider(family).notifier).hasFilesPending;
+          if (pending) {
+            showCustomFlash(context, 'error.filesNotProcessed'.tr());
+          }
+        }
+      },
     );
   }
-}
-
-class _PetVitalInformation extends StatelessWidget {
-  const _PetVitalInformation();
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: AppThemeSpacing.smallH),
-        Text('Informacion vital', style: Theme.of(context).textTheme.titleLarge),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        FormBuilderDateTimePicker(
-          name: 'birthDate',
-          locale: context.locale,
-          keyboardType: TextInputType.datetime,
-          format: DateFormat.yMd(context.locale.languageCode),
-          inputType: InputType.date,
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          decoration: InputDecoration(labelText: 'birthDate'.tr()),
-          validator: FormBuilderValidators.compose(
-            [
-              FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-              FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
-            ],
-          ),
-        ),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        Row(
-          children: [
-            Expanded(
-              child: FormBuilderTextField(
-                name: 'weight',
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                decoration: InputDecoration(labelText: 'weight'.tr()),
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                  FormBuilderValidators.numeric(),
-                ]),
-              ),
-            ),
-            SizedBox(width: AppThemeSpacing.smallW),
-            Expanded(
-              child: FormBuilderDropdown<PetSize>(
-                name: 'size',
-                decoration: InputDecoration(labelText: 'size'.tr()),
-                items: PetSize.values
-                    .where((s) => s != PetSize.unselected)
-                    .map((s) => DropdownMenuItem(value: s, child: Text(s.displayName)))
-                    .toList(),
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-                ]),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        FormBuilderDropdown<FoodType>(
-          name: 'foodType',
-          decoration: InputDecoration(labelText: 'foodType'.tr()),
-          items: FoodType.values
-              .where((f) => f != FoodType.unselected)
-              .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))
-              .toList(),
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-          ]),
-        ),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        FormBuilderTextField(
-          name: 'microchipNumber',
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(labelText: 'microchipNumberOptional'.tr()),
-        ),
-      ],
-    );
+  void dispose() {
+    // Cancel manual listeners
+    _petCancel.close();
+    _filesCancel.close();
+    // Dispose PageController
+    _pageController.dispose();
+    super.dispose();
   }
-}
-
-class _PetBasicInfoPage extends StatefulWidget {
-  final PetSex? selectedPetSex;
-  final ValueChanged<PetSex> onSexChanged;
-  final ValueChanged<PetBreed?> onBreedChanged;
-
-  const _PetBasicInfoPage({
-    required this.selectedPetSex,
-    required this.onSexChanged,
-    required this.onBreedChanged,
-  });
-
-  @override
-  State<_PetBasicInfoPage> createState() => _PetBasicInfoPageState();
-}
-
-class _PetBasicInfoPageState extends State<_PetBasicInfoPage> {
-  PetSpecie? _selectedSpecie;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
-    final availableBreeds =
-        _selectedSpecie == null ? <PetBreed>[] : PetBreed.values.where((b) => b.specie == _selectedSpecie).toList();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(height: AppThemeSpacing.smallH),
-        Text('Informacion basica', style: textTheme.titleLarge),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        FormBuilderTextField(
-          name: 'name',
-          keyboardType: TextInputType.name,
-          decoration: InputDecoration(labelText: 'name'.tr()),
-          validator: FormBuilderValidators.compose([
-            FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
-          ]),
-        ),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        Row(
-          children: [
-            Expanded(
-              child: FormBuilderDropdown<PetSpecie>(
-                name: 'specie',
-                decoration: InputDecoration(labelText: 'specie'.tr()),
-                items: PetSpecie.values
-                    .map((specie) => DropdownMenuItem(
-                          value: specie,
-                          child: Text(specie.displayName),
-                        ))
-                    .toList(),
-                validator: FormBuilderValidators.required(
-                  errorText: 'validators.fieldRequired'.tr(),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedSpecie = value;
-                    FormBuilder.of(context)?.fields['breed']?.didChange(null);
-                  });
+    final canPop = _currentPage == 0;
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) async {
+        /* PopScope handles both system back and AppBar back */
+        if (didPop) return; // allowed by framework
+        if (_currentPage == _confirmationPageIndex) return;
+        if (_currentPage == 0) {
+          context.pop();
+        } else {
+          _previousPage();
+        }
+      },
+      child: Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text('registerPet'.tr()),
+              centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                onPressed: () {
+                  if (canPop) {
+                    context.pop();
+                  } else {
+                    _previousPage();
+                  }
                 },
               ),
             ),
-            SizedBox(width: AppThemeSpacing.smallW),
-            Expanded(
-              child: FormBuilderDropdown<PetBreed>(
-                name: 'breed',
-                decoration: InputDecoration(labelText: 'breed'.tr()),
-                key: ValueKey(_selectedSpecie),
-                items: availableBreeds
-                    .map((breed) => DropdownMenuItem(
-                          value: breed,
-                          child: Text(breed.displayName),
-                        ))
-                    .toList(),
-                onChanged: widget.onBreedChanged,
-                validator: FormBuilderValidators.required(
-                  errorText: 'validators.fieldRequired'.tr(),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_currentPage < _formPages) _progressHeader(),
+                Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      _BasicInfoPage(
+                        formKey: _basicKey,
+                        specie: _selectedSpecie,
+                        selectedBreed: _selectedBreed,
+                        selectedSex: _selectedSex,
+                        autovalidate: _basicValidated,
+                        onSpecieChanged: (s) => setState(() {
+                          _selectedSpecie = s;
+                          _selectedBreed = null;
+                        }),
+                        onBreedChanged: (b) => setState(() => _selectedBreed = b),
+                        onSexChanged: (s) => setState(() => _selectedSex = s),
+                        initialName: _vm.name,
+                      ),
+                      _PhotoPage(
+                        breed: _selectedBreed,
+                        onFileChanged: _onFileChanged,
+                      ),
+                      _VitalInfoPage(
+                        formKey: _vitalKey,
+                        autovalidate: _vitalValidated,
+                        initialWeight: _vm.weight != 0 ? _vm.weight : null,
+                      ),
+                      _ConfirmationPage(),
+                    ],
+                  ),
                 ),
+                _bottomButton(),
+                SizedBox(height: AppThemeSpacing.smallH),
+              ],
+            ),
+          ),
+          if (_saving || ref.watch(petNotifierProvider.select((s) => s is Loading<Pet>)))
+            Container(
+              height: 1.sh,
+              width: 1.sw,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+              child: const Center(child: CircularProgressIndicator()),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _progressHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('${_currentPage + 1} / $_formPages'),
+          SizedBox(height: AppThemeSpacing.extraTinyH),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween<double>(
+                begin: 0,
+                end: (_currentPage + 1) / _formPages,
+              ),
+              duration: const Duration(milliseconds: 300),
+              builder: (_, value, __) => LinearProgressIndicator(
+                value: value,
+                minHeight: 10,
               ),
             ),
-          ],
-        ),
-        SizedBox(height: AppThemeSpacing.extraSmallH),
-        Row(
-          children: [
-            PetSexSelectionButton(
-              sex: PetSex.male,
-              selectedSex: widget.selectedPetSex,
-              onSelect: () => widget.onSexChanged(PetSex.male),
-            ),
-            SizedBox(width: AppThemeSpacing.smallW),
-            PetSexSelectionButton(
-              sex: PetSex.female,
-              selectedSex: widget.selectedPetSex,
-              onSelect: () => widget.onSexChanged(PetSex.female),
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
+  }
+
+  Widget _bottomButton() {
+    final label = _currentPage == _formPages - 1
+        ? 'save'.tr()
+        : _currentPage == _confirmationPageIndex
+            ? 'finish'.tr()
+            : 'next'.tr();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+      child: ElevatedButton(
+        onPressed: _saving ? null : _onButtonPressed,
+        child: Text(label),
+      ),
+    );
+  }
+
+  void _nextPage() {
+    if (_currentPage < _confirmationPageIndex) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.linear,
+      );
+      setState(() => _currentPage++);
+    }
+  }
+
+  void _previousPage() {
+    if (_currentPage > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.linear,
+      );
+      setState(() => _currentPage--);
+    }
+  }
+
+  void _goToConfirmationPage() {
+    _pageController.animateToPage(
+      _confirmationPageIndex,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
+    setState(() => _currentPage = _confirmationPageIndex);
+  }
+
+  Future<void> _onButtonPressed() async {
+    switch (_currentPage) {
+      case 0:
+        final bool isBasicValid = _basicKey.currentState?.saveAndValidate(
+              focusOnInvalid: false,
+              autoScrollWhenFocusOnInvalid: false,
+            ) ??
+            false;
+
+        if (!isBasicValid) {
+          setState(() => _basicValidated = true);
+          return;
+        }
+
+        _updateVmFromBasic();
+        _nextPage();
+        break;
+
+      case 1:
+        _nextPage();
+        break;
+
+      case 2:
+        final bool isVitalValid = _vitalKey.currentState?.saveAndValidate(
+              focusOnInvalid: false,
+              autoScrollWhenFocusOnInvalid: false,
+            ) ??
+            false;
+
+        if (!isVitalValid) {
+          setState(() => _vitalValidated = true);
+          return;
+        }
+
+        _updateVmFromVital();
+        await _savePet();
+        break;
+
+      case 3:
+        if (mounted) context.go(HomeRoute().location);
+        break;
+    }
+  }
+
+  void _updateVmFromBasic() {
+    final data = _basicKey.currentState!;
+    _vm = _vm.copyWith(
+      name: data.value['name'] as String,
+      specie: data.value['specie'] as PetSpecie,
+      breed: data.value['breed'] as PetBreed,
+      sex: _selectedSex ?? PetSex.male,
+    );
+  }
+
+  void _updateVmFromVital() {
+    final form = _vitalKey.currentState!;
+    final weightStr = form.value['weight']?.toString();
+    final weight = double.tryParse(weightStr ?? '') ?? _vm.weight;
+
+    _vm = _vm.copyWith(
+      birthDate: form.value['birthDate'] as DateTime,
+      weight: weight,
+      size: form.value['size'] as PetSize,
+      foodType: form.value['foodType'] as FoodType,
+      microchipNumber: form.value['microchipNumber'] as String,
+    );
+  }
+
+  void _onFileChanged(List<AppFileViewModel> files) {
+    _stagedFiles = files;
+  }
+
+  String _buildStoragePath(String id) => '$_collectionPath/$id/$filesFolder';
+  String _buildFirestorePath(String id) => '$_collectionPath/$id/$filesFolder';
+
+  Future<void> _savePet() async {
+    setState(() => _saving = true);
+
+    final Pet base = ref.read(petNotifierProvider).entity ?? Pet.empty();
+
+    final Pet upsertData = _vm.toEntity(base);
+
+    await ref.read(petNotifierProvider.notifier).save(upsertData);
   }
 }
 
-class _PetPhotoPage extends StatelessWidget {
-  const _PetPhotoPage({
-    required this.breed,
-    required this.family,
-    required this.storagePath,
-    required this.firestorePath,
-    required this.loading,
+class _BasicInfoPage extends StatelessWidget {
+  const _BasicInfoPage({
+    required this.formKey,
+    required this.specie,
+    required this.selectedBreed,
+    required this.selectedSex,
+    required this.onSpecieChanged,
+    required this.onBreedChanged,
+    required this.autovalidate,
+    required this.onSexChanged,
+    required this.initialName,
   });
 
-  final PetBreed? breed;
-  final String family;
-  final String? storagePath;
-  final String? firestorePath;
-  final bool loading;
+  final GlobalKey<FormBuilderState> formKey;
+  final PetSpecie? specie;
+  final PetBreed? selectedBreed;
+  final PetSex? selectedSex;
+  final ValueChanged<PetSpecie?> onSpecieChanged;
+  final ValueChanged<PetBreed?> onBreedChanged;
+  final ValueChanged<PetSex> onSexChanged;
+  final String initialName;
+  final bool autovalidate;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final availableBreeds = specie == null ? <PetBreed>[] : PetBreed.values.where((b) => b.specie == specie).toList();
 
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: FormBuilder(
+        key: formKey,
+        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: AppThemeSpacing.smallH),
+              Text('basicInfo'.tr(), style: Theme.of(context).textTheme.titleLarge),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              FormBuilderTextField(
+                name: 'name',
+                initialValue: initialName,
+                decoration: InputDecoration(labelText: 'name'.tr()),
+                validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              Row(
+                children: [
+                  Expanded(
+                    child: FormBuilderDropdown<PetSpecie>(
+                      name: 'specie',
+                      decoration: InputDecoration(labelText: 'specie'.tr()),
+                      initialValue: specie,
+                      items: PetSpecie.values
+                          .map((s) => DropdownMenuItem(
+                                value: s,
+                                child: Text(s.displayName),
+                              ))
+                          .toList(),
+                      validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                      onChanged: onSpecieChanged,
+                    ),
+                  ),
+                  SizedBox(width: AppThemeSpacing.smallW),
+                  Expanded(
+                    child: FormBuilderDropdown<PetBreed>(
+                      key: ValueKey(specie),
+                      name: 'breed',
+                      decoration: InputDecoration(labelText: 'breed'.tr()),
+                      initialValue: selectedBreed,
+                      items: availableBreeds
+                          .map((b) => DropdownMenuItem(
+                                value: b,
+                                child: Text(b.displayName),
+                              ))
+                          .toList(),
+                      validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                      onChanged: onBreedChanged,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              Row(
+                children: [
+                  _PetSexSelectionButton(
+                    sex: PetSex.male,
+                    selectedSex: selectedSex,
+                    onSelect: () => onSexChanged(PetSex.male),
+                  ),
+                  SizedBox(width: AppThemeSpacing.smallW),
+                  _PetSexSelectionButton(
+                    sex: PetSex.female,
+                    selectedSex: selectedSex,
+                    onSelect: () => onSexChanged(PetSex.female),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PhotoPage extends StatelessWidget {
+  const _PhotoPage({
+    required this.breed,
+    required this.onFileChanged,
+  });
+
+  final PetBreed? breed;
+  final void Function(List<AppFileViewModel>) onFileChanged;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(height: AppThemeSpacing.smallH),
-        Text(
-          'Vamos a ver esa carita!',
-          style: textTheme.titleLarge,
-          textAlign: TextAlign.center,
-        ),
+        Text('uploadPhotoTitle'.tr(), style: Theme.of(context).textTheme.titleLarge),
         SizedBox(height: AppThemeSpacing.extraTinyH),
-        Text(
-          'Una foto de perfil ayuda a identificar a tu mascota y hace que su perfil sea mas personal',
-          textAlign: TextAlign.center,
-        ),
+        Text('uploadPhotoSubtitle'.tr(), textAlign: TextAlign.center),
         SizedBox(height: AppThemeSpacing.smallH),
-        SingleFile(
-          family: family,
-          storagePath: storagePath,
-          firestorePath: firestorePath,
-          cropOptions: circle300x300,
-          showCancelAction: false,
-          showDeleteAction: false,
-          showRetryAction: false,
-          isLoading: loading,
-          unselectedFileWidget: (onImageTap) => _PetAvatar(breed: breed, onImageTap: onImageTap),
-          borderRadius: BorderRadius.circular(AppThemeSpacing.extraLargeH),
-          thumbnailHeight: AppThemeSpacing.ultraH,
-          thumbnailWidth: AppThemeSpacing.ultraH,
+        Center(
+          child: SingleFile(
+            family: petsModule,
+            storagePath: null,
+            firestorePath: null,
+            cropOptions: circle300x300,
+            onFileChanged: (file) => onFileChanged(file == null ? [] : [file]),
+            showCancelAction: false,
+            showDeleteAction: false,
+            showRetryAction: false,
+            unselectedFileWidget: (tap) => _PetAvatar(breed: breed, onImageTap: tap),
+            borderRadius: BorderRadius.circular(AppThemeSpacing.ultraH),
+            thumbnailHeight: .3.sh,
+            thumbnailWidth: .3.sh,
+          ),
         ),
       ],
     );
   }
 }
 
-class PetSexSelectionButton extends StatelessWidget {
-  final PetSex sex;
-  final PetSex? selectedSex;
-  final VoidCallback onSelect;
+class _VitalInfoPage extends StatelessWidget {
+  const _VitalInfoPage({
+    required this.formKey,
+    required this.autovalidate,
+    this.initialWeight,
+  });
 
-  const PetSexSelectionButton({
+  final GlobalKey<FormBuilderState> formKey;
+  final double? initialWeight;
+  final bool autovalidate;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: FormBuilder(
+        key: formKey,
+        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppThemeSpacing.mediumW),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: AppThemeSpacing.smallH),
+              Text('vitalInfo'.tr(), style: Theme.of(context).textTheme.titleLarge),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              FormBuilderDateTimePicker(
+                name: 'birthDate',
+                locale: context.locale,
+                format: DateFormat.yMd(context.locale.languageCode),
+                inputType: InputType.date,
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+                decoration: InputDecoration(labelText: 'birthDate'.tr()),
+                validator: FormBuilderValidators.compose(
+                  [
+                    FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                    FormBuilderValidators.dateTime(errorText: 'validators.invalidDate'),
+                  ],
+                ),
+              ),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              Row(
+                children: [
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'weight',
+                      initialValue: initialWeight != null ? '$initialWeight' : null,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(labelText: 'weight'.tr()),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                        FormBuilderValidators.numeric(),
+                      ]),
+                    ),
+                  ),
+                  SizedBox(width: AppThemeSpacing.smallW),
+                  Expanded(
+                    child: FormBuilderDropdown<PetSize>(
+                      name: 'size',
+                      decoration: InputDecoration(labelText: 'size'.tr()),
+                      items: PetSize.values
+                          .where((s) => s != PetSize.unselected)
+                          .map((s) => DropdownMenuItem(value: s, child: Text(s.displayName)))
+                          .toList(),
+                      validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              FormBuilderDropdown<FoodType>(
+                name: 'foodType',
+                decoration: InputDecoration(labelText: 'foodType'.tr()),
+                items: FoodType.values
+                    .where((f) => f != FoodType.unselected)
+                    .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))
+                    .toList(),
+                validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ),
+              SizedBox(height: AppThemeSpacing.extraSmallH),
+              FormBuilderTextField(
+                name: 'microchipNumber',
+                decoration: InputDecoration(labelText: 'microchipNumber'.tr()),
+                validator: FormBuilderValidators.required(errorText: 'validators.fieldRequired'.tr()),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ConfirmationPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.check_circle, size: AppThemeSpacing.ultraH, color: Theme.of(context).colorScheme.primary),
+          SizedBox(height: AppThemeSpacing.smallH),
+          Text('petCreatedSuccess'.tr(), style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+}
+
+class _PetSexSelectionButton extends StatelessWidget {
+  const _PetSexSelectionButton({
     required this.sex,
     required this.selectedSex,
     required this.onSelect,
-    super.key,
   });
+
+  final PetSex sex;
+  final PetSex? selectedSex;
+  final VoidCallback onSelect;
 
   @override
   Widget build(BuildContext context) {
@@ -565,8 +685,7 @@ class _PetAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double radius = AppThemeSpacing.extraLargeH;
-    final double avatarSize = radius * 2;
-
+    final double avatarSize = radius * 3;
     final String? networkUrl = breed?.defaultImageUrl;
 
     final Widget imageWidget = networkUrl != null
@@ -575,12 +694,12 @@ class _PetAvatar extends StatelessWidget {
             fit: BoxFit.cover,
             width: avatarSize,
             height: avatarSize,
-            placeholder: (context, url) => Shimmer.fromColors(
+            placeholder: (_, __) => Shimmer.fromColors(
               baseColor: Theme.of(context).colorScheme.surface,
               highlightColor: Colors.grey[100]!,
               child: Container(
-                height: avatarSize,
                 width: avatarSize,
+                height: avatarSize,
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   shape: BoxShape.circle,
@@ -622,11 +741,8 @@ class _PetAvatar extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [AppThemeShadow.small],
                   ),
-                  child: Icon(
-                    Icons.camera_alt,
-                    size: AppThemeSpacing.smallH,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+                  child: Icon(Icons.camera_alt,
+                      size: AppThemeSpacing.smallH, color: Theme.of(context).colorScheme.onPrimary),
                 ),
               ),
             ),
@@ -634,14 +750,5 @@ class _PetAvatar extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class _PetSuccessPage extends StatelessWidget {
-  const _PetSuccessPage();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: SizedBox.shrink());
   }
 }
