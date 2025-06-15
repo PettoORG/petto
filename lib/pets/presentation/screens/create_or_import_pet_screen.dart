@@ -24,7 +24,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/images/cat.png',
+                  'assets/images/pets-in-park.png',
                   width: placeholderSize,
                   height: placeholderSize,
                 ),

@@ -107,7 +107,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: AppThemeSpacing.extraSmallH,
                   children: [
-                    Image.asset('assets/images/forgot-password-dog.png', height: .35.sh),
+                    Image.asset('assets/images/detective-dog.png', height: .35.sh),
                     Text('forgotPassword'.tr(), style: textTheme.titleLarge),
                     Text('enterEmailToReset'.tr()),
                     FormBuilderTextField(
