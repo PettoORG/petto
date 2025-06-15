@@ -6,6 +6,7 @@ import 'package:petto/pets/presentation/screens/create_or_import_pet_screen.dart
 import 'package:petto/pets/presentation/screens/pet_details_screen.dart';
 import 'package:petto/pets/presentation/screens/pet_profile_screen.dart';
 import 'package:petto/pets/presentation/screens/pet_share_screen.dart';
+import 'package:petto/pets/presentation/screens/link_pet_screen.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 
 part 'router.g.dart';
@@ -16,6 +17,8 @@ part 'router.g.dart';
   routes: <TypedGoRoute<GoRouteData>>[
     // Step 1: choose how to add the pet
     TypedGoRoute<CreateOrImportPetRoute>(path: 'create-or-import'),
+    // Link existing pet
+    TypedGoRoute<LinkPetRoute>(path: 'link'),
     // Pet profile view
     TypedGoRoute<PetProfileRoute>(path: 'profile/:petId'),
     // Share pet view
@@ -37,6 +40,14 @@ class CreateOrImportPetRoute extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) => const CreateOrImportPetScreen();
+}
+
+/// Route to link an existing pet to the current account.
+class LinkPetRoute extends GoRouteData {
+  const LinkPetRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const LinkPetScreen();
 }
 
 /// Detail screen – shows one pet by id and optionally attached files.

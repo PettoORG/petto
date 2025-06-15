@@ -19,6 +19,10 @@ RouteBase get $petsRoute => GoRouteData.$route(
           factory: $CreateOrImportPetRouteExtension._fromState,
         ),
         GoRouteData.$route(
+          path: 'link',
+          factory: $LinkPetRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
           path: 'profile/:petId',
           factory: $PetProfileRouteExtension._fromState,
         ),
@@ -56,6 +60,23 @@ extension $CreateOrImportPetRouteExtension on CreateOrImportPetRoute {
 
   String get location => GoRouteData.$location(
         '/pets/create-or-import',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $LinkPetRouteExtension on LinkPetRoute {
+  static LinkPetRoute _fromState(GoRouterState state) => const LinkPetRoute();
+
+  String get location => GoRouteData.$location(
+        '/pets/link',
       );
 
   void go(BuildContext context) => context.go(location);

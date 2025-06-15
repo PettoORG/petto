@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
 import 'package:petto/onboarding/router.dart';
+import 'package:petto/pets/router.dart';
 
 class CreateOrImportPetScreen extends StatelessWidget {
   const CreateOrImportPetScreen({super.key});
@@ -38,7 +39,7 @@ class CreateOrImportPetScreen extends StatelessWidget {
                 ),
                 SizedBox(height: AppThemeSpacing.extraSmallH),
                 _PetCard(
-                  onTap: () {},
+                  onTap: () => const LinkPetRoute().push(context),
                   titleKey: 'addExistingPet',
                   descriptionKey: 'addExistingPetDescription',
                   colorScheme: colorScheme,
