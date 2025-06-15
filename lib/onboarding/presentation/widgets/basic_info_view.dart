@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -67,6 +68,7 @@ class BasicInfoView extends StatelessWidget {
                     child: FormBuilderDropdown<PetSpecie>(
                       name: 'specie',
                       decoration: InputDecoration(labelText: 'specie'.tr()),
+                      borderRadius: BorderRadius.all(AppThemeRadius.large),
                       initialValue: specie,
                       items:
                           PetSpecie.values.map((s) => DropdownMenuItem(value: s, child: Text(s.displayName))).toList(),
@@ -146,19 +148,12 @@ class _BreedDropdownSearchState extends State<_BreedDropdownSearch> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return DropdownButtonHideUnderline(
       child: DropdownButton2<PetBreed>(
         isExpanded: true,
-        hint: Text(
-          'breed'.tr(),
-          style: TextStyle(fontSize: 14, color: Theme.of(context).hintColor),
-        ),
-        items: widget.breeds
-            .map((b) => DropdownMenuItem(
-                  value: b,
-                  child: Text(b.displayName, style: const TextStyle(fontSize: 14)),
-                ))
-            .toList(),
+        hint: Text('breed'.tr()),
+        items: widget.breeds.map((b) => DropdownMenuItem(value: b, child: Text(b.displayName))).toList(),
         value: _selectedBreed,
         onChanged: (value) {
           setState(() {
@@ -166,39 +161,34 @@ class _BreedDropdownSearchState extends State<_BreedDropdownSearch> {
           });
           widget.onChanged(value);
         },
-        buttonStyleData: const ButtonStyleData(
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          height: 44,
-          width: double.infinity,
-        ),
-        dropdownStyleData: const DropdownStyleData(maxHeight: 240),
-        menuItemStyleData: const MenuItemStyleData(height: 44),
+        onMenuStateChange: (isOpen) {
+          if (!isOpen) _searchController.clear();
+        },
+        dropdownStyleData: DropdownStyleData(
+            maxHeight: .40.sh,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(AppThemeRadius.large),
+            )),
         dropdownSearchData: DropdownSearchData(
-          searchController: _searchController,
-          searchInnerWidgetHeight: 50,
-          searchInnerWidget: Container(
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: TextFormField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                hintText: 'Search breed...'.tr(),
-                hintStyle: const TextStyle(fontSize: 12),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            ),
-          ),
           searchMatchFn: (item, searchValue) {
             final breed = item.value;
             if (breed == null) return false;
             return breed.displayName.toLowerCase().contains(searchValue.toLowerCase());
           },
+          searchController: _searchController,
+          searchInnerWidgetHeight: .01.sh,
+          searchInnerWidget: Padding(
+            padding: EdgeInsets.all(AppThemeSpacing.extraTinyH),
+            child: TextFormField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: 'Buscar por raza...'.tr(),
+                hintStyle: textTheme.bodySmall,
+              ),
+            ),
+          ),
         ),
-        onMenuStateChange: (isOpen) {
-          if (!isOpen) _searchController.clear();
-        },
       ),
     );
   }
