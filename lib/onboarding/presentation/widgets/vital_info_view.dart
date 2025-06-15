@@ -68,6 +68,7 @@ class VitalInfoView extends StatelessWidget {
                     child: FormBuilderDropdown<PetSize>(
                       name: 'size',
                       decoration: InputDecoration(labelText: 'size'.tr()),
+                      borderRadius: BorderRadius.all(AppThemeRadius.large),
                       items: PetSize.values
                           .where((s) => s != PetSize.unselected)
                           .map((s) => DropdownMenuItem(value: s, child: Text(s.displayName)))
@@ -81,6 +82,7 @@ class VitalInfoView extends StatelessWidget {
               FormBuilderDropdown<FoodType>(
                 name: 'foodType',
                 decoration: InputDecoration(labelText: 'foodType'.tr()),
+                borderRadius: BorderRadius.all(AppThemeRadius.large),
                 items: FoodType.values
                     .where((f) => f != FoodType.unselected)
                     .map((f) => DropdownMenuItem(value: f, child: Text(f.displayName)))

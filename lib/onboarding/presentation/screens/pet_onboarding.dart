@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:petto/app/theme/app_theme_sizes.dart';
+import 'package:petto/core/domain/failure.dart';
 import 'package:petto/core/files/application/app_file_view_model.dart';
 import 'package:petto/core/files/application/files_notifier.dart';
 import 'package:petto/core/files/application/files_state.dart' as fs;
@@ -295,46 +296,72 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
   }
 
   Future<void> _onButtonPressed() async {
+    if (!_validate()) return;
+
+    if (_currentPage < _formPages - 1) {
+      // Si no es la última página de formulario, avanzo
+      if (_currentPage == 0) {
+        _updateVmFromBasic();
+      }
+      _nextPage();
+    } else if (_currentPage == _formPages - 1) {
+      // Página 2: datos vitales → guardo
+      _updateVmFromVital();
+      await _savePet();
+    }
+  }
+
+  bool _validate() {
     switch (_currentPage) {
       case 0:
-        FocusScope.of(context).unfocus();
-        final bool isBasicValid = _basicKey.currentState?.saveAndValidate(
-              focusOnInvalid: false,
-              autoScrollWhenFocusOnInvalid: false,
-            ) ??
-            false;
-
-        if (!isBasicValid) {
-          setState(() => _basicValidated = true);
-          return;
-        }
-
-        _updateVmFromBasic();
-        _nextPage();
-
-        break;
-
-      case 1:
-        _nextPage();
-        break;
-
+        return _validateBasic();
       case 2:
-        FocusScope.of(context).unfocus();
-        final bool isVitalValid = _vitalKey.currentState?.saveAndValidate(
-              focusOnInvalid: false,
-              autoScrollWhenFocusOnInvalid: false,
-            ) ??
-            false;
-
-        if (!isVitalValid) {
-          setState(() => _vitalValidated = true);
-          return;
-        }
-
-        _updateVmFromVital();
-        await _savePet();
-        break;
+        return _validateVital();
+      default:
+        return true;
     }
+  }
+
+  bool _validateBasic() {
+    FocusScope.of(context).unfocus();
+    final form = _basicKey.currentState!;
+    final isValid = form.saveAndValidate(
+      focusOnInvalid: false,
+      autoScrollWhenFocusOnInvalid: false,
+    );
+    if (!isValid) {
+      setState(() => _basicValidated = true);
+      return false;
+    }
+    if (_selectedBreed == null) {
+      ref.read(petNotifierProvider.notifier).fail(
+            Failure.validation(message: 'Debe seleccionar una raza'),
+            recordError: false,
+          );
+      return false;
+    }
+    if (_selectedSex == null) {
+      ref.read(petNotifierProvider.notifier).fail(
+            Failure.validation(message: 'Debe seleccionar un sexo'),
+            recordError: false,
+          );
+      return false;
+    }
+    return true;
+  }
+
+  bool _validateVital() {
+    FocusScope.of(context).unfocus();
+    final form = _vitalKey.currentState!;
+    final isValid = form.saveAndValidate(
+      focusOnInvalid: false,
+      autoScrollWhenFocusOnInvalid: false,
+    );
+    if (!isValid) {
+      setState(() => _vitalValidated = true);
+      return false;
+    }
+    return true;
   }
 
   void _updateVmFromBasic() {
@@ -342,8 +369,8 @@ class _PetOnboardingScreenState extends ConsumerState<PetOnboardingScreen> {
     _vm = _vm.copyWith(
       name: data.value['name'] as String,
       specie: data.value['specie'] as PetSpecie,
-      breed: data.value['breed'] as PetBreed,
-      sex: _selectedSex ?? PetSex.male,
+      breed: _selectedBreed!,
+      sex: _selectedSex!,
     );
   }
 
